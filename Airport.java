@@ -14,7 +14,7 @@ public class Airport
 		return runways;
 	}
 
-	public addObstacle(ObstacleData OD, String runName)
+	public void addObstacle(ObstacleData OD, String runName)
 	{
 		boolean left = runName.charAt(2) == 'L';
 		
