@@ -38,7 +38,7 @@ public class Functions {
 		int slope = obstacle.maxHeight * 50;
 		int obstacleDistance = obstacle.start + obstacle.length;
 
-		if (obstacle.start > runway.TORA) {
+		if (obstacle.start > (runway.TORA / 2)) {
 			landingToward = true;
 			takeOffToward = true;
 		} else {
