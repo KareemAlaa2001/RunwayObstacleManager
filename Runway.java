@@ -14,12 +14,20 @@ public class Runway
 	public void addObstacleL(ObstacleData ODL)
 	{
 		RunL.addObstacle(ODL);
-		// UpdateUI
 	}
 
 	public void addObstacleR(ObstacleData ODR)
 	{
 		RunR.addObstacle(ODR);
-		// UpdateUI
+	}
+
+	public void getRunL()
+	{
+		return RunL;
+	}
+
+	public void getRunR()
+	{
+		return RunR;
 	}
 }
