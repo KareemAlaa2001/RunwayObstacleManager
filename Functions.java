@@ -1,42 +1,26 @@
 public class Functions 
 {
 	private static final int RESA = 240;
-	private static final int engineBlastAllowance = 300;
+	private static final int stripEnd = 60;
+	private static final int BlastAllowance = 300;
 
 	static public RunwayData reCalculate(RunwayData runway, ObstacleData obstacle)
-	{
-		boolean landingToward;
-		boolean takeOffToward;
-		int newLDA = runway.LDA;
+	{ // Method known to not work
 		int slope = obstacle.maxHeight * 50;
-		int obstacleDistance = obstacle.start + obstacle.length;
 
-		if (obstacle.start > runway.TORA) {
-			landingToward = true;
-			takeOffToward = true;
-		} else {
-			landingToward = false;
-			takeOffToward = false;
-		}
-
-		if (landingToward) {
-			newLDA = obstacle.start - RESA - 60;
-		} else {
-			newLDA = runway.LDA - obstacleDistance - slope - 60;
-		}
-
-		if (takeOffToward) {
+		if (obstacle.position > runway.threshold) { // Takeoff / Landing toward obstacle
+			System.out.println((obstacle.position - runway.threshold));
 			return new RunwayData(	runway.threshold,
-									obstacle.start + runway.threshold - slope - 60,
-									runway.TORA,
-									runway.TORA,
-									newLDA);
+									(obstacle.position - runway.threshold) + runway.threshold - slope - stripEnd,
+									(obstacle.position - runway.threshold) + runway.threshold - slope - stripEnd,
+									(obstacle.position - runway.threshold) + runway.threshold - slope - stripEnd,
+									(obstacle.position - runway.threshold) - RESA - stripEnd);
 		} else {
 			return new RunwayData(	runway.threshold,
-									runway.TORA - obstacle.start - engineBlastAllowance,
-									runway.TODA - obstacle.start - engineBlastAllowance,
-									runway.ASDA - obstacle.start - engineBlastAllowance,
-									newLDA);
+									runway.TORA - BlastAllowance - (obstacle.position - runway.threshold) - runway.threshold,
+									runway.TORA - BlastAllowance - (obstacle.position - runway.threshold) - runway.threshold,// - obstacle.start - engineBlastAllowance,?
+									runway.TORA - BlastAllowance - (obstacle.position - runway.threshold) - runway.threshold,// - obstacle.start - engineBlastAllowance,?
+									runway.LDA - slope - (obstacle.position - runway.threshold) - stripEnd);
 		}
 	}
 }

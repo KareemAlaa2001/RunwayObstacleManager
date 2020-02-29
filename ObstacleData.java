@@ -1,15 +1,11 @@
 public class ObstacleData
 {
-	public int start;
-	public int length;
-	public int maxPoint;
+	public int position;
 	public int maxHeight;
 
-	public ObstacleData(int start, int length, int maxPoint, int maxHeight)
+	public ObstacleData(int position, int maxHeight)
 	{
-		this.start = start;
-		this.length = length;
-		this.maxPoint = maxPoint;
+		this.position = position;
 		this.maxHeight = maxHeight;
 	}
 }
