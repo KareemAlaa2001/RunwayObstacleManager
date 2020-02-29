@@ -6,7 +6,6 @@ public class RunwayData
 	public int ASDA; //  accelerate-stop distance available
 	public int LDA;  //  landing distance available
 
-
 	public RunwayData(int threshold, int TORA, int TODA, int ASDA, int LDA)
 	{
 		this.threshold = threshold;
