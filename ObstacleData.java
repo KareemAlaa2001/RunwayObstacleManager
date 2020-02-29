@@ -5,7 +5,7 @@ public class ObstacleData
 	public int maxPoint;
 	public int maxHeight;
 
-	public RunwayData(int start, int length, int maxPoint, int maxHeight)
+	public ObstacleData(int start, int length, int maxPoint, int maxHeight)
 	{
 		this.left = left;
 		this.start = start;

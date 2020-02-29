@@ -2,7 +2,7 @@ public class Airport
 {
 	private List<Runway> runways;
 
-	public Airpor(List<Runway> runways)
+	public Airport(List<Runway> runways)
 	{
 		this.runways = runways;
 	}

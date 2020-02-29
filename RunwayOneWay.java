@@ -1,19 +1,28 @@
+import java.util.ArrayList;
+
 public class RunwayOneWay
 {
 	private String name;
 	private RunwayData dataOriginal;
 	private RunwayData dataReCalc;
+	private List<ObstacleData> obstacles;
 
 	public Runway(String name, RunwayData RD)
 	{
 		this.name = name;
 		this.dataOriginal = RD;
 		dataReCalc = null;
+		obstacles = new ArrayList<ObstacleData>();
 	}
 
 	public void addObstacle(ObstacleData OD)
 	{
-		dataReCalc = Functions.reCalculate(RunwayData runway, ObstacleData obstacle);
+		dataReCalc = Functions.reCalculate(dataOriginal, obstacles);
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 
 	public RunwayData getRunwaySpec()
