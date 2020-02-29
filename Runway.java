@@ -21,12 +21,12 @@ public class Runway
 		RunR.addObstacle(ODR);
 	}
 
-	public void getRunL()
+	public RunwayOneWay getRunL()
 	{
 		return RunL;
 	}
 
-	public void getRunR()
+	public RunwayOneWay getRunR()
 	{
 		return RunR;
 	}
