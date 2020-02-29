@@ -13,6 +13,16 @@ public class RunwayOneWay
 
 	public void addObstacle(ObstacleData OD)
 	{
-		// Functions.AccountForObstacle();
+		dataReCalc = Functions.reCalculate(RunwayData runway, ObstacleData obstacle);
+	}
+
+	public RunwayData getRunwaySpec()
+	{ // Returns the runway data as specified without obstacles
+		return dataOriginal;
+	}
+
+	public RunwayData getUpdatedRunway()
+	{ // Can return null if no obstacle has been added
+		return dataReCalc;
 	}
 }
