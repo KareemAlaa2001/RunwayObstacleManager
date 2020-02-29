@@ -18,7 +18,7 @@ public class RunwayOneWay
 	public void addObstacle(ObstacleData OD)
 	{
 		obstacles.add(OD);
-		dataReCalc = Functions.reCalculate(dataOriginal, obstacles);
+		dataReCalc = Functions.reCalculate(dataOriginal, obstacles.get(0));
 	}
 
 	public String getName()

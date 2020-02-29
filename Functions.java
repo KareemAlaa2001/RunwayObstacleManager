@@ -1,5 +1,8 @@
 
-public class Functions{
+public class Functions {
+
+	private static final int RESA = 240;
+	private static final int engineBlastAllowance = 300;
 
 	RunwayData runway;
 	ObstacleData obstacle;
@@ -10,8 +13,6 @@ public class Functions{
 	public int newASDA;
 	public int obstacleDistance;
 	public int slope;
-	public int RESA;
-	public int engineBlastAllowance;
 	public String landingDirection;
 	public String takeOffDirection;
 
@@ -26,51 +27,45 @@ public class Functions{
 		this.obstacle = obstacle;
 
 		slope = 0;
-		RESA = 240;
-		engineBlastAllowance = 300;
 
 	}
-	
-	public RunwayData recalculate(RunwayData runway, ObstacleData obstacle){
 
-		obstacleDistance = obstacle.start + obstacle.length;
-		slope = obstacle.maxHeight * 50;
 
-		if (obstacle.start > runway.TORA){
-			landingDirection = "Towards";
-			takeOffDirection = "Towards";
-		}else if(obstacle.start < runway.TORA){
-			landingDirection = "Over";
-			takeOffDirection = "Away";
-		}else{
-			System.out.println("Obstacle in center of Runway?");
+	public static RunwayData reCalculate(RunwayData runway, ObstacleData obstacle) {
+		boolean landingToward;
+		boolean takeOffToward;
+		int newLDA = runway.LDA;
+		int slope = obstacle.maxHeight * 50;
+		int obstacleDistance = obstacle.start + obstacle.length;
+
+		if (obstacle.start > runway.TORA) {
+			landingToward = true;
+			takeOffToward = true;
+		} else {
+			landingToward = false;
+			takeOffToward = false;
 		}
 
-
-		if (landingDirection.equals("Towards")) {
+		if (landingToward) {
 			newLDA = obstacle.start - RESA - 60;
-		}else if(landingDirection.equals("Over")) {
+		} else {
 			newLDA = runway.LDA - obstacleDistance - slope - 60;
-		}else{
-			System.out.println("Obstacle in center of Runway?");
 		}
 
-
-		if (takeOffDirection.equals("Towards")){
-			newTORA = obstacle.start + runway.threshold - slope - 60;
-			newTODA = newTORA;
-			newASDA = newTORA;
-		}else if (takeOffDirection.equals("Away")){
-			newTORA = runway.TORA - obstacle.start - engineBlastAllowance;
-			newTODA = runway.TODA - obstacle.start - engineBlastAllowance;
-			newASDA = runway.ASDA - obstacle.start - engineBlastAllowance;
-		}else{
-
+		if (takeOffToward) {
+			return new RunwayData(runway.threshold,
+					obstacle.start + runway.threshold - slope - 60,
+					runway.TORA,
+					runway.TORA,
+					newLDA);
+		} else {
+			return new RunwayData(runway.threshold,
+					runway.TORA - obstacle.start - engineBlastAllowance,
+					runway.TODA - obstacle.start - engineBlastAllowance,
+					runway.ASDA - obstacle.start - engineBlastAllowance,
+					newLDA);
 		}
-
-
-		RunwayData newRunwayData = new RunwayData(newThreshHold, newTORA, newTODA, newASDA, newLDA);
-		return newRunwayData;
-		
 	}
+
 }
+
