@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public class RunwayOneWay
 {
@@ -7,7 +7,7 @@ public class RunwayOneWay
 	private RunwayData dataReCalc;
 	private List<ObstacleData> obstacles;
 
-	public Runway(String name, RunwayData RD)
+	public RunwayOneWay(String name, RunwayData RD)
 	{
 		this.name = name;
 		this.dataOriginal = RD;
@@ -17,6 +17,7 @@ public class RunwayOneWay
 
 	public void addObstacle(ObstacleData OD)
 	{
+		obstacles.add(OD);
 		dataReCalc = Functions.reCalculate(dataOriginal, obstacles);
 	}
 
