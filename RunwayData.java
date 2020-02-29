@@ -14,4 +14,10 @@ public class RunwayData
 		this.ASDA = ASDA;
 		this.LDA = LDA;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Thresh: " + threshold + "\n" + "TORA: " + TORA + "\n" + "TODA: " + TODA + "\n" + "ASDA: " + ASDA + "\n" + "LDA: " + LDA + "\n";
+	}
 }
