@@ -8,7 +8,7 @@ public class Runway
 	{
 		this.leftBearing = leftBearing;
 		RunL = new RunwayOneWay(leftBearing + "L", left);
-		RunR = new RunwayOneWay((36 - leftBearing) + "R", right);
+		RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 	}
 
 	public void addObstacleL(ObstacleData ODL)
