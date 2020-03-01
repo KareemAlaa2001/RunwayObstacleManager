@@ -10,17 +10,24 @@ public class Functions
 		int newASDA;
 		int newLDA;
 
-		boolean towards = obstacle.position > runway.threshold;
+		boolean towards = obstacle.position > runway.threshold; // Need to fix this
 
-		if (slopeAllowance > Airport.RESA && towards) {
-			newLDA = obstacle.position - slopeAllowance - Airport.StripEnd;
+		if (slopeAllowance >= Airport.RESA && towards) {
+			newThreshold = runway.threshold;
+			newTORA = newTODA = newASDA = newLDA = obstacle.position - slopeAllowance - Airport.StripEnd;
 		} else if (slopeAllowance < Airport.RESA && towards) {
-			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
-		} else if (slopeAllowance > Airport.RESA && !towards && Airport.BlastAllowance > (slopeAllowance + Airport.StripEnd)) {
+			newThreshold = runway.threshold;
+			newTORA = newTODA = newASDA = newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+		} else if (Airport.BlastAllowance > (slopeAllowance + Airport.StripEnd) && Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newLDA = runway.LDA - obstacle.position - Airport.BlastAllowance;
 			newThreshold = obstacle.position + Airport.BlastAllowance;
+		} else if (Airport.BlastAllowance <= (slopeAllowance + Airport.StripEnd)) {
+
+		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
+
 		}
-		
+
+
 		return new RunwayData(newThreshold, newTORA, newTODA, newASDA, newLDA);
 	}
 }
