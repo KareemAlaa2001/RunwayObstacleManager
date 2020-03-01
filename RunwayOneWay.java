@@ -35,4 +35,9 @@ public class RunwayOneWay
 	{ // Can return null if no obstacle has been added
 		return dataReCalc;
 	}
+        
+        public List<ObstacleData> getObstacles() 
+        {
+                return obstacles;
+        }
 }
