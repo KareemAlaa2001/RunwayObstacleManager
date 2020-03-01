@@ -10,7 +10,7 @@ public class Functions
 		int newASDA = -1;
 		int newLDA = -1;
 
-		boolean towards = obstacle.position > runway.threshold; // Need to fix this
+		boolean towards = obstacle.position > (runway.LDA / 2); // Need to fix this
 
 		if (slopeAllowance >= Airport.RESA && towards) {
 			newThreshold = runway.threshold;

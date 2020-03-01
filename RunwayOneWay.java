@@ -11,7 +11,7 @@ public class RunwayOneWay
 	{
 		this.name = name;
 		this.dataOriginal = RD;
-		dataReCalc = null;
+		dataReCalc = RD;
 		obstacles = new ArrayList<ObstacleData>();
 	}
 
@@ -32,7 +32,7 @@ public class RunwayOneWay
 	}
 
 	public RunwayData getUpdatedRunway()
-	{ // Can return null if no obstacle has been added
+	{ // Same as dataOriginal if no obstacles added
 		return dataReCalc;
 	}
         
