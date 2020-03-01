@@ -40,7 +40,7 @@ public class Window extends Application {
 
         ArrayList<Runway> runwayList = new ArrayList();
         Runway r = new Runway(9, new RunwayData(0, 3660, 3660, 3660, 3353), new RunwayData(0, 3660, 3660, 3660, 3353));
-        r.addObstacleR(new ObstacleData(3550, 200));
+        r.addObstacleR(new ObstacleData(3550, 12));
         runwayList.add(r);
         Airport ap = new Airport(runwayList);
 
@@ -49,13 +49,13 @@ public class Window extends Application {
         for (Runway runway : ap.getRunways()) {
             runwayNames.add(runway.getRunL().getName());
             runways.put(runway.getRunL().getName(), 
-                    new RunwayCanvas(1100, 900, runway.getRunL().getRunwaySpec(), runway.getRunL().getName(), runway.getRunL().getObstacles()));
+                    new RunwayCanvas(1100, 900, runway.getRunL().getRunwaySpec(), runway.getRunL().getName(), runway.getRunL().getObstacles(), ap));
             runwayNames.add(runway.getRunR().getName());
             runways.put(runway.getRunR().getName(), 
-                    new RunwayCanvas(1100, 900, runway.getRunR().getRunwaySpec(), runway.getRunR().getName(), runway.getRunR().getObstacles()));
+                    new RunwayCanvas(1100, 900, runway.getRunR().getRunwaySpec(), runway.getRunR().getName(), runway.getRunR().getObstacles(), ap));
         }
 
-        RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null);
+        RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null, null);
         emptyPane.getChildren().add(defaultCanvas);
         defaultCanvas.render();
 

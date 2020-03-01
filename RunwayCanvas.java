@@ -6,15 +6,17 @@ import javafx.scene.paint.Color;
 
 public class RunwayCanvas extends Canvas {
 
-    RunwayData data;
-    String name;
-    List<ObstacleData> obstacles;
+    private RunwayData data;
+    private String name;
+    private List<ObstacleData> obstacles;
+    private Airport airport;
 
-    RunwayCanvas(int w, int h, RunwayData data, String name, List<ObstacleData> obstacles) {
+    RunwayCanvas(int w, int h, RunwayData data, String name, List<ObstacleData> obstacles, Airport airport) {
         super(w, h);
         this.data = data;
         this.name = name;
         this.obstacles = obstacles;
+        this.airport = airport;
     }
 
     public void render() {
@@ -80,17 +82,39 @@ public class RunwayCanvas extends Canvas {
             
             
             g.setLineWidth(2);
+            double vScale = 20.0;
             for (ObstacleData obstacle : obstacles) {
                 g.setFill(Color.RED);
                 double[] xPoints = new double[]{1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
                     1000 * ((obstacle.position + 0.0) / data.TORA) + 50,
                     1000 * ((obstacle.position + 0.0) / data.TORA) + 60};
                 double[] yPoints = new double[]{725,
-                    725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA),
+                    725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale,
                     725};
                 g.fillPolygon(xPoints, yPoints, 3);
                 g.setFill(Color.BLACK);
                 g.strokePolygon(xPoints, yPoints, 3);
+                if ((obstacle.position + 0.0) / data.TORA > 0.5) {
+                    g.setLineWidth(2);
+                    g.setFill(Color.BLACK);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 70, 725,
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 70, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale,
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 725);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 725, 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 760);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 725, 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 760);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 750, 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 750);
+                    g.setLineWidth(1);
+                    g.strokeText(obstacle.maxHeight + "m", 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 70, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale - 5);
+                    g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m", 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope + 2, 750 + 15);
+                } else {
+                    
+                }
             }
             
             g.setFill(Color.GRAY);
