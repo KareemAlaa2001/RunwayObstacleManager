@@ -2,7 +2,7 @@ public class Functions
 {
 	static public RunwayData reCalculate(RunwayData runway, ObstacleData obstacle)
 	{ // Method known to not work
-		int slope = obstacle.maxHeight * 50;
+		int slope = obstacle.maxHeight * Airport.MinSlope;
 		
 		if (obstacle.position > runway.threshold) { // Takeoff / Landing toward obstacle
 			return new RunwayData(	runway.threshold,
