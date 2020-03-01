@@ -2,6 +2,11 @@ import java.util.*;
 
 public class Airport
 {
+	public static int RESA = 240;
+	public static int StripEnd = 60;
+	public static int BlastAllowance = 300;
+	public static int MinSlope = 50;
+
 	private List<Runway> runways;
 
 	public Airport(List<Runway> runways)
