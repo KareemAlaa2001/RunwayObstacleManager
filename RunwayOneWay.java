@@ -18,7 +18,7 @@ public class RunwayOneWay
 	public void addObstacle(ObstacleData OD)
 	{
 		obstacles.add(OD);
-		dataReCalc = Functions.reCalculate(dataOriginal, obstacles.get(0));
+		dataReCalc = Functions.reCalculate(dataOriginal, obstacles);
 	}
 
 	public String getName()
@@ -35,4 +35,8 @@ public class RunwayOneWay
 	{ // Can return null if no obstacle has been added
 		return dataReCalc;
 	}
+        
+        public List<ObstacleData> getObstacleList() {
+            return obstacles;
+        }
 }

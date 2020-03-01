@@ -6,6 +6,7 @@ public class RunwayData
 	public int ASDA; //  accelerate-stop distance available
 	public int LDA;  //  landing distance available
 
+
 	public RunwayData(int threshold, int TORA, int TODA, int ASDA, int LDA)
 	{
 		this.threshold = threshold;
@@ -13,11 +14,5 @@ public class RunwayData
 		this.TODA = TODA;
 		this.ASDA = ASDA;
 		this.LDA = LDA;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "Thresh: " + threshold + "\n" + "TORA: " + TORA + "\n" + "TODA: " + TODA + "\n" + "ASDA: " + ASDA + "\n" + "LDA: " + LDA + "\n";
 	}
 }
