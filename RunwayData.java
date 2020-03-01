@@ -1,18 +1,22 @@
 public class RunwayData
 {
-	public int threshold; //  displaced threshold
-	public int TORA; //  take off run available
-	public int TODA; //  take off distance available
-	public int ASDA; //  accelerate-stop distance available
-	public int LDA;  //  landing distance available
+	public int threshold;	// displaced threshold
+	public int stopway;
+	public int clearway;
+	public int TORA;		// take off run available
+	public int TODA;		// take off distance available
+	public int ASDA;		// accelerate-stop distance available
+	public int LDA;			// landing distance available
 
-	public RunwayData(int threshold, int TORA, int TODA, int ASDA, int LDA)
-	{
+	public RunwayData(int threshold, int TORA, int stopway, int clearway)
+	{ // clearway includes stopway
 		this.threshold = threshold;
 		this.TORA = TORA;
-		this.TODA = TODA;
-		this.ASDA = ASDA;
-		this.LDA = LDA;
+		this.ASDA = TORA + stopway;
+		this.TODA = TORA + clearway;
+		this.LDA = TORA - threshold;
+		this.stopway = stopway;
+		this.clearway = clearway;
 	}
 
 	@Override
