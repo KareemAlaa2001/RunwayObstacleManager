@@ -4,11 +4,11 @@ public class Functions
 	{ // Method known to not work
 		int slopeAllowance = obstacle.maxHeight * Airport.MinSlope;
 
-		int newThreshold;
-		int newTORA;
-		int newTODA;
-		int newASDA;
-		int newLDA;
+		int newThreshold = -1;
+		int newTORA = -1;
+		int newTODA = -1;
+		int newASDA = -1;
+		int newLDA = -1;
 
 		boolean towards = obstacle.position > runway.threshold; // Need to fix this
 
@@ -39,7 +39,7 @@ public class Functions
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
 		} else {
-			throw new Exception("Unhandled call to reCalculate as event not covered");
+			//throw new Exception("Unhandled call to reCalculate as event not covered");
 		}
 		return new RunwayData(newThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA);
 	}
