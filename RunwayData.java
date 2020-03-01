@@ -19,6 +19,17 @@ public class RunwayData
 		this.clearway = clearway;
 	}
 
+	public RunwayData(int threshold, int TORA, int TODA, int ASDA, int LDA)
+	{ // clearway totally seperate to stopway, call this function when initialising a runway
+		this.threshold = threshold;
+		this.TORA = TORA;
+		this.ASDA = ASDA;
+		this.TODA = TODA;
+		this.LDA = LDA;
+		this.stopway = ASDA - TORA;
+		this.clearway = TODA - TORA;
+	}
+
 	public RunwayData(int threshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA)
 	{ // Any usage of this constructor should be marked as such, only called in recalculation
 		this.threshold = threshold;
