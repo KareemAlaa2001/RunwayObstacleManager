@@ -55,14 +55,6 @@ public class RunwayCanvas extends Canvas {
             g.strokeText("ASDA - " + data.ASDA + "m", 55, 135);
             g.strokeText("TORA - " + data.TORA + "m", 55, 210);
             g.strokeText("LDA - " + data.LDA + "m", 55, 285);
-            
-//            g.setLineWidth(2);
-//            for (ObstacleData obstacle : obstacles) {
-//                g.setFill(Color.RED);
-//                g.fillRect(xPoints, yPoints);
-//                g.setFill(Color.BLACK);
-//                g.strokePolygon(xPoints, yPoints, 3);
-//            }
 
             
             g.setFill(Color.GRAY);
@@ -72,13 +64,27 @@ public class RunwayCanvas extends Canvas {
             g.strokeRect(50, 350, 1000 * (data.TORA / maxLength), 50);
             
             
+            for (ObstacleData obstacle : obstacles) {
+                g.setFill(Color.RED);
+                g.fillRect(1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
+                        355, 
+                        20,
+                        40);
+                g.setFill(Color.BLACK);
+                g.strokeRect(1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
+                        355, 
+                        20,
+                        40);
+            }
+            
+            
             
             g.setLineWidth(2);
             for (ObstacleData obstacle : obstacles) {
                 g.setFill(Color.RED);
-                double[] xPoints = new double[]{1000 * ((obstacle.start + 0.0) / data.TORA) + 50,
-                    1000 * ((obstacle.start + obstacle.maxPoint + 0.0) / data.TORA) + 50,
-                    1000 * ((obstacle.start + obstacle.length + 0.0) / data.TORA) + 50};
+                double[] xPoints = new double[]{1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
+                    1000 * ((obstacle.position + 0.0) / data.TORA) + 50,
+                    1000 * ((obstacle.position + 0.0) / data.TORA) + 60};
                 double[] yPoints = new double[]{725,
                     725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA),
                     725};

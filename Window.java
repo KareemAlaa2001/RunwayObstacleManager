@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Window extends Application {
-    
+
     private Map<String, RunwayCanvas> runways;
 
     public static void main(String[] args) {
@@ -32,49 +33,48 @@ public class Window extends Application {
         stage.setTitle("Airport Display");
         Pane emptyPane = new Pane();
         emptyPane.setPrefSize(1100, 900);
-        
+
         grid.add(emptyPane, 0, 0);
-        
+
         grid.add(new Label("Select Runway:"), 1, 0);
-        
-        Interface itf = new Interface() {
-            @Override
-            public ArrayList<RunwayOneWay> getRunwayList() {
-                ArrayList<RunwayOneWay> runways = new ArrayList();
-                RunwayOneWay runway = new RunwayOneWay("09R", new RunwayData(0, 3660, 3660, 3660, 3353));
-                runway.addObstacle(new ObstacleData(3000, 600, 550, 200));
-                runways.add(runway);
-                return runways;
-            }
-        };
-        
+
+        ArrayList<Runway> runwayList = new ArrayList();
+        Runway r = new Runway(9, new RunwayData(0, 3660, 3660, 3660, 3353), new RunwayData(0, 3660, 3660, 3660, 3353));
+        r.addObstacleR(new ObstacleData(3550, 200));
+        runwayList.add(r);
+        Airport ap = new Airport(runwayList);
+
         runways = new HashMap();
         List<String> runwayNames = new ArrayList();
-        for (RunwayOneWay runway : itf.getRunwayList()) {
-            runwayNames.add(runway.getName());
-            runways.put(runway.getName(), new RunwayCanvas(1100, 900, runway.getRunwaySpec(), runway.getName(), runway.getObstacleList()));
+        for (Runway runway : ap.getRunways()) {
+            runwayNames.add(runway.getRunL().getName());
+            runways.put(runway.getRunL().getName(), 
+                    new RunwayCanvas(1100, 900, runway.getRunL().getRunwaySpec(), runway.getRunL().getName(), runway.getRunL().getObstacles()));
+            runwayNames.add(runway.getRunR().getName());
+            runways.put(runway.getRunR().getName(), 
+                    new RunwayCanvas(1100, 900, runway.getRunR().getRunwaySpec(), runway.getRunR().getName(), runway.getRunR().getObstacles()));
         }
-        
+
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null);
         emptyPane.getChildren().add(defaultCanvas);
         defaultCanvas.render();
-        
+
         ComboBox runwaySelectionBox = new ComboBox();
         runwaySelectionBox.getItems().addAll(runwayNames);
-        
+
         runwaySelectionBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String oldVal, String newVal) {
                 updateCanvas(emptyPane, runways.get(newVal));
             }
         });
-        
+
         grid.add(runwaySelectionBox, 2, 0);
-        
+
         stage.setScene(new Scene(grid));
         stage.show();
     }
-    
+
     public void updateCanvas(Pane pane, RunwayCanvas canvas) {
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
