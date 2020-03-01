@@ -9,7 +9,7 @@ public class RunwayData
 	public int LDA;			// landing distance available
 
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
-	{ // clearway includes stopway, call this function when initialising a runway
+	{ // clearway totally seperate to stopway, call this function when initialising a runway
 		this.threshold = threshold;
 		this.TORA = TORA;
 		this.ASDA = TORA + stopway;
@@ -32,7 +32,7 @@ public class RunwayData
 
 	@Override
 	public String toString()
-	{
+	{ // For debugging purposes
 		return "Thresh: " + threshold + "\n" + "TORA: " + TORA + "\n" + "TODA: " + TODA + "\n" + "ASDA: " + ASDA + "\n" + "LDA: " + LDA + "\n";
 	}
 }

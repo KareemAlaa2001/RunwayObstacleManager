@@ -14,17 +14,30 @@ public class Functions
 
 		if (slopeAllowance >= Airport.RESA && towards) {
 			newThreshold = runway.threshold;
-			newTORA = newTODA = newASDA = newLDA = obstacle.position - slopeAllowance - Airport.StripEnd;
+			newTORA = newTODA = newASDA = obstacle.position - slopeAllowance - Airport.StripEnd;
+			newLDA = newTORA - runway.threshold;
 		} else if (slopeAllowance < Airport.RESA && towards) {
 			newThreshold = runway.threshold;
-			newTORA = newTODA = newASDA = newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+			newTORA = newTODA = newASDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+			newLDA = newTORA - runway.threshold;
 		} else if (Airport.BlastAllowance > (slopeAllowance + Airport.StripEnd) && Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
-			newLDA = runway.LDA - obstacle.position - Airport.BlastAllowance;
 			newThreshold = obstacle.position + Airport.BlastAllowance;
+			newLDA = runway.TORA - newThreshold;
+			newTORA = newLDA;
+			newTODA = newTORA + runway.clearway;
+			newASDA = newTORA + runway.stopway;
 		} else if (Airport.BlastAllowance <= (slopeAllowance + Airport.StripEnd)) {
-
+			newThreshold = obstacle.position + slopeAllowance + Airport.StripEnd;
+			newLDA = runway.TORA - newThreshold;
+			newTORA = newLDA;
+			newTODA = newTORA + runway.clearway;
+			newASDA = newTORA + runway.stopway;
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
-
+			newThreshold = obstacle.position + Airport.RESA + Airport.StripEnd;
+			newLDA = runway.TORA - newThreshold;
+			newTORA = newLDA;
+			newTODA = newTORA + runway.clearway;
+			newASDA = newTORA + runway.stopway;
 		} else {
 			throw new Exception("Unhandled call to reCalculate as event not covered");
 		}
