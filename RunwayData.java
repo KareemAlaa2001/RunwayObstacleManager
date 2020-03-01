@@ -9,12 +9,23 @@ public class RunwayData
 	public int LDA;			// landing distance available
 
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
-	{ // clearway includes stopway
+	{ // clearway includes stopway, call this function when initialising a runway
 		this.threshold = threshold;
 		this.TORA = TORA;
 		this.ASDA = TORA + stopway;
 		this.TODA = TORA + clearway;
 		this.LDA = TORA - threshold;
+		this.stopway = stopway;
+		this.clearway = clearway;
+	}
+
+	public RunwayData(int threshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA)
+	{ // Any usage of this constructor should be marked as such, only called in recalculation
+		this.threshold = threshold;
+		this.TORA = TORA;
+		this.ASDA = ASDA;
+		this.TODA = TODA;
+		this.LDA = LDA;
 		this.stopway = stopway;
 		this.clearway = clearway;
 	}

@@ -25,9 +25,9 @@ public class Functions
 
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 
+		} else {
+			throw new Exception("Unhandled call to reCalculate as event not covered");
 		}
-
-
-		return new RunwayData(newThreshold, newTORA, newTODA, newASDA, newLDA);
+		return new RunwayData(newThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA);
 	}
 }
