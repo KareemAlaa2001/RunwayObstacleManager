@@ -14,11 +14,11 @@ public class Functions
 
 		if (slopeAllowance >= Airport.RESA && towards) {
 			newThreshold = runway.threshold;
-			newTORA = newTODA = newASDA = obstacle.position - slopeAllowance - Airport.StripEnd;
+			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - slopeAllowance - Airport.StripEnd;
 			newLDA = newTORA - runway.threshold;
 		} else if (slopeAllowance < Airport.RESA && towards) {
 			newThreshold = runway.threshold;
-			newTORA = newTODA = newASDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - Airport.RESA - Airport.StripEnd;
 			newLDA = newTORA - runway.threshold;
 		} else if (Airport.BlastAllowance > (slopeAllowance + Airport.StripEnd) && Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.BlastAllowance;
