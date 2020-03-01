@@ -36,8 +36,8 @@ public class RunwayOneWay
 		return dataReCalc;
 	}
         
-        public List<ObstacleData> getObstacles() 
-        {
-                return obstacles;
-        }
+    public List<ObstacleData> getObstacles() 
+    {
+            return obstacles;
+    }
 }
