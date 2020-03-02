@@ -10,32 +10,36 @@ public class Functions
 		int newASDA = -1;
 		int newLDA = -1;
 
-		boolean towards = obstacle.position > (runway.LDA / 2); // Need to fix this
+		boolean towards = obstacle.position > (runway.TORA / 2); // Need to fix this
 
-		if (slopeAllowance >= Airport.RESA && towards) {
+		if (towards && slopeAllowance >= Airport.RESA) {
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - slopeAllowance - Airport.StripEnd;
-			newLDA = newTORA - runway.threshold;
-		} else if (slopeAllowance < Airport.RESA && towards) {
+			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+		} else if (towards && slopeAllowance < Airport.RESA) {
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - Airport.RESA - Airport.StripEnd;
-			newLDA = newTORA - runway.threshold;
-		} else if (Airport.BlastAllowance > (slopeAllowance + Airport.StripEnd) && Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
+			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+		} else if (Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.BlastAllowance;
-			newLDA = runway.TORA - newThreshold;
-			newTORA = newLDA;
-			newTODA = newTORA + runway.clearway;
-			newASDA = newTORA + runway.stopway;
-		} else if (Airport.BlastAllowance <= (slopeAllowance + Airport.StripEnd)) {
-			newThreshold = obstacle.position + slopeAllowance + Airport.StripEnd;
-			newLDA = runway.TORA - newThreshold;
-			newTORA = newLDA;
+			if (Airport.RESA > slopeAllowance) {
+				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
+			} else {
+				newLDA = runway.LDA - obstacle.position - slopeAllowance - Airport.StripEnd;
+			}
+			newTORA = runway.TORA - Airport.BlastAllowance - runway.threshold - obstacle.position;
+			//System.out.println(runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + obstacle.position + " = " + newTORA);
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.RESA + Airport.StripEnd;
-			newLDA = runway.TORA - newThreshold;
-			newTORA = newLDA;
+			if (Airport.RESA > slopeAllowance) {
+				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
+			} else {
+				newLDA = runway.LDA - obstacle.position - slopeAllowance - Airport.StripEnd;
+			}
+			newTORA = runway.TORA - Airport.RESA - Airport.StripEnd - obstacle.position - runway.threshold;
+			//System.out.println(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
 		} else {
