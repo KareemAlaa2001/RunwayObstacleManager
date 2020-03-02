@@ -113,7 +113,23 @@ public class RunwayCanvas extends Canvas {
                     g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m", 
                             1000 * ((obstacle.position + 0.0) / data.TORA) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope + 2, 750 + 15);
                 } else {
-                    
+                    g.setLineWidth(2);
+                    g.setFill(Color.BLACK);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 30, 725, //H Label
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 30, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale, //Slope Label
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 725);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 725, //Obstacle Position Line
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 760);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 725, //Hx50 Line
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 760);
+                    g.strokeLine(1000 * ((obstacle.position + 0.0) / data.TORA) + 50, 750, //Hx50 Label
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * airport.MinSlope, 750);
+                    g.setLineWidth(1);
+                    g.strokeText(obstacle.maxHeight + "m", 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 30, 725 - 1000 * ((obstacle.maxHeight + 0.0) / data.TORA) * vScale - 5);
+                    g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m", 
+                            1000 * ((obstacle.position + 0.0) / data.TORA) + 50 + 2, 750 + 15);
                 }
             }
             

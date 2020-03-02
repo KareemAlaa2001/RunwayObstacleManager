@@ -39,8 +39,8 @@ public class Window extends Application {
         grid.add(new Label("Select Runway:"), 1, 0);
 
         ArrayList<Runway> runwayList = new ArrayList();
-        Runway r = new Runway(9, new RunwayData(0, 3660, 3660, 3660, 3353), new RunwayData(0, 3660, 3660, 3660, 3353));
-        r.addObstacleR(new ObstacleData(3550, 12));
+        Runway r = new Runway(9, new RunwayData(0, 3660, 200, 400), new RunwayData(0, 3660, 200, 400));
+        r.addObstacleR(new ObstacleData(200, 12));
         runwayList.add(r);
         Airport ap = new Airport(runwayList);
 
