@@ -33,47 +33,54 @@ public class RunwayCanvas extends Canvas {
                     Math.max(data.TODA,
                             Math.max(data.LDA,
                                     data.ASDA)));
+            maxLength += data.clearway;
+            double scaledOffset = 1000 * (data.clearway / maxLength);
             g.setStroke(Color.BLACK);
             g.setLineWidth(2);
-            g.strokeLine(50, 50, 50, 340);
-            g.strokeLine(50, 65 , 1000 * (data.TODA / maxLength) + 50, 65 ); //TODA
-            g.strokeLine(1000 * (data.TODA / maxLength) + 50, 65, 1000 * (data.TODA / maxLength) + 40, 60);
-            g.strokeLine(1000 * (data.TODA / maxLength) + 50, 65, 1000 * (data.TODA / maxLength) + 40, 70);
+            g.strokeLine(50 + scaledOffset, 50, 50 + scaledOffset, 350);
+            g.strokeLine(50 + scaledOffset, 65 , 1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65 ); //TODA
+            g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset, 60);
+            g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset, 70);
                     
-            g.strokeLine(50, 140, 1000 * (data.ASDA / maxLength) + 50, 140); //ASDA
-            g.strokeLine(1000 * (data.ASDA / maxLength) + 50, 140, 1000 * (data.ASDA / maxLength) + 40, 135);
-            g.strokeLine(1000 * (data.ASDA / maxLength) + 50, 140, 1000 * (data.ASDA / maxLength) + 40, 145);
+            g.strokeLine(50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140); //ASDA
+            g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset, 135);
+            g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset, 145);
             
-            g.strokeLine(50, 215, 1000 * (data.TORA / maxLength) + 50, 215); //TORA
-            g.strokeLine(1000 * (data.TORA / maxLength) + 50, 215, 1000 * (data.TORA / maxLength) + 40, 210);
-            g.strokeLine(1000 * (data.TORA / maxLength) + 50, 215, 1000 * (data.TORA / maxLength) + 40, 220);
+            g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA
+            g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 210);
+            g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 220);
             
-            g.strokeLine(50, 290, 1000 * (data.LDA  / maxLength) + 50, 290); //LDA
-            g.strokeLine(1000 * (data.LDA / maxLength) + 50, 290, 1000 * (data.LDA / maxLength) + 40, 285);
-            g.strokeLine(1000 * (data.LDA / maxLength) + 50, 290, 1000 * (data.LDA / maxLength) + 40, 295);
+            g.strokeLine(50 + scaledOffset, 290, 1000 * (data.LDA  / maxLength) + 50 + scaledOffset, 290); //LDA
+            g.strokeLine(1000 * (data.LDA / maxLength) + 50 + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + scaledOffset, 285);
+            g.strokeLine(1000 * (data.LDA / maxLength) + 50 + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + scaledOffset, 295);
             
             g.setLineWidth(1);
-            g.strokeText("TODA - " + data.TODA + "m", 55, 60);
-            g.strokeText("ASDA - " + data.ASDA + "m", 55, 135);
-            g.strokeText("TORA - " + data.TORA + "m", 55, 210);
-            g.strokeText("LDA - " + data.LDA + "m", 55, 285);
+            g.strokeText("TODA - " + data.TODA + "m", 55 + scaledOffset, 60);
+            g.strokeText("ASDA - " + data.ASDA + "m", 55 + scaledOffset, 135);
+            g.strokeText("TORA - " + data.TORA + "m", 55 + scaledOffset, 210);
+            g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset, 285);
 
             
             g.setFill(Color.GRAY);
-            g.fillRect(50, 350, 1000 * (data.TORA / maxLength), 50);
+            g.fillRect(50 + scaledOffset, 350, 1000 * (data.TORA / maxLength), 50);
             g.setLineWidth(2);
             g.setStroke(Color.BLACK);
-            g.strokeRect(50, 350, 1000 * (data.TORA / maxLength), 50);
+            g.strokeRect(50 + scaledOffset, 350, 1000 * (data.TORA / maxLength), 50);
+            g.strokeRect(50 + scaledOffset - 1000 * (data.stopway / maxLength), 350, 1000 * (data.stopway / maxLength), 50);
+            g.strokeRect(50 + scaledOffset + 1000 * (data.TORA / maxLength), 350, 1000 * (data.stopway / maxLength), 50);
+            g.setLineWidth(1);
+            g.strokeRect(50 , 340, scaledOffset, 70);
+            g.strokeRect(50 + scaledOffset + 1000 * (data.TORA / maxLength), 340, scaledOffset, 70);
             
             
             for (ObstacleData obstacle : obstacles) {
                 g.setFill(Color.RED);
-                g.fillRect(1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
+                g.fillRect(1000 * ((obstacle.position + 0.0) / maxLength) + 40 + scaledOffset,
                         355, 
                         20,
                         40);
                 g.setFill(Color.BLACK);
-                g.strokeRect(1000 * ((obstacle.position + 0.0) / data.TORA) + 40,
+                g.strokeRect(1000 * ((obstacle.position + 0.0) / maxLength) + 40 + scaledOffset,
                         355, 
                         20,
                         40);
