@@ -49,10 +49,10 @@ public class Window extends Application {
         for (Runway runway : ap.getRunways()) {
             runwayNames.add(runway.getRunL().getName());
             runways.put(runway.getRunL().getName(), 
-                    new RunwayCanvas(1100, 900, runway.getRunL().getRunwaySpec(), runway.getRunL().getName(), runway.getRunL().getObstacles(), ap));
+                    new RunwayCanvas(1100, 900, runway.getRunL().getUpdatedRunway(), runway.getRunL().getName(), runway.getRunL().getObstacles(), ap));
             runwayNames.add(runway.getRunR().getName());
             runways.put(runway.getRunR().getName(), 
-                    new RunwayCanvas(1100, 900, runway.getRunR().getRunwaySpec(), runway.getRunR().getName(), runway.getRunR().getObstacles(), ap));
+                    new RunwayCanvas(1100, 900, runway.getRunR().getUpdatedRunway(), runway.getRunR().getName(), runway.getRunR().getObstacles(), ap));
         }
 
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null, null);
