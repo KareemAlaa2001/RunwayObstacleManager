@@ -1,7 +1,7 @@
 public class Functions 
 {
 	static public RunwayData reCalculate(RunwayData runway, ObstacleData obstacle)
-	{ // Method known to not work
+	{ // Very dirty due to prints and overlapping repeat code, needs cleaning
 		int slopeAllowance = obstacle.maxHeight * Airport.MinSlope;
 
 		int newThreshold = -1;
@@ -16,17 +16,20 @@ public class Functions
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - slopeAllowance - Airport.StripEnd;
 			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+
 			System.out.println("New LDA, TODA, ASDA = " + runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
 			System.out.println("New LDA = " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (towards && slopeAllowance < Airport.RESA) {
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - Airport.RESA - Airport.StripEnd;
 			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+
 			System.out.println("New LDA, TODA, ASDA = " + runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
 			System.out.println("New LDA = " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.BlastAllowance;
 			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.BlastAllowance + " = " + newThreshold);
+
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
 				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
@@ -44,6 +47,7 @@ public class Functions
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.RESA + Airport.StripEnd;
 			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
+			
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
 				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);

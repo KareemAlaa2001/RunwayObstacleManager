@@ -21,12 +21,12 @@ public class Runway
 	}
 
 	public void addObstacleL(ObstacleData ODL)
-	{
+	{ // Could be deprecated soon
 		RunL.addObstacle(ODL);
 	}
 
 	public void addObstacleR(ObstacleData ODR)
-	{
+	{ // Could be deprecated soon
 		RunR.addObstacle(ODR);
 	}
 
