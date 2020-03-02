@@ -18,6 +18,7 @@ public class RunwayOneWay
 	public void addObstacle(ObstacleData OD)
 	{
 		obstacles.add(OD);
+		System.out.println("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
 		dataReCalc = Functions.reCalculate(dataOriginal, obstacles.get(0));
 	}
 
@@ -38,6 +39,6 @@ public class RunwayOneWay
         
     public List<ObstacleData> getObstacles() 
     {
-            return obstacles;
+        return obstacles;
     }
 }

@@ -16,35 +16,50 @@ public class Functions
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - slopeAllowance - Airport.StripEnd;
 			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+			System.out.println("New LDA, TODA, ASDA = " + runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
+			System.out.println("New LDA = " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (towards && slopeAllowance < Airport.RESA) {
 			newThreshold = runway.threshold;
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - Airport.RESA - Airport.StripEnd;
 			newLDA = obstacle.position - Airport.RESA - Airport.StripEnd;
+			System.out.println("New LDA, TODA, ASDA = " + runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
+			System.out.println("New LDA = " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.BlastAllowance;
+			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.BlastAllowance + " = " + newThreshold);
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
+				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 			} else {
 				newLDA = runway.LDA - obstacle.position - slopeAllowance - Airport.StripEnd;
+				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newLDA);
 			}
 			newTORA = runway.TORA - Airport.BlastAllowance - runway.threshold - obstacle.position;
-			//System.out.println(runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + obstacle.position + " = " + newTORA);
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
+
+			System.out.println("New TORA = " + runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + obstacle.position + " = " + newTORA);
+			System.out.println("New TODA = " + newTORA + " + " + runway.clearway + " = " + newTODA);
+			System.out.println("New ASDA = " + newTORA + " + " + runway.stopway + " = " + newASDA);
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 			newThreshold = obstacle.position + Airport.RESA + Airport.StripEnd;
+			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
+				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 			} else {
 				newLDA = runway.LDA - obstacle.position - slopeAllowance - Airport.StripEnd;
+				System.out.println("New LDA = " + runway.LDA + " - " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newLDA);
 			}
 			newTORA = runway.TORA - Airport.RESA - Airport.StripEnd - obstacle.position - runway.threshold;
-			//System.out.println(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
-		} else {
-			//throw new Exception("Unhandled call to reCalculate as event not covered");
+
+			System.out.println("New TORA = " + runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
+			System.out.println("New TODA = " + newTORA + " + " + runway.clearway + " = " + newTODA);
+			System.out.println("New ASDA = " + newTORA + " + " + runway.stopway + " = " + newASDA);
 		}
+		System.out.println();
 		return new RunwayData(newThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA);
 	}
 }
