@@ -7,9 +7,13 @@ public class FunctionsTests
 {
 	private List<Runway> generateTestRunways()
 	{
-    	ArrayList<Runway> runwayList = new ArrayList();
+    	ArrayList<Runway> runwayList = new ArrayList<Runway>();
         Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
         Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
+        runwayList.add(r1);
+        runwayList.add(r2);
+        
+		return runwayList;
 	}
 
 	private boolean runwayDataSame(RunwayData a, RunwayData b)
