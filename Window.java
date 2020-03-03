@@ -39,20 +39,24 @@ public class Window extends Application {
         grid.add(new Label("Select Runway:"), 1, 0);
 
         ArrayList<Runway> runwayList = new ArrayList();
-        Runway r = new Runway(9, new RunwayData(0, 3660, 200, 400), new RunwayData(0, 3660, 200, 400));
-        r.addObstacleL(new ObstacleData(200, 12));
-        r.addObstacleR(new ObstacleData(3500, 12));
-        runwayList.add(r);
+        Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
+        r1.addObstacleL(new ObstacleData(-50, 12));
+        r1.addObstacleR(new ObstacleData(3646, 12));
+        r2.addObstacleL(new ObstacleData(500, 25));
+        r2.addObstacleR(new ObstacleData(2853, 25));
+        runwayList.add(r1);
+        runwayList.add(r2);
         Airport ap = new Airport(runwayList);
 
         runways = new HashMap();
         List<String> runwayNames = new ArrayList();
         for (Runway runway : ap.getRunways()) {
             runwayNames.add(runway.getRunL().getName());
-            runways.put(runway.getRunL().getName(), 
+            runways.put(runway.getRunL().getName(),
                     new RunwayCanvas(1100, 900, runway.getRunL().getUpdatedRunway(), runway.getRunL().getName(), runway.getRunL().getObstacles(), runway.getRunL().getRunwaySpec().TORA));
             runwayNames.add(runway.getRunR().getName());
-            runways.put(runway.getRunR().getName(), 
+            runways.put(runway.getRunR().getName(),
                     new RunwayCanvas(1100, 900, runway.getRunR().getUpdatedRunway(), runway.getRunR().getName(), runway.getRunR().getObstacles(), runway.getRunR().getRunwaySpec().TORA));
         }
 
@@ -72,7 +76,8 @@ public class Window extends Application {
 
         grid.add(runwaySelectionBox, 2, 0);
 
-        stage.setScene(new Scene(grid));
+        stage.setScene(new Scene(grid, 1360, 980));
+        stage.setResizable(false);
         stage.show();
     }
 
