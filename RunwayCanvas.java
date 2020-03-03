@@ -55,16 +55,16 @@ public class RunwayCanvas extends Canvas {
                     g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 210);
                     g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 220);
 
-                    g.strokeLine(50 + scaledOffset, 275, 50 + scaledOffset, 350);
-                    g.strokeLine(50 + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 50 + scaledOffset, 290); //LDA
-                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + scaledOffset, 285);
-                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + scaledOffset, 295);
+                    g.strokeLine(50 + scaledOffset + 1000 * (data.threshold / maxLength), 275, 50 + scaledOffset + 1000 * (data.threshold / maxLength), 350);
+                    g.strokeLine(50 + scaledOffset + 1000 * (data.threshold / maxLength), 290, 1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290); //LDA
+                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * (data.threshold / maxLength) + scaledOffset, 285);
+                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * (data.threshold / maxLength) + scaledOffset, 295);
 
                     g.setLineWidth(1);
                     g.strokeText("TODA - " + data.TODA + "m", 55 + scaledOffset, 60);
                     g.strokeText("ASDA - " + data.ASDA + "m", 55 + scaledOffset, 135);
                     g.strokeText("TORA - " + data.TORA + "m", 55 + scaledOffset, 210);
-                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset, 285);
+                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
 
                 } else {
                     
@@ -130,12 +130,12 @@ public class RunwayCanvas extends Canvas {
             g.setLineWidth(2);
             for (ObstacleData obstacle : obstacles) {
                 g.setFill(Color.RED);
-                g.fillRect(1000 * ((obstacle.position + 0.0) / maxLength) + 40 + scaledOffset,
+                g.fillRect(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 40 + scaledOffset,
                         355,
                         20,
                         40);
                 g.setFill(Color.BLACK);
-                g.strokeRect(1000 * ((obstacle.position + 0.0) / maxLength) + 40 + scaledOffset,
+                g.strokeRect(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 40 + scaledOffset,
                         355,
                         20,
                         40);
@@ -145,51 +145,51 @@ public class RunwayCanvas extends Canvas {
             double vScale = 20.0;
             for (ObstacleData obstacle : obstacles) {
                 g.setFill(Color.RED);
-                double[] xPoints = new double[]{1000 * ((obstacle.position + 0.0) / maxLength) + 40 + scaledOffset,
-                    1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset,
-                    1000 * ((obstacle.position + 0.0) / maxLength) + 60 + scaledOffset};
+                double[] xPoints = new double[]{1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 40 + scaledOffset,
+                    1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset,
+                    1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 60 + scaledOffset};
                 double[] yPoints = new double[]{725,
                     725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale,
                     725};
                 g.fillPolygon(xPoints, yPoints, 3);
                 g.setFill(Color.BLACK);
                 g.strokePolygon(xPoints, yPoints, 3);
-                if ((obstacle.position + 0.0) / originalRunwayLength > 0.5) {
+                if ((obstacle.position + data.threshold + 0.0) / originalRunwayLength > 0.5) {
                     g.setLineWidth(2);
                     g.setFill(Color.BLACK);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 70 + scaledOffset, 725,
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale,
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 725,
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 760);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725,
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 750,
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 70 + scaledOffset, 725,
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale,
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 725,
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 760);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725,
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 750,
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
                     g.setLineWidth(1);
                     g.strokeText(obstacle.maxHeight + "m",
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
                     g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m",
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + 2 + scaledOffset, 750 + 15);
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + 2 + scaledOffset, 750 + 15);
                 } else {
                     g.setLineWidth(2);
                     g.setFill(Color.BLACK);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 30 + scaledOffset, 725, //H Label
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale, //Slope Label
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 725, //Obstacle Position Line
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 760);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725, //Hx50 Line
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
-                    g.strokeLine(1000 * ((obstacle.position + 0.0) / maxLength) + 50 + scaledOffset, 750, //Hx50 Label
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 30 + scaledOffset, 725, //H Label
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale, //Slope Label
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 725, //Obstacle Position Line
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 760);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725, //Hx50 Line
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
+                    g.strokeLine(1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + scaledOffset, 750, //Hx50 Label
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
                     g.setLineWidth(1);
                     g.strokeText(obstacle.maxHeight + "m",
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
                     g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m",
-                            1000 * ((obstacle.position + 0.0) / maxLength) + 50 + 2 + scaledOffset, 750 + 15);
+                            1000 * ((obstacle.position + data.threshold + 0.0) / maxLength) + 50 + 2 + scaledOffset, 750 + 15);
                 }
             }
 
