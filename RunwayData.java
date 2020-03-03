@@ -1,6 +1,6 @@
 public class RunwayData
 {
-	public int threshold;	// displaced threshold
+	public int threshold;	// displaced threshold after recalculation (could be the same value)
 	public int stopway;
 	public int clearway;
 	public int TORA;		// take off run available
