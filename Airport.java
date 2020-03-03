@@ -31,6 +31,7 @@ public class Airport
 				}
 			}
 		}
+		return null; // runways does not contain runName
 	}
 
 	public List<Runway> getRunways()

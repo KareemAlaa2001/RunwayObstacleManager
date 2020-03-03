@@ -1,8 +1,9 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import java.util.*;
 
-public class BackendTests 
+public class FunctionsTests 
 {
 	private List<Runway> generateTestRunways()
 	{
@@ -13,7 +14,7 @@ public class BackendTests
 
 	private boolean runwayDataSame(RunwayData a, RunwayData b)
 	{
-		return (a.TORA == b.TORA) && (a.TODA == b.TODA) && (a.ASDA == b.ASDA) && (a.LDA == b.LDA)
+		return (a.TORA == b.TORA) && (a.TODA == b.TODA) && (a.ASDA == b.ASDA) && (a.LDA == b.LDA);
 	}
 
     @Test
