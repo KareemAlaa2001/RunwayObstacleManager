@@ -27,8 +27,8 @@ public class Functions
 			System.out.println("New TORA, TODA, ASDA = " + runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
 			System.out.println("New LDA = " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
-			newThreshold = obstacle.position + Airport.BlastAllowance;
-			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.BlastAllowance + " = " + newThreshold);
+			newThreshold = runway.threshold + obstacle.position + Airport.BlastAllowance;
+			System.out.println("New Threshold = " + runway.threshold + " + " + obstacle.position + " + " + Airport.BlastAllowance + " = " + newThreshold);
 
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
@@ -45,8 +45,8 @@ public class Functions
 			System.out.println("New TODA = " + newTORA + " + " + runway.clearway + " = " + newTODA);
 			System.out.println("New ASDA = " + newTORA + " + " + runway.stopway + " = " + newASDA);
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
-			newThreshold = obstacle.position + Airport.RESA + Airport.StripEnd;
-			System.out.println("New Threshold = " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
+			newThreshold = runway.threshold + obstacle.position + Airport.RESA + Airport.StripEnd;
+			System.out.println("New Threshold = " + runway.threshold + " + " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
 			
 			if (Airport.RESA > slopeAllowance) {
 				newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
