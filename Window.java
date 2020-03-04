@@ -45,13 +45,21 @@ public class Window
         for (Runway runway : ap.getRunways()) {
             runwayNames.add(runway.getRunL().getName());
             runways.put(runway.getRunL().getName(),
-                    new RunwayCanvas(1100, 900, runway.getRunL().getUpdatedRunway(), runway.getRunL().getName(), runway.getRunL().getObstacles(), runway.getRunL().getRunwaySpec().TORA));
+                    new RunwayCanvas(1100, 900, runway.getRunL().getUpdatedRunway(),
+                            runway.getRunL().getName(),
+                            runway.getRunL().getObstacles(),
+                            runway.getRunL().getRunwaySpec().TORA,
+                            runway.getRunL().getRunwaySpec().threshold));
             runwayNames.add(runway.getRunR().getName());
             runways.put(runway.getRunR().getName(),
-                    new RunwayCanvas(1100, 900, runway.getRunR().getUpdatedRunway(), runway.getRunR().getName(), runway.getRunR().getObstacles(), runway.getRunR().getRunwaySpec().TORA));
+                    new RunwayCanvas(1100, 900, runway.getRunR().getUpdatedRunway(),
+                            runway.getRunR().getName(),
+                            runway.getRunR().getObstacles(),
+                            runway.getRunR().getRunwaySpec().TORA,
+                            runway.getRunR().getRunwaySpec().threshold));
         }
 
-        RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null, 0);
+        RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900, null, "Unselected", null, 0, 0);
         emptyPane.getChildren().add(defaultCanvas);
         defaultCanvas.render();
 
