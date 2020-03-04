@@ -5,27 +5,28 @@ import java.util.*;
 
 public class AirportTests
 {
-	@Test
+    @Test
     public void addRetreiveRunways()
     {
-    	ArrayList<Runway> runwayList = new ArrayList<Runway>();
-        Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        ArrayList<Runway> runwayList = new ArrayList<Runway>();
+        runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
         Airport ap1 = new Airport(runwayList);
 
         RunwayOneWay rw = null;
         rw = ap1.getRunway("09L");
-        AssertFalse(rw == null);
+        System.out.println(rw);
+        assertFalse(rw == null);
 
-        RunwayOneWay rw = null;
+        rw = null;
         rw = ap1.getRunway("27R");
-        AssertFalse(rw == null);
+        assertFalse(rw == null);
     }
 
-	@Test
+    @Test
     public void addObstacleToRunway()
     {
-    	ArrayList<Runway> runwayList = new ArrayList<Runway>();
-        Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        ArrayList<Runway> runwayList = new ArrayList<Runway>();
+        runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
         Airport ap1 = new Airport(runwayList);
 
         ap1.addObstacle(new ObstacleData(-1, 2), "09L");
@@ -37,7 +38,7 @@ public class AirportTests
             od = new ObstacleData(10, 10);
         }
 
-        AssertEquals(od.position == -1);
-        AssertEquals(od.maxHeight == 2);
+        assertEquals(-1, od.position);
+        assertEquals(2, od.maxHeight);
     }
 }
