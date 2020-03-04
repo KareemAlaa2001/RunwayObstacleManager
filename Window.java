@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Window extends Application
+public class Window
 {
     private Airport ap;
     private Map<String, RunwayCanvas> runways;
@@ -25,8 +25,7 @@ public class Window extends Application
         this.ap = ap; 
     }
 
-    @Override
-    public void start(Stage stage) throws Exception
+    public Stage getStage(Stage stage) throws Exception
     {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -71,7 +70,7 @@ public class Window extends Application
 
         stage.setScene(new Scene(grid, 1360, 980));
         stage.setResizable(false);
-        stage.show();
+        return stage;
     }
 
     public void updateCanvas(Pane pane, RunwayCanvas canvas)
