@@ -15,16 +15,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Window extends Application {
-
+public class Window extends Application
+{
+    private Airport ap;
     private Map<String, RunwayCanvas> runways;
 
-    public static void main(String[] args) {
-        launch(args);
+    public Window(Airport ap)
+    {
+        this.ap = ap; 
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception
+    {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -38,20 +41,6 @@ public class Window extends Application {
 
         grid.add(new Label("Select Runway:"), 1, 0);
 
-        ArrayList<Runway> runwayList = new ArrayList();
-        Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-        Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
-        Runway r3 = new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660));
-        r1.addObstacleL(new ObstacleData(-50, 12));
-        r1.addObstacleR(new ObstacleData(3646, 12));
-        r2.addObstacleL(new ObstacleData(500, 25));
-        r2.addObstacleR(new ObstacleData(2853, 25));
-        r3.addObstacleL(new ObstacleData(500, 25));
-        r3.addObstacleR(new ObstacleData(2853, 25));
-        runwayList.add(r1);
-        runwayList.add(r2);
-        runwayList.add(r3);
-        Airport ap = new Airport(runwayList);
 
         runways = new HashMap();
         List<String> runwayNames = new ArrayList();
@@ -85,7 +74,8 @@ public class Window extends Application {
         stage.show();
     }
 
-    public void updateCanvas(Pane pane, RunwayCanvas canvas) {
+    public void updateCanvas(Pane pane, RunwayCanvas canvas)
+    {
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
         canvas.render();
