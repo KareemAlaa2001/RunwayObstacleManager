@@ -3,6 +3,8 @@ import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class RunwayCanvas extends Canvas {
 
@@ -96,10 +98,36 @@ public class RunwayCanvas extends Canvas {
                     }
                 }
             }
-            System.out.println("Left Ob Pos: " + leftOb.position);
-            System.out.println("Right Ob Pos: " + rightOb.position);
+
+            drawLine(g, leftOb.position + oData.threshold + opClearway, 750, 
+                    leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK,
+                    leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", false, 5, 15);
+            drawLine(g, leftOb.position + oData.threshold + opClearway, 735, 
+                    leftOb.position + oData.threshold + opClearway, 770, Color.BLACK);
+            drawLine(g, leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 735, 
+                    leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK);
+            drawLine(g, leftOb.position + oData.threshold + opClearway, 725 - leftOb.maxHeight * VSCALE * totalScale, 
+                    leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 725, Color.BLACK);
+            drawLine(g, leftOb.position + oData.threshold + opClearway - 70, 725 - leftOb.maxHeight * VSCALE * totalScale, 
+                    leftOb.position + oData.threshold + opClearway - 70, 725, Color.BLACK, 
+                    leftOb.maxHeight + "m", false, 0, -10);
+            
+            drawLine(g, rightOb.position + oData.threshold + opClearway, 750, 
+                    rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK,
+                    rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", false,
+                    - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15);
+            drawLine(g, rightOb.position + oData.threshold + opClearway, 735, 
+                    rightOb.position + oData.threshold + opClearway, 770, Color.BLACK);
+            drawLine(g, rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 735, 
+                    rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK);
+            drawLine(g, rightOb.position + oData.threshold + opClearway, 725 - rightOb.maxHeight * VSCALE * totalScale, 
+                    rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 725, Color.BLACK);
+            drawLine(g, rightOb.position + oData.threshold + opClearway + 70, 725 - rightOb.maxHeight * VSCALE * totalScale, 
+                    rightOb.position + oData.threshold + opClearway + 70, 725, Color.BLACK, 
+                    rightOb.maxHeight + "m", false, - (int)textWidth(g, rightOb.maxHeight + "m"), -10);
 
         }
+
     }
 
     public void drawRect(GraphicsContext g, double x, double y, double w, double h, Color f, Color s) {
@@ -121,7 +149,7 @@ public class RunwayCanvas extends Canvas {
         g.strokePolygon(xPoints, yPoints, 3);
     }
 
-    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, String l, boolean h) {
+    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, String l, boolean h, int ox, int oy) {
         g.setLineWidth(2);
         g.setStroke(s);
         g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
@@ -129,7 +157,20 @@ public class RunwayCanvas extends Canvas {
             g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 20, y2 - 20);
             g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 20, y2 + 20);
         }
-        g.strokeText(l, x1 * totalScale + 5, y1);
+        g.setLineWidth(1);
+        g.strokeText(l, x1 * totalScale + ox + MARGIN, y1 + oy);
+    }
+    
+    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s) {
+        g.setLineWidth(2);
+        g.setStroke(s);
+        g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
+    }
+    
+    private static double textWidth(GraphicsContext g, String s) {
+        Text text = new Text(s);
+        text.setFont(g.getFont());
+        return text.getBoundsInLocal().getWidth();
     }
 //                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
 //    g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA

@@ -16,8 +16,12 @@ public class Controller extends Application {
         r1.addObstacleR(new ObstacleData(3646, 12));
         r2.addObstacleL(new ObstacleData(500, 25));
         r2.addObstacleR(new ObstacleData(2853, 25));
-        r3.addObstacleL(new ObstacleData(500, 25));
-        r3.addObstacleR(new ObstacleData(2853, 25));
+        r3.addObstacleL(new ObstacleData(500, 21));
+        r3.addObstacleR(new ObstacleData(2853, 21));
+        r3.addObstacleL(new ObstacleData(2853, 25));
+        r3.addObstacleR(new ObstacleData(500, 25));
+        r3.addObstacleL(new ObstacleData(300, 25));
+        r3.addObstacleR(new ObstacleData(3053, 25));
         runwayList.add(r1);
         runwayList.add(r2);
         runwayList.add(r3);
