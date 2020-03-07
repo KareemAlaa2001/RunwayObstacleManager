@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 public class RunwayCanvas extends Canvas {
 
     private final int MARGIN = 50;
+    private final double VSCALE = 20.0;
 
     private RunwayData nData = null;
     private RunwayData oData = null;
@@ -38,6 +39,7 @@ public class RunwayCanvas extends Canvas {
     public void render() {
         final GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.BLACK);
+        g.setStroke(Color.BLACK);
         g.setLineWidth(5);
         g.strokeRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
         g.setLineWidth(3);
@@ -77,19 +79,63 @@ public class RunwayCanvas extends Canvas {
             drawRect(g, opClearway - opStopway, 725, opStopway, 10, Color.WHITE, Color.BLACK); //Bottom left stopway
             drawRect(g, opClearway + oData.TORA, 725, oData.stopway, 10, Color.WHITE, Color.BLACK); //Bottom right stopway
             drawRect(g, 0, 725, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
-            drawRect(g, opClearway + oData.TORA, 725, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom right clearway
+            drawRect(g, opClearway + oData.TORA, 725, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
 
-            g.setStroke(Color.BLACK);
+            ObstacleData leftOb = null;
+            ObstacleData rightOb = null;
+            for (ObstacleData ob : obstacles) {
+                drawRect(g, ob.position + oData.threshold + opClearway - 50, 355, 100, 40, Color.RED, Color.BLACK); //Top obstacle
+                drawTriangle(g, ob.position + oData.threshold + opClearway, 725, ob.maxHeight, Color.RED, Color.BLACK); //Top bottom obstacle
+                if (ob.position > oData.TORA / 2) {
+                    if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
+                        rightOb = ob;
+                    }
+                } else {
+                    if (leftOb == null || (ob.position + ob.maxHeight * Airport.MinSlope) > (leftOb.position + leftOb.maxHeight * Airport.MinSlope)) {
+                        leftOb = ob;
+                    }
+                }
+            }
+            System.out.println("Left Ob Pos: " + leftOb.position);
+            System.out.println("Right Ob Pos: " + rightOb.position);
+
         }
     }
 
     public void drawRect(GraphicsContext g, double x, double y, double w, double h, Color f, Color s) {
+        g.setLineWidth(1);
         g.setFill(f);
         g.fillRect(x * totalScale + MARGIN, y, w * totalScale, h);
         g.setLineWidth(1);
         g.setStroke(s);
         g.strokeRect(x * totalScale + MARGIN, y, w * totalScale, h);
     }
+
+    public void drawTriangle(GraphicsContext g, double x, double y, double h, Color f, Color s) {
+        g.setLineWidth(1);
+        g.setFill(f);
+        double[] xPoints = new double[]{(x - 50) * totalScale + MARGIN, x * totalScale + MARGIN, (x + 50) * totalScale + MARGIN};
+        double[] yPoints = new double[]{y, y - h * VSCALE * totalScale, y};
+        g.fillPolygon(xPoints, yPoints, 3);
+        g.setStroke(s);
+        g.strokePolygon(xPoints, yPoints, 3);
+    }
+
+    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, String l, boolean h) {
+        g.setLineWidth(2);
+        g.setStroke(s);
+        g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
+        if (h) {
+            g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 20, y2 - 20);
+            g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 20, y2 + 20);
+        }
+        g.strokeText(l, x1 * totalScale + 5, y1);
+    }
+//                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
+//    g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA
+//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 210);
+//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 220);
+//
 
 //            double maxLength = Math.max(data.TORA,
 //                    Math.max(data.TODA,
@@ -204,7 +250,6 @@ public class RunwayCanvas extends Canvas {
 //            }
 //
 //            g.setLineWidth(2);
-//            double vScale = 20.0;
 //            for (ObstacleData obstacle : obstacles) {
 //                g.setFill(Color.RED);
 //                double[] xPoints = new double[]{1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 40 + scaledOffset,
