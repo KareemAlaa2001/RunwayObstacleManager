@@ -11,14 +11,29 @@ public class RunwayCanvas extends Canvas {
     private List<ObstacleData> obstacles;
     private double originalRunwayLength;
     private double originalThreshold;
+    private double opClearway;
+    private double opStopway;
 
-    RunwayCanvas(int w, int h, RunwayData data, String name, List<ObstacleData> obstacles, double originalRunwayLength, double originalThreshold) {
+    public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway) {
         super(w, h);
-        this.data = data;
-        this.name = name;
-        this.obstacles = obstacles;
-        this.originalRunwayLength = originalRunwayLength;
-        this.originalThreshold = originalThreshold;
+        this.data = runway.getUpdatedRunway();
+        this.name = runway.getName();
+        this.obstacles = runway.getObstacles();
+        this.originalRunwayLength = runway.getRunwaySpec().TORA;
+        this.originalThreshold = runway.getRunwaySpec().threshold;
+        this.opClearway = opClearway;
+        this.opStopway = opStopway;
+    }
+    
+    public RunwayCanvas(int w, int h) {
+        super(w, h);
+        this.data = null;
+        this.name = "Unselected";
+        this.obstacles = null;
+        this.originalRunwayLength = 0;
+        this.originalThreshold = 0;
+        this.opClearway = 0;
+        this.opStopway = 0;
     }
 
     public void render() {
