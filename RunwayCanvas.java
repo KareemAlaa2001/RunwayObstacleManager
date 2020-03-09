@@ -30,20 +30,27 @@ public class RunwayCanvas extends Canvas {
         this.opStopway = opStopway;
         totalScale = (w - (MARGIN * 2)) / (opClearway + oData.TORA + oData.clearway);
         this.gradedArea = gradedArea;
-        runwayVpos = Math.min(350, this.getHeight() / 2 - MARGIN - gradedArea * totalScale - 25);
+        runwayVpos = Math.min(350, this.getHeight() / 2 - MARGIN - gradedArea * totalScale - 25) + 325;
     }
 
     public RunwayCanvas(int w, int h) {
         super(w, h);
     }
 
-    public void render() {
+    public void render(double scale, double tx, double ty) {
         final GraphicsContext g = this.getGraphicsContext2D();
+        g.setFill(Color.WHITE);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (oData != null) {
-
+            
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() / 2);
             g.clip();
+
+            g.save();
+            g.translate(-tx, -ty);
+            g.scale(scale, scale);
+            
             g.setLineWidth(1);
             g.setFill(Color.LIGHTGRAY);
             double[] xPoints = new double[]{0,
@@ -77,15 +84,13 @@ public class RunwayCanvas extends Canvas {
                 runwayVpos + 25 + gradedArea * totalScale,
                 runwayVpos + 75,
                 runwayVpos + 75,
-                this.getHeight() / 2,
-                this.getHeight() / 2};
+                this.getWidth(),
+                this.getWidth()};
             g.fillPolygon(xPoints, yPoints, 8);
-            g.restore();
-            
 
             drawRect(g, opClearway, runwayVpos, oData.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
-            drawRect(g, opClearway - opStopway, runwayVpos, opStopway, 50, Color.WHITE, Color.BLACK); //Top left stopway
-            drawRect(g, opClearway + oData.TORA, runwayVpos, oData.stopway, 50, Color.WHITE, Color.BLACK); //Top right stopway
+            drawRect(g, opClearway - opStopway, runwayVpos, opStopway, 50, Color.LIGHTGREY, Color.BLACK); //Top left stopway
+            drawRect(g, opClearway + oData.TORA, runwayVpos, oData.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top right stopway
             drawRect(g, 0, runwayVpos - 10, opClearway, 70, Color.TRANSPARENT, Color.GRAY); //Top left clearway
             drawRect(g, opClearway + oData.TORA, runwayVpos - 10, oData.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top right clearway
 
@@ -103,10 +108,21 @@ public class RunwayCanvas extends Canvas {
             }
             drawRotatedText(g, name, 88 + opClearway * totalScale, runwayVpos + 7, 90, Color.WHITE);
 
+            for (ObstacleData ob : obstacles) {
+                drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
+            }
+
+            drawLine(g, opClearway + (oData.TORA - nData.TORA), 375, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
+            drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
+
+            g.restore();
+            
+            g.restore();
+
             g.setFill(Color.GRAY);
             drawRect(g, opClearway, 725, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
-            drawRect(g, opClearway - opStopway, 725, opStopway, 10, Color.WHITE, Color.BLACK); //Bottom left stopway
-            drawRect(g, opClearway + oData.TORA, 725, oData.stopway, 10, Color.WHITE, Color.BLACK); //Bottom right stopway
+            drawRect(g, opClearway - opStopway, 725, opStopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom left stopway
+            drawRect(g, opClearway + oData.TORA, 725, oData.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom right stopway
             drawRect(g, 0, 725, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
             drawRect(g, opClearway + oData.TORA, 725, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
 
@@ -120,8 +136,7 @@ public class RunwayCanvas extends Canvas {
             ObstacleData leftOb = null;
             ObstacleData rightOb = null;
             for (ObstacleData ob : obstacles) {
-                drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
-                drawTriangle(g, ob.position + oData.threshold + opClearway, 725, ob.maxHeight, Color.RED, Color.BLACK); //Top bottom obstacle
+                drawTriangle(g, ob.position + oData.threshold + opClearway, 725, ob.maxHeight, Color.RED, Color.BLACK); //Bottom obstacle
                 if (ob.position > oData.TORA / 2) {
                     if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
                         rightOb = ob;
@@ -169,9 +184,6 @@ public class RunwayCanvas extends Canvas {
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 50, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
-            
-            drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
             drawLine(g, opClearway + nData.threshold, 705, opClearway + nData.threshold, 725, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
 
         }
