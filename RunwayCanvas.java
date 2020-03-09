@@ -1,4 +1,5 @@
 
+import java.awt.Point;
 import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -37,12 +38,12 @@ public class RunwayCanvas extends Canvas {
         super(w, h);
     }
 
-    public void render(double scale, double tx, double ty) {
+    public void render(double scale, double tx, double ty, boolean rotate) {
         final GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.WHITE);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (oData != null) {
-            
+
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() / 2);
             g.clip();
@@ -51,6 +52,14 @@ public class RunwayCanvas extends Canvas {
             g.translate(-tx, -ty);
             g.scale(scale, scale);
             
+            if (rotate) {
+                g.save();
+                g.translate(this.getWidth() / 2, this.getWidth() / 2);
+                g.rotate(Integer.parseInt(name.substring(0, 2)) * 10.0 - 90.0);
+                g.translate(-this.getWidth() / 2, -this.getWidth() / 2);
+            }
+            
+
             g.setLineWidth(1);
             g.setFill(Color.LIGHTGRAY);
             double[] xPoints = new double[]{0,
@@ -116,7 +125,7 @@ public class RunwayCanvas extends Canvas {
             drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
 
             g.restore();
-            
+            g.restore();
             g.restore();
 
             g.setFill(Color.GRAY);

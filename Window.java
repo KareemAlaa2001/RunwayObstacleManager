@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -41,10 +42,6 @@ public class Window {
         Pane emptyPane = new Pane();
         emptyPane.setPrefSize(1100, 900);
 
-        grid.add(emptyPane, 0, 0);
-
-        grid.add(new Label("Select Runway:"), 1, 0);
-
         runways = new HashMap();
         List<String> runwayNames = new ArrayList();
         for (Runway runway : ap.getRunways()) {
@@ -62,10 +59,12 @@ public class Window {
                             runway.getRunL().getRunwaySpec().stopway,
                             runway.getGradedArea()));
         }
+        
+        CheckBox rotateSelect = new CheckBox("Rotate Runway");
 
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900);
         emptyPane.getChildren().add(defaultCanvas);
-        defaultCanvas.render(1.0, 0, 0);
+        defaultCanvas.render(1.0, 0, 0, false);
         currentCanvas = defaultCanvas;
         emptyPane.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
@@ -80,7 +79,7 @@ public class Window {
                     currentXOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getWidth(), currentXOffset));
                     currentYOffset += canvasY * delta * 0.001;
                     currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
-                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset);
+                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
                 }
             }
         });
@@ -93,7 +92,7 @@ public class Window {
                 currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
                 mouseDX = t.getX();
                 mouseDY = t.getY();
-                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset);
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
             }
         });
         emptyPane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -114,21 +113,34 @@ public class Window {
                 currentXOffset = 0.0;
                 currentYOffset = 325.0;
                 currentCanvas = runways.get(newVal);
-                updateCanvas(emptyPane, runways.get(newVal), currentScroll, currentXOffset, currentYOffset);
+                updateCanvas(emptyPane, runways.get(newVal), currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
             }
         });
 
+
+        grid.add(emptyPane, 0, 0, 1, 2);
+
+        grid.add(new Label("Select Runway:"), 1, 0);
+        
         grid.add(runwaySelectionBox, 2, 0);
+        
+        rotateSelect.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+            }
+        });
+        grid.add(rotateSelect, 1, 1, 2, 1);
 
         stage.setScene(new Scene(grid, 1360, 980));
         stage.setResizable(false);
         return stage;
     }
 
-    public void updateCanvas(Pane pane, RunwayCanvas canvas, double scale, double tx, double ty) {
+    public void updateCanvas(Pane pane, RunwayCanvas canvas, double scale, double tx, double ty, boolean rotate) {
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
-        canvas.render((1.0 + scale * 0.001), tx, ty);
+        canvas.render((1.0 + scale * 0.001), tx, ty, rotate);
     }
 
 }
