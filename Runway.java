@@ -1,5 +1,6 @@
 public class Runway
-{	
+{
+	private int gradedArea;
 	private int leftBearing;
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
@@ -18,6 +19,28 @@ public class Runway
 			RunL = new RunwayOneWay(leftBearing + "L", left);
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
+	}
+
+	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right)
+	{
+		this.gradedArea = gradedArea;
+		this.leftBearing = leftBearing;
+
+		if (leftBearing < 10) {
+			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
+			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
+		} else if (leftBearing < 28 && leftBearing > 18) {
+			RunL = new RunwayOneWay(leftBearing + "L", left);
+			RunR = new RunwayOneWay("0" + ((leftBearing + 18) % 36) + "R", right);
+		} else {
+			RunL = new RunwayOneWay(leftBearing + "L", left);
+			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
+		}
+	}
+
+	public int getGradedArea()
+	{
+		return gradedArea;
 	}
 
 	public void addObstacleL(ObstacleData ODL)
