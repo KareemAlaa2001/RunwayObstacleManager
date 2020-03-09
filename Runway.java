@@ -1,6 +1,6 @@
 public class Runway
 {
-	private int gradedArea;
+	private int gradedArea; // distance from centreline in m, like radius it is only measured on one side and is symmetrical
 	private int leftBearing;
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
@@ -8,6 +8,7 @@ public class Runway
 	public Runway(int leftBearing, RunwayData left, RunwayData right)
 	{
 		this.leftBearing = leftBearing;
+		this.gradedArea = 0;
 
 		if (leftBearing < 10) {
 			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
