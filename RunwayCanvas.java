@@ -15,23 +15,21 @@ public class RunwayCanvas extends Canvas {
     private RunwayData oData = null;
     private String name = "Unselected";
     private List<ObstacleData> obstacles = null;
-    private double originalRunwayLength = 0;
-    private double originalThreshold = 0;
     private double opClearway = 0;
     private double opStopway = 0;
     private double totalScale = 0;
+    private double gradedArea = 0;
 
-    public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway) {
+    public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway, double gradedArea) {
         super(w, h);
         this.oData = runway.getRunwaySpec();
         this.nData = runway.getUpdatedRunway();
         this.name = runway.getName();
         this.obstacles = runway.getObstacles();
-        this.originalRunwayLength = runway.getRunwaySpec().TORA;
-        this.originalThreshold = runway.getRunwaySpec().threshold;
         this.opClearway = opClearway;
         this.opStopway = opStopway;
         totalScale = (w - (MARGIN * 2)) / (opClearway + oData.TORA + oData.clearway);
+        this.gradedArea = gradedArea;
     }
 
     public RunwayCanvas(int w, int h) {
@@ -40,15 +38,36 @@ public class RunwayCanvas extends Canvas {
 
     public void render() {
         final GraphicsContext g = this.getGraphicsContext2D();
-        g.setFill(Color.BLACK);
-        g.setStroke(Color.BLACK);
-        g.setLineWidth(5);
-        g.strokeRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
-        g.setLineWidth(3);
-        g.strokeLine(0, g.getCanvas().getHeight() / 2, g.getCanvas().getWidth(), g.getCanvas().getHeight() / 2);
-        g.setLineWidth(1);
-        g.strokeText(name, 10, 20);
         if (oData != null) {
+
+            g.save();
+            g.rect(0, 0, this.getWidth(), this.getHeight() / 2);
+            g.clip();
+            g.setLineWidth(1);
+            g.setFill(Color.LIGHTGRAY);
+            double[] xPoints = new double[]{0,
+                opClearway * totalScale + MARGIN,
+                (opClearway + 200) * totalScale + MARGIN,
+                (oData.TORA - 200) * totalScale + MARGIN,
+                oData.TORA * totalScale + MARGIN,
+                this.getWidth(),
+                this.getWidth(),
+                0};
+            double[] yPoints = new double[]{325, 325, 375 - gradedArea * totalScale, 375 - gradedArea * totalScale, 325, 325, 0, 0};
+            g.fillPolygon(xPoints, yPoints, 8);
+            xPoints = new double[]{0,
+                opClearway * totalScale + MARGIN,
+                (opClearway + 200) * totalScale + MARGIN,
+                (oData.TORA - 200) * totalScale + MARGIN,
+                oData.TORA * totalScale + MARGIN,
+                this.getWidth(),
+                this.getWidth(),
+                0};
+            yPoints = new double[]{425, 425, 375 + gradedArea * totalScale, 375 + gradedArea * totalScale, 425, 425, this.getHeight() / 2, this.getHeight() / 2};
+            g.fillPolygon(xPoints, yPoints, 8);
+            g.restore();
+            
+
             drawRect(g, opClearway, 350, oData.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
             drawRect(g, opClearway - opStopway, 350, opStopway, 50, Color.WHITE, Color.BLACK); //Top left stopway
             drawRect(g, opClearway + oData.TORA, 350, oData.stopway, 50, Color.WHITE, Color.BLACK); //Top right stopway
@@ -110,7 +129,7 @@ public class RunwayCanvas extends Canvas {
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Left right horizontal marker
                 drawLine(g, leftOb.position + oData.threshold + opClearway, 725 - leftOb.maxHeight * VSCALE * totalScale,
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Left slope
-                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, 720 - leftOb.maxHeight * VSCALE * totalScale, 
+                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, 720 - leftOb.maxHeight * VSCALE * totalScale,
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
                 drawLine(g, leftOb.position + oData.threshold + opClearway - 70, 725 - leftOb.maxHeight * VSCALE * totalScale,
                         leftOb.position + oData.threshold + opClearway - 70, 725, Color.BLACK,
@@ -128,7 +147,7 @@ public class RunwayCanvas extends Canvas {
                         rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Right left horizontal marker
                 drawLine(g, rightOb.position + oData.threshold + opClearway, 725 - rightOb.maxHeight * VSCALE * totalScale,
                         rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Right slope
-                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), 720 - rightOb.maxHeight * VSCALE * totalScale + 100 * Math.cos(angle), 
+                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), 720 - rightOb.maxHeight * VSCALE * totalScale + 100 * Math.cos(angle),
                         -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
                 drawLine(g, rightOb.position + oData.threshold + opClearway + 70, 725 - rightOb.maxHeight * VSCALE * totalScale,
                         rightOb.position + oData.threshold + opClearway + 70, 725, Color.BLACK,
@@ -140,6 +159,15 @@ public class RunwayCanvas extends Canvas {
             drawLine(g, opClearway + (oData.TORA - nData.TORA), 215, opClearway + oData.TORA, 215, Color.BLACK, "TORA - " + nData.TORA + "m", true, 5, -5); //TORA
 
         }
+
+        g.setFill(Color.BLACK);
+        g.setStroke(Color.BLACK);
+        g.setLineWidth(5);
+        g.strokeRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
+        g.setLineWidth(3);
+        g.strokeLine(0, g.getCanvas().getHeight() / 2, g.getCanvas().getWidth(), g.getCanvas().getHeight() / 2);
+        g.setLineWidth(1);
+        g.strokeText(name, 10, 20);
 
     }
 

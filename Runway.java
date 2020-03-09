@@ -8,7 +8,7 @@ public class Runway
 	public Runway(int leftBearing, RunwayData left, RunwayData right)
 	{
 		this.leftBearing = leftBearing;
-		this.gradedArea = 0;
+		this.gradedArea = 400;
 
 		if (leftBearing < 10) {
 			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
