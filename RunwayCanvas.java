@@ -99,6 +99,7 @@ public class RunwayCanvas extends Canvas {
                 }
             }
 
+            double angle = Math.atan(Airport.MinSlope / VSCALE);
             if (leftOb != null) {
                 drawLine(g, leftOb.position + oData.threshold + opClearway, 750,
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK,
@@ -109,6 +110,8 @@ public class RunwayCanvas extends Canvas {
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Left right horizontal marker
                 drawLine(g, leftOb.position + oData.threshold + opClearway, 725 - leftOb.maxHeight * VSCALE * totalScale,
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Left slope
+                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, 720 - leftOb.maxHeight * VSCALE * totalScale, 
+                        90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
                 drawLine(g, leftOb.position + oData.threshold + opClearway - 70, 725 - leftOb.maxHeight * VSCALE * totalScale,
                         leftOb.position + oData.threshold + opClearway - 70, 725, Color.BLACK,
                         leftOb.maxHeight + "m", false, 0, -10); //Left vertical label
@@ -125,6 +128,8 @@ public class RunwayCanvas extends Canvas {
                         rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Right left horizontal marker
                 drawLine(g, rightOb.position + oData.threshold + opClearway, 725 - rightOb.maxHeight * VSCALE * totalScale,
                         rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Right slope
+                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), 720 - rightOb.maxHeight * VSCALE * totalScale + 100 * Math.cos(angle), 
+                        -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
                 drawLine(g, rightOb.position + oData.threshold + opClearway + 70, 725 - rightOb.maxHeight * VSCALE * totalScale,
                         rightOb.position + oData.threshold + opClearway + 70, 725, Color.BLACK,
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
