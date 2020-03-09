@@ -170,6 +170,9 @@ public class RunwayCanvas extends Canvas {
             }
 
             drawLine(g, opClearway + (oData.TORA - nData.TORA), 50, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
+            
+            drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
+            drawLine(g, opClearway + nData.threshold, 705, opClearway + nData.threshold, 725, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
 
         }
 
