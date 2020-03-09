@@ -3,7 +3,6 @@ import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class RunwayCanvas extends Canvas {
@@ -19,6 +18,7 @@ public class RunwayCanvas extends Canvas {
     private double opStopway = 0;
     private double totalScale = 0;
     private double gradedArea = 0;
+    private double runwayVpos = 350;
 
     public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway, double gradedArea) {
         super(w, h);
@@ -30,6 +30,7 @@ public class RunwayCanvas extends Canvas {
         this.opStopway = opStopway;
         totalScale = (w - (MARGIN * 2)) / (opClearway + oData.TORA + oData.clearway);
         this.gradedArea = gradedArea;
+        runwayVpos = Math.min(350, this.getHeight() / 2 - MARGIN - gradedArea * totalScale - 25);
     }
 
     public RunwayCanvas(int w, int h) {
@@ -53,7 +54,14 @@ public class RunwayCanvas extends Canvas {
                 this.getWidth(),
                 this.getWidth(),
                 0};
-            double[] yPoints = new double[]{325, 325, 375 - gradedArea * totalScale, 375 - gradedArea * totalScale, 325, 325, 0, 0};
+            double[] yPoints = new double[]{runwayVpos - 25,
+                runwayVpos - 25,
+                runwayVpos + 25 - gradedArea * totalScale,
+                runwayVpos + 25 - gradedArea * totalScale,
+                runwayVpos - 25,
+                runwayVpos - 25,
+                0,
+                0};
             g.fillPolygon(xPoints, yPoints, 8);
             xPoints = new double[]{0,
                 opClearway * totalScale + MARGIN,
@@ -63,30 +71,37 @@ public class RunwayCanvas extends Canvas {
                 this.getWidth(),
                 this.getWidth(),
                 0};
-            yPoints = new double[]{425, 425, 375 + gradedArea * totalScale, 375 + gradedArea * totalScale, 425, 425, this.getHeight() / 2, this.getHeight() / 2};
+            yPoints = new double[]{runwayVpos + 75,
+                runwayVpos + 75,
+                runwayVpos + 25 + gradedArea * totalScale,
+                runwayVpos + 25 + gradedArea * totalScale,
+                runwayVpos + 75,
+                runwayVpos + 75,
+                this.getHeight() / 2,
+                this.getHeight() / 2};
             g.fillPolygon(xPoints, yPoints, 8);
             g.restore();
             
 
-            drawRect(g, opClearway, 350, oData.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
-            drawRect(g, opClearway - opStopway, 350, opStopway, 50, Color.WHITE, Color.BLACK); //Top left stopway
-            drawRect(g, opClearway + oData.TORA, 350, oData.stopway, 50, Color.WHITE, Color.BLACK); //Top right stopway
-            drawRect(g, 0, 340, opClearway, 70, Color.TRANSPARENT, Color.GRAY); //Top left clearway
-            drawRect(g, opClearway + oData.TORA, 340, oData.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top right clearway
+            drawRect(g, opClearway, runwayVpos, oData.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
+            drawRect(g, opClearway - opStopway, runwayVpos, opStopway, 50, Color.WHITE, Color.BLACK); //Top left stopway
+            drawRect(g, opClearway + oData.TORA, runwayVpos, oData.stopway, 50, Color.WHITE, Color.BLACK); //Top right stopway
+            drawRect(g, 0, runwayVpos - 10, opClearway, 70, Color.TRANSPARENT, Color.GRAY); //Top left clearway
+            drawRect(g, opClearway + oData.TORA, runwayVpos - 10, oData.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top right clearway
 
             g.setLineWidth(2);
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
-                    g.strokeLine(55 + opClearway * totalScale, 355 + i * 25 + j * 5, 70 + opClearway * totalScale, 355 + i * 25 + j * 5);
+                    g.strokeLine(55 + opClearway * totalScale, runwayVpos + 5 + i * 25 + j * 5, 70 + opClearway * totalScale, runwayVpos + 5 + i * 25 + j * 5);
                 }
             }
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 3; j++) {
-                    g.strokeLine(115 + opClearway * totalScale, 355 + i * 30 + j * 5, 125 + opClearway * totalScale, 355 + i * 30 + j * 5);
+                    g.strokeLine(115 + opClearway * totalScale, runwayVpos + 5 + i * 30 + j * 5, 125 + opClearway * totalScale, runwayVpos + 5 + i * 30 + j * 5);
                 }
             }
-            drawRotatedText(g, name, 88 + opClearway * totalScale, 357, 90, Color.WHITE);
+            drawRotatedText(g, name, 88 + opClearway * totalScale, runwayVpos + 7, 90, Color.WHITE);
 
             g.setFill(Color.GRAY);
             drawRect(g, opClearway, 725, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
@@ -105,7 +120,7 @@ public class RunwayCanvas extends Canvas {
             ObstacleData leftOb = null;
             ObstacleData rightOb = null;
             for (ObstacleData ob : obstacles) {
-                drawRect(g, ob.position + oData.threshold + opClearway - 50, 355, 100, 40, Color.RED, Color.BLACK); //Top obstacle
+                drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
                 drawTriangle(g, ob.position + oData.threshold + opClearway, 725, ob.maxHeight, Color.RED, Color.BLACK); //Top bottom obstacle
                 if (ob.position > oData.TORA / 2) {
                     if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
@@ -154,9 +169,7 @@ public class RunwayCanvas extends Canvas {
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 50, opClearway + (oData.TORA - nData.TORA), 350, Color.BLACK);
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 65, opClearway + (oData.TORA - nData.TORA) + nData.TODA, 65, Color.BLACK, "TODA - " + nData.TODA + "m", true, 5, -5); //TODA
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 215, opClearway + oData.TORA, 215, Color.BLACK, "TORA - " + nData.TORA + "m", true, 5, -5); //TORA
+            drawLine(g, opClearway + (oData.TORA - nData.TORA), 50, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
 
         }
 
