@@ -23,6 +23,7 @@ public class Window {
     private Airport ap;
     private Map<String, RunwayCanvas> runways;
     private double currentScroll;
+    private double mouseDX, mouseDY;
     private RunwayCanvas currentCanvas;
     private double currentXOffset, currentYOffset;
 
@@ -81,6 +82,25 @@ public class Window {
                     currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
                     updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset);
                 }
+            }
+        });
+        emptyPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                currentXOffset -= t.getX() - mouseDX;
+                currentYOffset -= t.getY() - mouseDY;
+                currentXOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getWidth(), currentXOffset));
+                currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
+                mouseDX = t.getX();
+                mouseDY = t.getY();
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset);
+            }
+        });
+        emptyPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                mouseDX = t.getX();
+                mouseDY = t.getY();
             }
         });
 
