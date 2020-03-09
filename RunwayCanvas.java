@@ -59,22 +59,15 @@ public class RunwayCanvas extends Canvas {
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
-                    g.strokeLine(55 + opClearway * totalScale, 355 + i * 25 + j * 5,
-                            70 + opClearway * totalScale, 355 + i * 25 + j * 5);
+                    g.strokeLine(55 + opClearway * totalScale, 355 + i * 25 + j * 5, 70 + opClearway * totalScale, 355 + i * 25 + j * 5);
                 }
             }
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 3; j++) {
-                    g.strokeLine(115 + opClearway * totalScale, 355 + i * 30 + j * 5,
-                            125 + opClearway * totalScale, 355 + i * 30 + j * 5);
+                    g.strokeLine(115 + opClearway * totalScale, 355 + i * 30 + j * 5, 125 + opClearway * totalScale, 355 + i * 30 + j * 5);
                 }
             }
-            g.setLineWidth(1);
-            g.save();
-            g.translate(88 + opClearway * totalScale, 357);
-            g.rotate(90);
-            g.strokeText(name, 5, 0);
-            g.restore();
+            drawRotatedText(g, name, 88 + opClearway * totalScale, 357, 90, Color.WHITE);
 
             g.setFill(Color.GRAY);
             drawRect(g, opClearway, 725, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
@@ -82,6 +75,13 @@ public class RunwayCanvas extends Canvas {
             drawRect(g, opClearway + oData.TORA, 725, oData.stopway, 10, Color.WHITE, Color.BLACK); //Bottom right stopway
             drawRect(g, 0, 725, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
             drawRect(g, opClearway + oData.TORA, 725, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
+
+            g.setLineWidth(2);
+            g.setStroke(Color.WHITE);
+            for (int i = 0; i < 2; i++) {
+                g.strokeLine(55 + opClearway * totalScale, 727 + i * 3, 70 + opClearway * totalScale, 727 + i * 3);
+            }
+            g.strokeLine(115 + opClearway * totalScale, 727, 125 + opClearway * totalScale, 727);
 
             ObstacleData leftOb = null;
             ObstacleData rightOb = null;
@@ -130,11 +130,6 @@ public class RunwayCanvas extends Canvas {
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            int lObOffset = 0;
-            if (leftOb != null) {
-                lObOffset = leftOb.position;
-            }
-
             drawLine(g, opClearway + (oData.TORA - nData.TORA), 50, opClearway + (oData.TORA - nData.TORA), 350, Color.BLACK);
             drawLine(g, opClearway + (oData.TORA - nData.TORA), 65, opClearway + (oData.TORA - nData.TORA) + nData.TODA, 65, Color.BLACK, "TODA - " + nData.TODA + "m", true, 5, -5); //TODA
             drawLine(g, opClearway + (oData.TORA - nData.TORA), 215, opClearway + oData.TORA, 215, Color.BLACK, "TORA - " + nData.TORA + "m", true, 5, -5); //TORA
@@ -180,10 +175,20 @@ public class RunwayCanvas extends Canvas {
         g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
     }
 
-    private static double textWidth(GraphicsContext g, String s) {
+    public double textWidth(GraphicsContext g, String s) {
         Text text = new Text(s);
         text.setFont(g.getFont());
         return text.getBoundsInLocal().getWidth();
+    }
+
+    public void drawRotatedText(GraphicsContext g, String s, double x, double y, double r, Color c) {
+        g.setLineWidth(1);
+        g.setStroke(c);
+        g.save();
+        g.translate(x, y);
+        g.rotate(r);
+        g.strokeText(s, 5, 0);
+        g.restore();
     }
 //                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
 //    g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA
