@@ -78,7 +78,7 @@ public class Window {
                     currentXOffset += canvasX * delta * 0.001;
                     currentXOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getWidth(), currentXOffset));
                     currentYOffset += canvasY * delta * 0.001;
-                    currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
+                    currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() * 0.7, currentYOffset));
                     updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
                 }
             }
@@ -89,7 +89,7 @@ public class Window {
                 currentXOffset -= t.getX() - mouseDX;
                 currentYOffset -= t.getY() - mouseDY;
                 currentXOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getWidth(), currentXOffset));
-                currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() / 2, currentYOffset));
+                currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() * 0.7, currentYOffset));
                 mouseDX = t.getX();
                 mouseDY = t.getY();
                 updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
@@ -111,7 +111,7 @@ public class Window {
             public void changed(ObservableValue ov, String oldVal, String newVal) {
                 currentScroll = 0.0;
                 currentXOffset = 0.0;
-                currentYOffset = 325.0;
+                currentYOffset = 235.0;
                 currentCanvas = runways.get(newVal);
                 updateCanvas(emptyPane, runways.get(newVal), currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
             }

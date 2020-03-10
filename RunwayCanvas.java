@@ -1,5 +1,4 @@
 
-import java.awt.Point;
 import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,7 +8,6 @@ import javafx.scene.text.Text;
 public class RunwayCanvas extends Canvas {
 
     private final int MARGIN = 50;
-    private final double VSCALE = 20.0;
     private final double VRATIO = 0.7;
 
     private RunwayData nData = null;
@@ -20,7 +18,7 @@ public class RunwayCanvas extends Canvas {
     private double opStopway = 0;
     private double totalScale = 0;
     private double gradedArea = 0;
-    private double runwayVpos = 350;
+    private double runwayVpos = 0;
 
     public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway, double gradedArea) {
         super(w, h);
@@ -32,7 +30,7 @@ public class RunwayCanvas extends Canvas {
         this.opStopway = opStopway;
         totalScale = (w - (MARGIN * 2)) / (opClearway + oData.TORA + oData.clearway);
         this.gradedArea = gradedArea;
-        runwayVpos = Math.min(350, this.getHeight() / 2 - MARGIN - gradedArea * totalScale - 25) + 325;
+        runwayVpos = this.getWidth() / 2 - 25;
     }
 
     public RunwayCanvas(int w, int h) {
@@ -46,12 +44,14 @@ public class RunwayCanvas extends Canvas {
         if (oData != null) {
 
             g.save();
-            g.rect(0, 0, this.getWidth(), this.getHeight() / 2);
+            g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
             g.clip();
 
             g.save();
             g.translate(-tx, -ty);
             g.scale(scale, scale);
+
+            double topCL = this.getHeight() * VRATIO * 0.5;
 
             if (rotate) {
                 g.save();
@@ -65,8 +65,8 @@ public class RunwayCanvas extends Canvas {
             double[] xPoints = new double[]{0,
                 opClearway * totalScale + MARGIN,
                 (opClearway + 200) * totalScale + MARGIN,
-                (oData.TORA - 200) * totalScale + MARGIN,
-                oData.TORA * totalScale + MARGIN,
+                (oData.TORA + opClearway - 200) * totalScale + MARGIN,
+                (oData.TORA + opClearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
                 0};
@@ -82,8 +82,8 @@ public class RunwayCanvas extends Canvas {
             xPoints = new double[]{0,
                 opClearway * totalScale + MARGIN,
                 (opClearway + 200) * totalScale + MARGIN,
-                (oData.TORA - 200) * totalScale + MARGIN,
-                oData.TORA * totalScale + MARGIN,
+                (oData.TORA + opClearway - 200) * totalScale + MARGIN,
+                (oData.TORA + opClearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
                 0};
@@ -121,7 +121,7 @@ public class RunwayCanvas extends Canvas {
                 drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
             }
 
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 375, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
+            drawLine(g, opClearway + (oData.TORA - nData.TORA), 235 + MARGIN, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
             drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
 
             g.restore();
@@ -165,9 +165,8 @@ public class RunwayCanvas extends Canvas {
                 }
             }
 
-
-            double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
             if (leftOb != null) {
+                double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
                 drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 75,
                         leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", false, 5, 15); //Left horizontal label
@@ -185,6 +184,7 @@ public class RunwayCanvas extends Canvas {
             }
 
             if (rightOb != null) {
+                double angle = Math.atan((rightOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
                 drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 75,
                         rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", false,
