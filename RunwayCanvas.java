@@ -10,6 +10,7 @@ public class RunwayCanvas extends Canvas {
 
     private final int MARGIN = 50;
     private final double VSCALE = 20.0;
+    private final double VRATIO = 0.7;
 
     private RunwayData nData = null;
     private RunwayData oData = null;
@@ -51,14 +52,13 @@ public class RunwayCanvas extends Canvas {
             g.save();
             g.translate(-tx, -ty);
             g.scale(scale, scale);
-            
+
             if (rotate) {
                 g.save();
                 g.translate(this.getWidth() / 2, this.getWidth() / 2);
                 g.rotate(Integer.parseInt(name.substring(0, 2)) * 10.0 - 90.0);
                 g.translate(-this.getWidth() / 2, -this.getWidth() / 2);
             }
-            
 
             g.setLineWidth(1);
             g.setFill(Color.LIGHTGRAY);
@@ -128,24 +128,32 @@ public class RunwayCanvas extends Canvas {
             g.restore();
             g.restore();
 
+            double bottomCL = this.getHeight() * (1.0 - VRATIO) * 0.5 + this.getHeight() * VRATIO;
+
             g.setFill(Color.GRAY);
-            drawRect(g, opClearway, 725, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
-            drawRect(g, opClearway - opStopway, 725, opStopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom left stopway
-            drawRect(g, opClearway + oData.TORA, 725, oData.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom right stopway
-            drawRect(g, 0, 725, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
-            drawRect(g, opClearway + oData.TORA, 725, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
+            drawRect(g, opClearway, bottomCL + 50, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
+            drawRect(g, opClearway - opStopway, bottomCL + 50, opStopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom left stopway
+            drawRect(g, opClearway + oData.TORA, bottomCL + 50, oData.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom right stopway
+            drawRect(g, 0, bottomCL + 50, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
+            drawRect(g, opClearway + oData.TORA, bottomCL + 50, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
 
             g.setLineWidth(2);
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
-                g.strokeLine(55 + opClearway * totalScale, 727 + i * 3, 70 + opClearway * totalScale, 727 + i * 3);
+                g.strokeLine(55 + opClearway * totalScale, bottomCL + 52 + i * 3, 70 + opClearway * totalScale, bottomCL + 52 + i * 3);
             }
-            g.strokeLine(115 + opClearway * totalScale, 727, 125 + opClearway * totalScale, 727);
+            g.strokeLine(115 + opClearway * totalScale, bottomCL + 52, 125 + opClearway * totalScale, bottomCL + 52);
+
+            double maxHeight = 0.0;
+            for (ObstacleData ob : obstacles) {
+                maxHeight = Math.max(maxHeight, ob.maxHeight);
+            }
+            double vScale = 100.0 / maxHeight;
 
             ObstacleData leftOb = null;
             ObstacleData rightOb = null;
             for (ObstacleData ob : obstacles) {
-                drawTriangle(g, ob.position + oData.threshold + opClearway, 725, ob.maxHeight, Color.RED, Color.BLACK); //Bottom obstacle
+                drawTriangle(g, ob.position + oData.threshold + opClearway, bottomCL + 50, ob.maxHeight * vScale, Color.RED, Color.BLACK); //Bottom obstacle
                 if (ob.position > oData.TORA / 2) {
                     if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
                         rightOb = ob;
@@ -157,43 +165,44 @@ public class RunwayCanvas extends Canvas {
                 }
             }
 
-            double angle = Math.atan(Airport.MinSlope / VSCALE);
+
+            double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
             if (leftOb != null) {
-                drawLine(g, leftOb.position + oData.threshold + opClearway, 750,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK,
+                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 75,
+                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", false, 5, 15); //Left horizontal label
-                drawLine(g, leftOb.position + oData.threshold + opClearway, 735,
-                        leftOb.position + oData.threshold + opClearway, 770, Color.BLACK); //Left left horizontal marker
-                drawLine(g, leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 735,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Left right horizontal marker
-                drawLine(g, leftOb.position + oData.threshold + opClearway, 725 - leftOb.maxHeight * VSCALE * totalScale,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Left slope
-                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, 720 - leftOb.maxHeight * VSCALE * totalScale,
+                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 60,
+                        leftOb.position + oData.threshold + opClearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
+                drawLine(g, leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
+                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
+                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
-                drawLine(g, leftOb.position + oData.threshold + opClearway - 70, 725 - leftOb.maxHeight * VSCALE * totalScale,
-                        leftOb.position + oData.threshold + opClearway - 70, 725, Color.BLACK,
+                drawLine(g, leftOb.position + oData.threshold + opClearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftOb.position + oData.threshold + opClearway - 70, bottomCL + 50, Color.BLACK,
                         leftOb.maxHeight + "m", false, 0, -10); //Left vertical label
             }
 
             if (rightOb != null) {
-                drawLine(g, rightOb.position + oData.threshold + opClearway, 750,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK,
+                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 75,
+                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", false,
                         - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15); //Right horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway, 735,
-                        rightOb.position + oData.threshold + opClearway, 770, Color.BLACK); //Right right horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 735,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 750, Color.BLACK); //Right left horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway, 725 - rightOb.maxHeight * VSCALE * totalScale,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, 725, Color.BLACK); //Right slope
-                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), 720 - rightOb.maxHeight * VSCALE * totalScale + 100 * Math.cos(angle),
+                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 60,
+                        rightOb.position + oData.threshold + opClearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
+                drawLine(g, rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
+                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Right slope
+                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), bottomCL + 45 - rightOb.maxHeight * vScale + 100 * Math.cos(angle),
                         -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
-                drawLine(g, rightOb.position + oData.threshold + opClearway + 70, 725 - rightOb.maxHeight * VSCALE * totalScale,
-                        rightOb.position + oData.threshold + opClearway + 70, 725, Color.BLACK,
+                drawLine(g, rightOb.position + oData.threshold + opClearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightOb.position + oData.threshold + opClearway + 70, bottomCL + 50, Color.BLACK,
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, opClearway + nData.threshold, 705, opClearway + nData.threshold, 725, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
+            drawLine(g, opClearway + nData.threshold, bottomCL + 30, opClearway + nData.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
 
         }
 
@@ -202,7 +211,7 @@ public class RunwayCanvas extends Canvas {
         g.setLineWidth(5);
         g.strokeRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
         g.setLineWidth(3);
-        g.strokeLine(0, g.getCanvas().getHeight() / 2, g.getCanvas().getWidth(), g.getCanvas().getHeight() / 2);
+        g.strokeLine(0, g.getCanvas().getHeight() * VRATIO, g.getCanvas().getWidth(), g.getCanvas().getHeight() * VRATIO);
         g.setLineWidth(1);
         g.strokeText(name, 10, 20);
 
@@ -221,7 +230,7 @@ public class RunwayCanvas extends Canvas {
         g.setLineWidth(1);
         g.setFill(f);
         double[] xPoints = new double[]{(x - 50) * totalScale + MARGIN, x * totalScale + MARGIN, (x + 50) * totalScale + MARGIN};
-        double[] yPoints = new double[]{y, y - h * VSCALE * totalScale, y};
+        double[] yPoints = new double[]{y, y - h, y};
         g.fillPolygon(xPoints, yPoints, 3);
         g.setStroke(s);
         g.strokePolygon(xPoints, yPoints, 3);
@@ -260,24 +269,7 @@ public class RunwayCanvas extends Canvas {
         g.strokeText(s, 5, 0);
         g.restore();
     }
-//                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
-//    g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 210);
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 220);
-//
 
-//            double maxLength = Math.max(data.TORA,
-//                    Math.max(data.TODA,
-//                            Math.max(data.LDA,
-//                                    Math.max(data.ASDA,
-//                                            originalRunwayLength + data.clearway))));
-//            maxLength += data.clearway;
-//            double scaledOffset = 1000 * (data.clearway / maxLength);
-//            double obscaleOffset = 1000 * ((originalRunwayLength - data.TORA) / maxLength);
-//            g.setStroke(Color.BLACK);
-//            g.setLineWidth(2);
-//
-//            for (ObstacleData obstacle : obstacles) {
 //                if ((obstacle.position + 0.0) / originalRunwayLength > 0.5) {
 //                    g.strokeLine(50 + scaledOffset, 50, 50 + scaledOffset, 350);
 //                    g.strokeLine(50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65); //TODA
@@ -331,115 +323,4 @@ public class RunwayCanvas extends Canvas {
 //                }
 //
 //            }
-//
-//            g.setFill(Color.GRAY);
-//            g.fillRect(50 + scaledOffset, 350, 1000 * (originalRunwayLength / maxLength), 50);
-//            g.setLineWidth(2);
-//            g.setStroke(Color.BLACK);
-//            g.strokeRect(50 + scaledOffset, 350, 1000 * (originalRunwayLength / maxLength), 50);
-//            g.strokeRect(50 + scaledOffset - 1000 * (data.stopway / maxLength), 350, 1000 * (data.stopway / maxLength), 50);
-//            g.strokeRect(50 + scaledOffset + 1000 * (originalRunwayLength / maxLength), 350, 1000 * (data.stopway / maxLength), 50);
-//            g.setLineWidth(1);
-//            g.strokeRect(50, 340, scaledOffset, 70);
-//            g.strokeRect(50 + scaledOffset + 1000 * (originalRunwayLength / maxLength), 340, scaledOffset, 70);
-//            g.setLineWidth(2);
-//            g.setStroke(Color.WHITE);
-//            for (int i = 0; i < 2; i++) {
-//                for (int j = 0; j < 4; j++) {
-//                    g.strokeLine(55 + scaledOffset, 355 + i * 25 + j * 5,
-//                            70 + scaledOffset, 355 + i * 25 + j * 5);
-//                }
-//            }
-//            for (int i = 0; i < 2; i++) {
-//                for (int j = 0; j < 3; j++) {
-//                    g.strokeLine(115 + scaledOffset, 355 + i * 30 + j * 5,
-//                            125 + scaledOffset, 355 + i * 30 + j * 5);
-//                }
-//            }
-//            g.setLineWidth(1);
-//            g.save();
-//            g.translate(88 + scaledOffset, 357);
-//            g.rotate(90);
-//            g.strokeText(name, 5, 0);
-//            g.restore();
-//
-//            g.setStroke(Color.BLACK);
-//            g.setLineWidth(2);
-//            for (ObstacleData obstacle : obstacles) {
-//                g.setFill(Color.RED);
-//                g.fillRect(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 40 + scaledOffset,
-//                        355,
-//                        20,
-//                        40);
-//                g.setFill(Color.BLACK);
-//                g.strokeRect(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 40 + scaledOffset,
-//                        355,
-//                        20,
-//                        40);
-//            }
-//
-//            g.setLineWidth(2);
-//            for (ObstacleData obstacle : obstacles) {
-//                g.setFill(Color.RED);
-//                double[] xPoints = new double[]{1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 40 + scaledOffset,
-//                    1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset,
-//                    1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 60 + scaledOffset};
-//                double[] yPoints = new double[]{725,
-//                    725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale,
-//                    725};
-//                g.fillPolygon(xPoints, yPoints, 3);
-//                g.setFill(Color.BLACK);
-//                g.strokePolygon(xPoints, yPoints, 3);
-//                if ((obstacle.position + originalThreshold + 0.0) / originalRunwayLength > 0.5) {
-//                    g.setLineWidth(2);
-//                    g.setFill(Color.BLACK);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 70 + scaledOffset, 725,
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale,
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 725,
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 760);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725,
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 750,
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
-//                    g.setLineWidth(1);
-//                    g.strokeText(obstacle.maxHeight + "m",
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 70 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
-//                    g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m",
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + 2 + scaledOffset, 750 + 15);
-//                } else {
-//                    g.setLineWidth(2);
-//                    g.setFill(Color.BLACK);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 30 + scaledOffset, 725, //H Label
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale, //Slope Label
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 725, //Obstacle Position Line
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 760);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 725, //Hx50 Line
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 760);
-//                    g.strokeLine(1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + scaledOffset, 750, //Hx50 Label
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * Airport.MinSlope + scaledOffset, 750);
-//                    g.setLineWidth(1);
-//                    g.strokeText(obstacle.maxHeight + "m",
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 30 + scaledOffset, 725 - 1000 * ((obstacle.maxHeight + 0.0) / maxLength) * vScale - 5);
-//                    g.strokeText(obstacle.maxHeight + "m x 50 = " + (obstacle.maxHeight * 50) + "m",
-//                            1000 * ((obstacle.position + originalThreshold + 0.0) / maxLength) + 50 + 2 + scaledOffset, 750 + 15);
-//                }
-//            }
-//
-//            g.setFill(Color.GRAY);
-//            g.fillRect(50 + scaledOffset, 725, 1000 * (originalRunwayLength / maxLength), 10);
-//            g.setLineWidth(2);
-//            g.setStroke(Color.BLACK);
-//            g.strokeRect(50 + scaledOffset, 725, 1000 * (originalRunwayLength / maxLength), 10);
-//            
-//            g.setLineWidth(2);
-//            g.setStroke(Color.BLACK);
-//            g.strokeRect(50 + scaledOffset - 1000 * (data.stopway / maxLength), 725, 1000 * (data.stopway / maxLength), 10);
-//            g.strokeRect(50 + scaledOffset + 1000 * (originalRunwayLength / maxLength), 725, 1000 * (data.stopway / maxLength), 10);
-//            g.setLineWidth(1);
-//            g.strokeRect(50, 725, scaledOffset, 20);
-//            g.strokeRect(50 + scaledOffset + 1000 * (originalRunwayLength / maxLength), 725, scaledOffset, 20);
 }
