@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 
 
 public class Controller extends Application {
+    
+    private Window window;
 
     private static Airport initAirport() {
         List<Runway> runwayList = new ArrayList();
@@ -33,8 +35,24 @@ public class Controller extends Application {
     }
 
     public void start(Stage stage) throws Exception {
-        Window window = new Window(initAirport());
+        window = new Window(initAirport());
         stage = window.getStage(stage);
         stage.show();
+    }
+
+    public void addOutputText(String string) {
+        window.addOutputText(string);
+    }
+
+    public void addActivityText(String string) {
+        window.addActivityText(string);
+    }
+
+    public void clearOutput() {
+        window.clearOutput();
+    }
+
+    public void clearActivity() {
+        window.clearActivity();
     }
 }

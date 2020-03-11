@@ -121,9 +121,9 @@ public class RunwayCanvas extends Canvas {
 
             drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN, opClearway + nData.takeoffThreshold, runwayVpos, Color.BLACK); //Take off threshold
             double labelDiv = (runwayVpos - 235 - MARGIN) / 4.0;
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 0, opClearway + nData.takeoffThreshold + nData.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nData.TODA + "m", true, 0, 0); //TODA
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 1, opClearway + nData.takeoffThreshold + nData.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nData.ASDA + "m", true, 0, 0); //ASDA
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 2, opClearway + nData.takeoffThreshold + nData.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nData.TORA + "m", true, 0, 0); //TORA
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 0, opClearway + nData.takeoffThreshold + nData.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nData.TODA + "m", true, 5, 10); //TODA
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 1, opClearway + nData.takeoffThreshold + nData.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nData.ASDA + "m", true, 5, 10); //ASDA
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 2, opClearway + nData.takeoffThreshold + nData.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nData.TORA + "m", true, 5, 10); //TORA
             
             drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold, runwayVpos, Color.BLACK); //Landing threshold
             drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold + nData.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, "LDA - " + nData.LDA + "m", true, 0, 0); //LDA
@@ -269,10 +269,11 @@ public class RunwayCanvas extends Canvas {
     public void drawRotatedText(GraphicsContext g, String s, double x, double y, double r, Color c) {
         g.setLineWidth(1);
         g.setStroke(c);
+        g.setFill(c);
         g.save();
         g.translate(x, y);
         g.rotate(r);
-        g.strokeText(s, 5, 0);
+        g.fillText(s, 5, 0);
         g.restore();
     }
 
