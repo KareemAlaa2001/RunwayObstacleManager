@@ -51,8 +51,6 @@ public class RunwayCanvas extends Canvas {
             g.translate(-tx, -ty);
             g.scale(scale, scale);
 
-            double topCL = this.getHeight() * VRATIO * 0.5;
-
             if (rotate) {
                 g.save();
                 g.translate(this.getWidth() / 2, this.getWidth() / 2);
@@ -121,7 +119,15 @@ public class RunwayCanvas extends Canvas {
                 drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
             }
 
-            drawLine(g, opClearway + (oData.TORA - nData.TORA), 235 + MARGIN, opClearway + (oData.TORA - nData.TORA), runwayVpos, Color.BLACK);
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN, opClearway + nData.takeoffThreshold, runwayVpos, Color.BLACK); //Take off threshold
+            double labelDiv = (runwayVpos - 235 - MARGIN) / 4.0;
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 0, opClearway + nData.takeoffThreshold + nData.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nData.TODA + "m", true, 0, 0); //TODA
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 1, opClearway + nData.takeoffThreshold + nData.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nData.ASDA + "m", true, 0, 0); //ASDA
+            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 2, opClearway + nData.takeoffThreshold + nData.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nData.TORA + "m", true, 0, 0); //TORA
+            
+            drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold, runwayVpos, Color.BLACK); //Landing threshold
+            drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold + nData.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, "LDA - " + nData.LDA + "m", true, 0, 0); //LDA
+            
             drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
 
             g.restore();
