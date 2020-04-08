@@ -4,9 +4,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-public class Controller extends Application {
-    
-    private Window window;
+
+public class Controller extends Application
+{
+    private static Window window = null;
 
     private static Airport initAirport() {
         List<Runway> runwayList = new ArrayList();
@@ -30,29 +31,51 @@ public class Controller extends Application {
         return new Airport(runwayList);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
 
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception
+    {
         window = new Window(initAirport());
         stage = window.getStage(stage);
         stage.show();
     }
 
-    public void addOutputText(String string) {
+    public static void addOutputText(String string)
+    {
+        if (window == null) {
+            System.err.println("Attempted to add output text to null window");
+            return;
+        }
         window.addOutputText(string);
     }
 
-    public void addActivityText(String string) {
+    public static void addActivityText(String string)
+    {
+        if (window == null) {
+            System.err.println("Attempted to add activity text to null window");
+            return;
+        }
         window.addActivityText(string);
     }
 
-    public void clearOutput() {
+    public static void clearOutput()
+    {
+        if (window == null) {
+            System.err.println("Attempted to clear output text of a null window");
+            return;
+        }
         window.clearOutput();
     }
 
-    public void clearActivity() {
+    public static void clearActivity()
+    {
+        if (window == null) {
+            System.err.println("Attempted to clear activity text of a null window");
+            return;
+        }
         window.clearActivity();
     }
 }

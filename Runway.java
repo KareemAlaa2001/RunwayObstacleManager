@@ -1,5 +1,6 @@
 public class Runway
 {
+	private String name;
 	private int gradedArea; // distance from centreline in m, like radius it is only measured on one side and is symmetrical
 	private int leftBearing;
 	private RunwayOneWay RunL;
@@ -20,6 +21,8 @@ public class Runway
 			RunL = new RunwayOneWay(leftBearing + "L", left);
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
+		this.name = RunL.getName() + "/" + RunR.getName();
+		Controller.addActivityText("Created runway " + name + ", without any graded area");
 	}
 
 	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right)
@@ -37,6 +40,13 @@ public class Runway
 			RunL = new RunwayOneWay(leftBearing + "L", left);
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
+		this.name = RunL.getName() + "/" + RunR.getName();
+		Controller.addActivityText("Created runway " + name);
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 
 	public int getGradedArea()
@@ -45,13 +55,17 @@ public class Runway
 	}
 
 	public void addObstacleL(ObstacleData ODL)
-	{ // Could be deprecated soon
+	{ // This should be the only point at which an obstacle should be added to a runway, RunwayOneWay.addObstacle() is only for internal use
 		RunL.addObstacle(ODL);
+		RunR.addObstacle(new ObstacleData(RunR.getRunwaySpec().TORA - (ODL.position + RunL.getRunwaySpec().threshold), ODL.maxHeight));
+		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
 	}
 
 	public void addObstacleR(ObstacleData ODR)
-	{ // Could be deprecated soon
+	{ // This should be the only point at which an obstacle should be added to a runway, RunwayOneWay.addObstacle() is only for internal use
 		RunR.addObstacle(ODR);
+		RunL.addObstacle(new ObstacleData(RunL.getRunwaySpec().TORA - (ODR.position + RunR.getRunwaySpec().threshold), ODR.maxHeight));
+		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}
 
 	public RunwayOneWay getRunL()
