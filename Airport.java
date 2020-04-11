@@ -9,6 +9,14 @@ public class Airport
 
 	private List<Runway> runways;
 
+	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
+	{
+		this.RESA = RESA;
+		this.StripEnd = StripEnd;
+		this.BlastAllowance = BlastAllowance;
+		this.MinSlope = MinSlope;
+	}
+
 	public Airport(List<Runway> runways)
 	{
 		this.runways = runways;
