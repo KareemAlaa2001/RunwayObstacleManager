@@ -1,9 +1,11 @@
 public class Functions 
 {
-	static public RunwayData reCalculate(RunwayData runway, ObstacleData obstacle)
-	{ // Very dirty due to prints and overlapping repeat code, needs cleaning
+	static public RunwayData reCalculate(RunwayData runway, ObstacleData obstacle) throws Exception
+	{ // Very dirty due to prints and overlapping repeat code, needs cleaning also needs to throw an exception if a runway becomes unusable due to recalculation
+		if (runway == null || obstacle == null) {
+			throw new Exception("null input to reCalculate");
+		}
 		int slopeAllowance = obstacle.maxHeight * Airport.MinSlope;
-
 		int newTakeoffThreshold = -1;
 		int newThreshold = -1;
 		int newTORA = -1;

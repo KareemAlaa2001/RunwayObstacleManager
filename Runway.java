@@ -6,8 +6,11 @@ public class Runway
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
 
-	public Runway(int leftBearing, RunwayData left, RunwayData right)
+	public Runway(int leftBearing, RunwayData left, RunwayData right) throws Exception
 	{
+		if (left == null || right == null) {
+			throw new Exception("Incorrect input to create a runway");
+		}
 		this.leftBearing = leftBearing;
 		this.gradedArea = 400;
 
@@ -25,8 +28,11 @@ public class Runway
 		Controller.addActivityText("Created runway " + name + ", without any graded area");
 	}
 
-	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right)
+	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right) throws Exception
 	{
+		if (left == null || right == null || gradedArea < 0) {
+			throw new Exception("Incorrect input to create a runway");
+		}
 		this.gradedArea = gradedArea;
 		this.leftBearing = leftBearing;
 
@@ -54,16 +60,16 @@ public class Runway
 		return gradedArea;
 	}
 
-	public void addObstacleL(ObstacleData ODL)
-	{ // This should be the only point at which an obstacle should be added to a runway, RunwayOneWay.addObstacle() is only for internal use
-		RunL.addObstacle(ODL);
+	public void addObstacleL(ObstacleData ODL) throws Exception
+	{ // Should not be used by any class other than Airport
+		RunL.addObstacle(ODL); // Should check if there is already an obstacle with these parameters added to the runway
 		RunR.addObstacle(new ObstacleData(RunR.getRunwaySpec().TORA - (ODL.position + RunL.getRunwaySpec().threshold), ODL.maxHeight));
 		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
 	}
 
-	public void addObstacleR(ObstacleData ODR)
-	{ // This should be the only point at which an obstacle should be added to a runway, RunwayOneWay.addObstacle() is only for internal use
-		RunR.addObstacle(ODR);
+	public void addObstacleR(ObstacleData ODR) throws Exception
+	{ // Should not be used by any class other than Airport
+		RunR.addObstacle(ODR); // Should check if there is already an obstacle with these parameters added to the runway
 		RunL.addObstacle(new ObstacleData(RunL.getRunwaySpec().TORA - (ODR.position + RunR.getRunwaySpec().threshold), ODR.maxHeight));
 		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}

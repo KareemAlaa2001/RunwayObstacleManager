@@ -53,15 +53,15 @@ public class Airport
 
 	public Runway getRunwayFull(String name) throws Exception
 	{
-		if (runName == null) {
+		if (name == null) {
 			throw new Exception("No name give for runway");
 		}
 		for (Runway run : runways) {
-			if (runways.getName().equals(name)) {
+			if (run.getName().equals(name)) {
 				return run;
 			}
 		}
-		throw new Exception("There is no runway in this airport with identifier '" + runName + "'");
+		throw new Exception("There is no runway in this airport with identifier '" + name + "'");
 	}
 
 	public List<Runway> getRunways()

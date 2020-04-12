@@ -15,11 +15,11 @@ public class RunwayOneWay
 		obstacles = new ArrayList<ObstacleData>();
 	}
 
-	public void addObstacle(ObstacleData OD)
+	public void addObstacle(ObstacleData OD) throws Exception
 	{
-		obstacles.add(OD);
 		Controller.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
 		dataReCalc = Functions.reCalculate(dataOriginal, obstacles.get(0));
+		obstacles.add(OD);
 	}
 
 	public String getName()
