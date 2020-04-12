@@ -9,23 +9,32 @@ public class Airport
 
 	private List<Runway> runways;
 
-	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
+	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope) throws Exception
 	{
+		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope > 90 || MinSlope < 0) {
+			throw new Exception("Invalid data given for airport");
+		}
 		this.RESA = RESA;
 		this.StripEnd = StripEnd;
 		this.BlastAllowance = BlastAllowance;
 		this.MinSlope = MinSlope;
 	}
 
-	public Airport(List<Runway> runways)
+	public Airport(List<Runway> runways) throws Exception
 	{
+		if (runways == null || runways.size() == 0) {
+			throw new Exception("Error creating Airport from given runways");
+		}
 		this.runways = runways;
 	}
 
-	public RunwayOneWay getRunway(String runName)
+	public RunwayOneWay getRunway(String runName) throws Exception
 	{
+		if (runName == null) {
+			throw new Exception("No name give for runway");
+		}
 		boolean left = runName.charAt(2) == 'L';
-		
+
 		if (left) {
 			for (int i = 0; i < runways.size(); i++) {
 				if (runways.get(i).getRunL().getName().equals(runName)) {
@@ -39,7 +48,7 @@ public class Airport
 				}
 			}
 		}
-		return null; // runways does not contain runName
+		throw new Exception("There is no runway in this airport with identifier '" + runName + "'");
 	}
 
 	public List<Runway> getRunways()
@@ -47,8 +56,15 @@ public class Airport
 		return runways;
 	}
 
-	public void addObstacle(ObstacleData OD, String runName)
+	public void addObstacle(ObstacleData OD, String runName) throws Exception
 	{
-		getRunway(runName).addObstacle(OD);
+		if (OD == null) {
+			throw new Exception("No obstacleData given to add to runway " + runName);
+		}
+		try {
+			getRunway(runName).addObstacle(OD);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
 }
