@@ -31,7 +31,7 @@ public class Airport
 	public RunwayOneWay getRunway(String runName) throws Exception
 	{
 		if (runName == null) {
-			throw new Exception("No name give for runway");
+			throw new Exception("No name given for runway");
 		}
 		boolean left = runName.charAt(2) == 'L';
 
@@ -51,18 +51,35 @@ public class Airport
 		throw new Exception("There is no runway in this airport with identifier '" + runName + "'");
 	}
 
+	public Runway getRunwayFull(String name) throws Exception
+	{
+		if (runName == null) {
+			throw new Exception("No name give for runway");
+		}
+		for (Runway run : runways) {
+			if (runways.getName().equals(name)) {
+				return run;
+			}
+		}
+		throw new Exception("There is no runway in this airport with identifier '" + runName + "'");
+	}
+
 	public List<Runway> getRunways()
 	{
 		return runways;
 	}
 
-	public void addObstacle(ObstacleData OD, String runName) throws Exception
+	public void addObstacle(ObstacleData OD, String runName, boolean left) throws Exception
 	{
 		if (OD == null) {
 			throw new Exception("No obstacleData given to add to runway " + runName);
 		}
 		try {
-			getRunway(runName).addObstacle(OD);
+			if (left) {
+				getRunwayFull(runName).addObstacleL(OD);
+			} else {
+				getRunwayFull(runName).addObstacleR(OD);			
+			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
