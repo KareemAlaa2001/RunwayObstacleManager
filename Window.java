@@ -61,8 +61,7 @@ public class Window {
                     runway.getRunR().getRunwaySpec().clearway,
                     runway.getRunR().getRunwaySpec().stopway,
                     runway.getGradedArea());
-            runways.put(runway.getRunL().getName(),
-                    runwayCanvas);
+            runways.put(runway.getRunL().getName(), runwayCanvas);
             runwayNames.add(runway.getRunR().getName());
             runways.put(runway.getRunR().getName(),
                     new RunwayCanvas(1100, 900, runway.getRunR(),

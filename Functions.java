@@ -73,11 +73,11 @@ public class Functions
 			newASDA = newTORA + runway.stopway;
 
 			Controller.addOutputText("old TORA - RESA - strip end - obstacle distance from threshold = New TORA");
-			System.out.println(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
+			Controller.addOutputText(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
 			Controller.addOutputText("new TORA + clearway = New TODA");
-			System.out.println(newTORA + " + " + runway.clearway + " = " + newTODA);
+			Controller.addOutputText(newTORA + " + " + runway.clearway + " = " + newTODA);
 			Controller.addOutputText("new TORA + stopway = New ASDA");
-			System.out.println(newTORA + " + " + runway.stopway + " = " + newASDA);
+			Controller.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
 		}
 		Controller.addOutputText("");
 		return new RunwayData(newThreshold, newTakeoffThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA);
