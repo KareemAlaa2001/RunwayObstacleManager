@@ -49,6 +49,7 @@ public class RunwayData
 		this.LDA = LDA;
 		this.stopway = stopway;
 		this.clearway = clearway;
+		thresholdBreakdown = null;
 	}
 
 	public RunwayData(int threshold, int takeoffThreshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA, Map<String, Integer> thresholdBreakdown)
