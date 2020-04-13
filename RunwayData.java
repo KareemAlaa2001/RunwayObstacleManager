@@ -1,3 +1,5 @@
+import java.util.Map;
+
 public class RunwayData
 {
 	public int threshold;	// Displaced threshold after recalculation (could be the same value)
@@ -9,6 +11,8 @@ public class RunwayData
 	public int ASDA;		// Accelerate-Stop Distance Available
 	public int LDA;			// Landing Distance Available
 
+	private Map<String, Integer> thresholdBreakdown;
+
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
 	{ // clearway totally seperate to stopway, call this function when initialising a runway
 		this.threshold = threshold;
@@ -19,6 +23,7 @@ public class RunwayData
 		this.LDA = TORA - threshold;
 		this.stopway = stopway;
 		this.clearway = clearway;
+		thresholdBreakdown = null;
 	}
 
 	public RunwayData(int threshold, int TORA, int TODA, int ASDA, int LDA)
@@ -31,6 +36,7 @@ public class RunwayData
 		this.LDA = LDA;
 		this.stopway = ASDA - TORA;
 		this.clearway = TODA - TORA;
+		thresholdBreakdown = null;
 	}
 
 	public RunwayData(int threshold, int takeoffThreshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA)
@@ -43,6 +49,27 @@ public class RunwayData
 		this.LDA = LDA;
 		this.stopway = stopway;
 		this.clearway = clearway;
+	}
+
+	public RunwayData(int threshold, int takeoffThreshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA, Map<String, Integer> thresholdBreakdown)
+	{ // Any usage of this constructor should be marked as such, only called in recalculation
+		this.threshold = threshold;
+		this.takeoffThreshold = takeoffThreshold;
+		this.TORA = TORA;
+		this.ASDA = ASDA;
+		this.TODA = TODA;
+		this.LDA = LDA;
+		this.stopway = stopway;
+		this.clearway = clearway;
+		this.thresholdBreakdown = thresholdBreakdown;
+	}
+
+	public Map<String, Integer> getThresholdBreakdown() throws Exception
+	{ // Throws exception if thresholdBreakdown is not initialised, this is not an error, more like a flag
+		if (thresholdBreakdown == null) {
+			throw new Exception("thresholdBreakdown is not initialised");
+		}
+		return thresholdBreakdown;
 	}
 
 	@Override
