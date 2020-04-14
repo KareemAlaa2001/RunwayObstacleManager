@@ -56,18 +56,9 @@ public class Window {
         runways = new HashMap();
         List<String> runwayNames = new ArrayList();
         for (Runway runway : ap.getRunways()) {
-            runwayNames.add(runway.getRunL().getName());
-            RunwayCanvas runwayCanvas = new RunwayCanvas(1100, 900, runway.getRunL(),
-                    runway.getRunR().getRunwaySpec().clearway,
-                    runway.getRunR().getRunwaySpec().stopway,
-                    runway.getGradedArea());
-            runways.put(runway.getRunL().getName(), runwayCanvas);
-            runwayNames.add(runway.getRunR().getName());
-            runways.put(runway.getRunR().getName(),
-                    new RunwayCanvas(1100, 900, runway.getRunR(),
-                            runway.getRunL().getRunwaySpec().clearway,
-                            runway.getRunL().getRunwaySpec().stopway,
-                            runway.getGradedArea()));
+            runwayNames.add(runway.getName());
+            RunwayCanvas runwayCanvas = new RunwayCanvas(1100, 900, runway);
+            runways.put(runway.getName(), runwayCanvas);
         }
 
         CheckBox rotateSelect = new CheckBox("Rotate Runway");
