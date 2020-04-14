@@ -3,6 +3,7 @@ import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class RunwayCanvas extends Canvas {
@@ -10,26 +11,26 @@ public class RunwayCanvas extends Canvas {
     private final int MARGIN = 50;
     private final double VRATIO = 0.7;
 
-    private RunwayData nData = null;
-    private RunwayData oData = null;
+    private RunwayData nDataL = null;
+    private RunwayData oDataL = null;
+    private RunwayData nDataR = null;
+    private RunwayData oDataR = null;
     private String name = "Unselected";
     private List<ObstacleData> obstacles = null;
-    private double opClearway = 0;
-    private double opStopway = 0;
     private double totalScale = 0;
     private double gradedArea = 0;
     private double runwayVpos = 0;
 
-    public RunwayCanvas(int w, int h, RunwayOneWay runway, double opClearway, double opStopway, double gradedArea) {
+    public RunwayCanvas(int w, int h, Runway runway) {
         super(w, h);
-        this.oData = runway.getRunwaySpec();
-        this.nData = runway.getUpdatedRunway();
+        this.oDataL = runway.getRunL().getRunwaySpec();
+        this.nDataL = runway.getRunL().getUpdatedRunway();
+        this.oDataR = runway.getRunR().getRunwaySpec();
+        this.nDataR = runway.getRunR().getUpdatedRunway();
         this.name = runway.getName();
-        this.obstacles = runway.getObstacles();
-        this.opClearway = opClearway;
-        this.opStopway = opStopway;
-        totalScale = (w - (MARGIN * 2)) / (opClearway + oData.TORA + oData.clearway);
-        this.gradedArea = gradedArea;
+        this.obstacles = runway.getRunL().getObstacles();
+        totalScale = (w - (MARGIN * 2)) / (oDataR.clearway + oDataL.TORA + oDataL.clearway);
+        this.gradedArea = runway.getGradedArea();
         runwayVpos = this.getWidth() / 2 - 25;
     }
 
@@ -40,8 +41,9 @@ public class RunwayCanvas extends Canvas {
     public void render(double scale, double tx, double ty, boolean rotate) {
         final GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.WHITE);
+        g.setFont(Font.font ("monospaced", 20));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        if (oData != null) {
+        if (oDataL != null && oDataR != null) {
 
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
@@ -61,10 +63,10 @@ public class RunwayCanvas extends Canvas {
             g.setLineWidth(1);
             g.setFill(Color.LIGHTGRAY);
             double[] xPoints = new double[]{0,
-                opClearway * totalScale + MARGIN,
-                (opClearway + 200) * totalScale + MARGIN,
-                (oData.TORA + opClearway - 200) * totalScale + MARGIN,
-                (oData.TORA + opClearway) * totalScale + MARGIN,
+                oDataR.clearway * totalScale + MARGIN,
+                (oDataR.clearway + 200) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
                 0};
@@ -78,10 +80,10 @@ public class RunwayCanvas extends Canvas {
                 0};
             g.fillPolygon(xPoints, yPoints, 8);
             xPoints = new double[]{0,
-                opClearway * totalScale + MARGIN,
-                (opClearway + 200) * totalScale + MARGIN,
-                (oData.TORA + opClearway - 200) * totalScale + MARGIN,
-                (oData.TORA + opClearway) * totalScale + MARGIN,
+                oDataR.clearway * totalScale + MARGIN,
+                (oDataR.clearway + 200) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
                 0};
@@ -95,40 +97,40 @@ public class RunwayCanvas extends Canvas {
                 this.getWidth()};
             g.fillPolygon(xPoints, yPoints, 8);
 
-            drawRect(g, opClearway, runwayVpos, oData.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
-            drawRect(g, opClearway - opStopway, runwayVpos, opStopway, 50, Color.LIGHTGREY, Color.BLACK); //Top left stopway
-            drawRect(g, opClearway + oData.TORA, runwayVpos, oData.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top right stopway
-            drawRect(g, 0, runwayVpos - 10, opClearway, 70, Color.TRANSPARENT, Color.GRAY); //Top left clearway
-            drawRect(g, opClearway + oData.TORA, runwayVpos - 10, oData.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top right clearway
+            drawRect(g, oDataR.clearway, runwayVpos, oDataL.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
+            drawRect(g, oDataR.clearway - oDataR.stopway, runwayVpos, oDataR.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top left stopway
+            drawRect(g, oDataR.clearway + oDataL.TORA, runwayVpos, oDataL.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top right stopway
+            drawRect(g, 0, runwayVpos - 10, oDataR.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top left clearway
+            drawRect(g, oDataR.clearway + oDataL.TORA, runwayVpos - 10, oDataL.clearway, 70, Color.TRANSPARENT, Color.GRAY); //Top right clearway
 
             g.setLineWidth(2);
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
-                    g.strokeLine(55 + opClearway * totalScale, runwayVpos + 5 + i * 25 + j * 5, 70 + opClearway * totalScale, runwayVpos + 5 + i * 25 + j * 5);
+                    g.strokeLine(55 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 25 + j * 5, 70 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 25 + j * 5);
                 }
             }
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 3; j++) {
-                    g.strokeLine(115 + opClearway * totalScale, runwayVpos + 5 + i * 30 + j * 5, 125 + opClearway * totalScale, runwayVpos + 5 + i * 30 + j * 5);
+                    g.strokeLine(115 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 30 + j * 5, 125 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 30 + j * 5);
                 }
             }
-            drawRotatedText(g, name, 88 + opClearway * totalScale, runwayVpos + 7, 90, Color.WHITE);
+            drawRotatedText(g, name, 88 + oDataR.clearway * totalScale, runwayVpos, 90, Color.WHITE);
 
             for (ObstacleData ob : obstacles) {
-                drawRect(g, ob.position + oData.threshold + opClearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
+                drawRect(g, ob.position + oDataL.threshold + oDataR.clearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
             }
 
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN, opClearway + nData.takeoffThreshold, runwayVpos, Color.BLACK); //Take off threshold
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN, oDataR.clearway + nDataL.takeoffThreshold, runwayVpos, Color.BLACK); //Take off threshold
             double labelDiv = (runwayVpos - 235 - MARGIN) / 4.0;
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 0, opClearway + nData.takeoffThreshold + nData.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nData.TODA + "m", true, 5, 10); //TODA
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 1, opClearway + nData.takeoffThreshold + nData.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nData.ASDA + "m", true, 5, 10); //ASDA
-            drawLine(g, opClearway + nData.takeoffThreshold, 235 + MARGIN + labelDiv * 2, opClearway + nData.takeoffThreshold + nData.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nData.TORA + "m", true, 5, 10); //TORA
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 0, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nDataL.TODA + "m", true, 5, -5); //TODA
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 1, oDataR.clearway + nDataL.takeoffThreshold + nDataL.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nDataL.ASDA + "m", true, 5, -5); //ASDA
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 2, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nDataL.TORA + "m", true, 5, -5); //TORA
             
-            drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold, runwayVpos, Color.BLACK); //Landing threshold
-            drawLine(g, opClearway + nData.threshold, 235 + MARGIN + labelDiv * 3, opClearway + nData.threshold + nData.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, "LDA - " + nData.LDA + "m", true, 0, 0); //LDA
+            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold, runwayVpos, Color.BLACK); //Landing threshold
+            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold + nDataL.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, "LDA - " + nDataL.LDA + "m", true, 5, -5); //LDA
             
-            drawLine(g, opClearway + nData.threshold, runwayVpos + 50, opClearway + nData.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
+            drawLine(g, oDataR.clearway + nDataL.threshold, runwayVpos + 50, oDataR.clearway + nDataL.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
 
             g.restore();
             g.restore();
@@ -137,18 +139,18 @@ public class RunwayCanvas extends Canvas {
             double bottomCL = this.getHeight() * (1.0 - VRATIO) * 0.5 + this.getHeight() * VRATIO;
 
             g.setFill(Color.GRAY);
-            drawRect(g, opClearway, bottomCL + 50, oData.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
-            drawRect(g, opClearway - opStopway, bottomCL + 50, opStopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom left stopway
-            drawRect(g, opClearway + oData.TORA, bottomCL + 50, oData.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom right stopway
-            drawRect(g, 0, bottomCL + 50, opClearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
-            drawRect(g, opClearway + oData.TORA, bottomCL + 50, oData.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
+            drawRect(g, oDataR.clearway, bottomCL + 50, oDataL.TORA, 10, Color.GRAY, Color.BLACK); //Bottom runway
+            drawRect(g, oDataR.clearway - oDataR.stopway, bottomCL + 50, oDataR.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom left stopway
+            drawRect(g, oDataR.clearway + oDataL.TORA, bottomCL + 50, oDataL.stopway, 10, Color.LIGHTGREY, Color.BLACK); //Bottom right stopway
+            drawRect(g, 0, bottomCL + 50, oDataR.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
+            drawRect(g, oDataR.clearway + oDataL.TORA, bottomCL + 50, oDataL.clearway, 20, Color.TRANSPARENT, Color.BLACK); //Bottom left clearway
 
             g.setLineWidth(2);
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
-                g.strokeLine(55 + opClearway * totalScale, bottomCL + 52 + i * 3, 70 + opClearway * totalScale, bottomCL + 52 + i * 3);
+                g.strokeLine(55 + oDataR.clearway * totalScale, bottomCL + 52 + i * 3, 70 + oDataR.clearway * totalScale, bottomCL + 52 + i * 3);
             }
-            g.strokeLine(115 + opClearway * totalScale, bottomCL + 52, 125 + opClearway * totalScale, bottomCL + 52);
+            g.strokeLine(115 + oDataR.clearway * totalScale, bottomCL + 52, 125 + oDataR.clearway * totalScale, bottomCL + 52);
 
             double maxHeight = 0.0;
             for (ObstacleData ob : obstacles) {
@@ -159,8 +161,8 @@ public class RunwayCanvas extends Canvas {
             ObstacleData leftOb = null;
             ObstacleData rightOb = null;
             for (ObstacleData ob : obstacles) {
-                drawTriangle(g, ob.position + oData.threshold + opClearway, bottomCL + 50, ob.maxHeight * vScale, Color.RED, Color.BLACK); //Bottom obstacle
-                if (ob.position > oData.TORA / 2) {
+                drawTriangle(g, ob.position + oDataL.threshold + oDataR.clearway, bottomCL + 50, ob.maxHeight * vScale, Color.RED, Color.BLACK); //Bottom obstacle
+                if (ob.position > oDataL.TORA / 2) {
                     if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
                         rightOb = ob;
                     }
@@ -173,42 +175,42 @@ public class RunwayCanvas extends Canvas {
 
             if (leftOb != null) {
                 double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
-                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 75,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
+                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
+                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", false, 5, 15); //Left horizontal label
-                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 60,
-                        leftOb.position + oData.threshold + opClearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
-                drawLine(g, leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
-                drawLine(g, leftOb.position + oData.threshold + opClearway, bottomCL + 50 - leftOb.maxHeight * vScale,
-                        leftOb.position + oData.threshold + opClearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
-                drawRotatedText(g, "            ALS", (leftOb.position + oData.threshold + opClearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
+                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
+                        leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
+                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
+                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
+                drawRotatedText(g, "            ALS", (leftOb.position + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
-                drawLine(g, leftOb.position + oData.threshold + opClearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
-                        leftOb.position + oData.threshold + opClearway - 70, bottomCL + 50, Color.BLACK,
+                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50, Color.BLACK,
                         leftOb.maxHeight + "m", false, 0, -10); //Left vertical label
             }
 
             if (rightOb != null) {
                 double angle = Math.atan((rightOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
-                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 75,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
+                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
+                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", false,
                         - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15); //Right horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 60,
-                        rightOb.position + oData.threshold + opClearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
-                drawLine(g, rightOb.position + oData.threshold + opClearway, bottomCL + 50 - rightOb.maxHeight * vScale,
-                        rightOb.position + oData.threshold + opClearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Right slope
-                drawRotatedText(g, "TOCS", (rightOb.position + oData.threshold + opClearway) * totalScale + MARGIN - 100 * Math.sin(angle), bottomCL + 45 - rightOb.maxHeight * vScale + 100 * Math.cos(angle),
+                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
+                        rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
+                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
+                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Right slope
+                drawRotatedText(g, "TOCS", (rightOb.position + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN - 100 * Math.sin(angle), bottomCL + 45 - rightOb.maxHeight * vScale + 100 * Math.cos(angle),
                         -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
-                drawLine(g, rightOb.position + oData.threshold + opClearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
-                        rightOb.position + oData.threshold + opClearway + 70, bottomCL + 50, Color.BLACK,
+                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50, Color.BLACK,
                         rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, opClearway + nData.threshold, bottomCL + 30, opClearway + nData.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
+            drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL + 30, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
 
         }
 
