@@ -29,7 +29,7 @@ public class RunwayCanvas extends Canvas {
         this.nDataR = runway.getRunR().getUpdatedRunway();
         this.name = runway.getName();
         this.obstacles = runway.getRunL().getObstacles();
-        totalScale = (w - (MARGIN * 2)) / (oDataR.clearway + oDataL.TORA + oDataL.clearway);
+        totalScale = (w - (MARGIN * 2)) / (oDataR.clearway + oDataL.TORA + oDataL.clearway + 0.0);
         this.gradedArea = runway.getGradedArea();
         runwayVpos = this.getWidth() / 2 - 25;
     }
