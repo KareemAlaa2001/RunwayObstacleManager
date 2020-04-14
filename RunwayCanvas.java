@@ -11,6 +11,7 @@ public class RunwayCanvas extends Canvas {
     private final int MARGIN = 50;
     private final double VRATIO = 0.7;
 
+    private int w, h;
     private RunwayData nDataL = null;
     private RunwayData oDataL = null;
     private RunwayData nDataR = null;
@@ -23,6 +24,8 @@ public class RunwayCanvas extends Canvas {
 
     public RunwayCanvas(int w, int h, Runway runway) {
         super(w, h);
+        this.w = w;
+        this.h = h;
         this.oDataL = runway.getRunL().getRunwaySpec();
         this.nDataL = runway.getRunL().getUpdatedRunway();
         this.oDataR = runway.getRunR().getRunwaySpec();
@@ -41,7 +44,7 @@ public class RunwayCanvas extends Canvas {
     public void render(double scale, double tx, double ty, boolean rotate) {
         final GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.WHITE);
-        g.setFont(Font.font ("monospaced", 20));
+        g.setFont(Font.font("monospaced", 20));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (oDataL != null && oDataR != null) {
 
@@ -107,30 +110,44 @@ public class RunwayCanvas extends Canvas {
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
-                    g.strokeLine(55 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 25 + j * 5, 70 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 25 + j * 5);
+                    g.strokeLine(oDataR.clearway * totalScale + MARGIN + 5, runwayVpos + 5 + i * 25 + j * 5, oDataR.clearway * totalScale + MARGIN + 20, runwayVpos + 5 + i * 25 + j * 5); //Top left first markers
+                    g.strokeLine((oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 5, runwayVpos + 5 + i * 25 + j * 5, (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 20, runwayVpos + 5 + i * 25 + j * 5); //Top right first markers
                 }
             }
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 3; j++) {
-                    g.strokeLine(115 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 30 + j * 5, 125 + oDataR.clearway * totalScale, runwayVpos + 5 + i * 30 + j * 5);
+                    g.strokeLine(oDataR.clearway * totalScale + MARGIN + 65, runwayVpos + 5 + i * 30 + j * 5, oDataR.clearway * totalScale + MARGIN + 75, runwayVpos + 5 + i * 30 + j * 5); //Top left second markers
+                    g.strokeLine((oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 65, runwayVpos + 5 + i * 30 + j * 5, (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 75, runwayVpos + 5 + i * 30 + j * 5); //Top right second markers
                 }
             }
-            drawRotatedText(g, name, 88 + oDataR.clearway * totalScale, runwayVpos, 90, Color.WHITE);
+            drawRotatedText(g, name.split("/")[0], oDataR.clearway * totalScale + MARGIN + 38, runwayVpos + 20 - (textWidth(g, name.split("/")[0]) / 2), 90, Color.WHITE); //Top left bearing marker
+            drawRotatedText(g, name.split("/")[1], (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 38, runwayVpos + 30 + (textWidth(g, name.split("/")[1]) / 2), 270, Color.WHITE); //Top right bearing marker
 
             for (ObstacleData ob : obstacles) {
                 drawRect(g, ob.position + oDataL.threshold + oDataR.clearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
             }
 
-            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN, oDataR.clearway + nDataL.takeoffThreshold, runwayVpos, Color.BLACK); //Take off threshold
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN, oDataR.clearway + nDataL.takeoffThreshold, runwayVpos, Color.BLACK); //Left tTake off threshold
             double labelDiv = (runwayVpos - 235 - MARGIN) / 4.0;
-            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 0, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, "TODA - " + nDataL.TODA + "m", true, 5, -5); //TODA
-            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 1, oDataR.clearway + nDataL.takeoffThreshold + nDataL.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, "ASDA - " + nDataL.ASDA + "m", true, 5, -5); //ASDA
-            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 2, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, "TORA - " + nDataL.TORA + "m", true, 5, -5); //TORA
-            
-            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold, runwayVpos, Color.BLACK); //Landing threshold
-            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold + nDataL.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, "LDA - " + nDataL.LDA + "m", true, 5, -5); //LDA
-            
-            drawLine(g, oDataR.clearway + nDataL.threshold, runwayVpos + 50, oDataR.clearway + nDataL.threshold, runwayVpos + 70, Color.BLACK, "Threshold", false, 5, 20); //Top threshold label
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 0, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TODA, 235 + MARGIN + labelDiv * 0, Color.BLACK, Color.WHITE, "TODA - " + nDataL.TODA + "m", true, true, 5, -5); //Left TODA
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 1, oDataR.clearway + nDataL.takeoffThreshold + nDataL.ASDA, 235 + MARGIN + labelDiv * 1, Color.BLACK, Color.WHITE, "ASDA - " + nDataL.ASDA + "m", true, true, 5, -5); //Left ASDA
+            drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN + labelDiv * 2, oDataR.clearway + nDataL.takeoffThreshold + nDataL.TORA, 235 + MARGIN + labelDiv * 2, Color.BLACK, Color.WHITE, "TORA - " + nDataL.TORA + "m", true, true, 5, -5); //Left TORA
+
+            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold, runwayVpos, Color.BLACK); //Left landing threshold
+            drawLine(g, oDataR.clearway + nDataL.threshold, 235 + MARGIN + labelDiv * 3, oDataR.clearway + nDataL.threshold + nDataL.LDA, 235 + MARGIN + labelDiv * 3, Color.BLACK, Color.WHITE, "LDA - " + nDataL.LDA + "m", true, true, 5, -5); //Left LDA
+
+            drawLine(g, oDataR.clearway + nDataL.threshold, runwayVpos - 20, oDataR.clearway + nDataL.threshold, runwayVpos, Color.BLACK, Color.WHITE, "Threshold", true, false, 5, 15); //Top left threshold label
+
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold, h - 30 - MARGIN, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold, runwayVpos + 50, Color.BLACK); //Right tTake off threshold
+            labelDiv = (h - 30 - MARGIN - runwayVpos - 50) / 4.0;
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold, h - 30 - MARGIN - labelDiv * 0, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold - nDataR.TODA, h - 30 - MARGIN - labelDiv * 0, Color.BLACK, Color.WHITE, "TODA - " + nDataR.TODA + "m", false, true, -5, -5); //Right TODA
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold, h - 30 - MARGIN - labelDiv * 1, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold - nDataR.ASDA, h - 30 - MARGIN - labelDiv * 1, Color.BLACK, Color.WHITE, "ASDA - " + nDataR.ASDA + "m", false, true, -5, -5); //Right ASDA
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold, h - 30 - MARGIN - labelDiv * 2, oDataR.clearway + oDataL.TORA - nDataR.takeoffThreshold - nDataR.TORA, h - 30 - MARGIN - labelDiv * 2, Color.BLACK, Color.WHITE, "TORA - " + nDataR.TORA + "m", false, true, -5, -5); //Right TORA
+//            
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.threshold, h - 30 - MARGIN - labelDiv * 3, oDataR.clearway + oDataL.TORA - nDataR.threshold, runwayVpos + 50, Color.BLACK); //Right landing threshold
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.threshold, h - 30 - MARGIN - labelDiv * 3, oDataR.clearway + oDataL.TORA - nDataR.threshold - nDataR.LDA, h - 30 - MARGIN - labelDiv * 3, Color.BLACK, Color.WHITE, "LDA - " + nDataR.LDA + "m", false, true, -5, -5); //Right LDA
+//            
+            drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.threshold, runwayVpos + 70, oDataR.clearway + oDataL.TORA - nDataR.threshold, runwayVpos + 50, Color.BLACK, Color.WHITE, "Threshold", false, false, -5, -3); //Top right threshold label
 
             g.restore();
             g.restore();
@@ -177,7 +194,7 @@ public class RunwayCanvas extends Canvas {
                 double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
                 drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
                         leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
-                        leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", false, 5, 15); //Left horizontal label
+                        leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", true, false, 5, 15); //Left horizontal label
                 drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
                 drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
@@ -188,14 +205,14 @@ public class RunwayCanvas extends Canvas {
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
                 drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
                         leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50, Color.BLACK,
-                        leftOb.maxHeight + "m", false, 0, -10); //Left vertical label
+                        leftOb.maxHeight + "m", true, false, 0, -10); //Left vertical label
             }
 
             if (rightOb != null) {
                 double angle = Math.atan((rightOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
                 drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
                         rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
-                        rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", false,
+                        rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", true, false,
                         - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15); //Right horizontal marker
                 drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
@@ -207,10 +224,10 @@ public class RunwayCanvas extends Canvas {
                         -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
                 drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
                         rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50, Color.BLACK,
-                        rightOb.maxHeight + "m", false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
+                        rightOb.maxHeight + "m", true, false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL + 30, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, 5, 10); //Bottom threshold label
+            drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL + 30, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", true, false, 5, 10); //Bottom threshold label
 
         }
 
@@ -244,16 +261,52 @@ public class RunwayCanvas extends Canvas {
         g.strokePolygon(xPoints, yPoints, 3);
     }
 
-    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, String l, boolean h, int ox, int oy) {
+    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, String l, boolean d, boolean h, int ox, int oy) {
         g.setLineWidth(2);
         g.setStroke(s);
         g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
         if (h) {
-            g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 - 5);
-            g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 + 5);
+            if (d) {
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 - 5);
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 + 5);
+            } else {
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN + 10, y2 - 5);
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN + 10, y2 + 5);
+            }
         }
         g.setLineWidth(1);
-        g.strokeText(l, x1 * totalScale + ox + MARGIN, y1 + oy);
+        if (d) {
+            g.strokeText(l, x1 * totalScale + ox + MARGIN, y1 + oy);
+        } else {
+            g.strokeText(l, x1 * totalScale + ox - textWidth(g, l) + MARGIN, y1 + oy);
+        }
+    }
+
+    public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s, Color b, String l, boolean d, boolean h, int ox, int oy) {
+        g.setLineWidth(2);
+        g.setFill(b);
+        if (d) {
+            g.fillRect(x1 * totalScale + ox + MARGIN - 2, y1 + oy - 15, textWidth(g, l) + 4, 18);
+        } else {
+            g.fillRect(x1 * totalScale + ox - textWidth(g, l) + MARGIN - 2, y1 + oy - 15, textWidth(g, l) + 4, 18);
+        }
+        g.setStroke(s);
+        g.strokeLine(x1 * totalScale + MARGIN, y1, x2 * totalScale + MARGIN, y2);
+        if (h) {
+            if (d) {
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 - 5);
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN - 10, y2 + 5);
+            } else {
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN + 10, y2 - 5);
+                g.strokeLine(x2 * totalScale + MARGIN, y2, x2 * totalScale + MARGIN + 10, y2 + 5);
+            }
+        }
+        g.setLineWidth(1);
+        if (d) {
+            g.strokeText(l, x1 * totalScale + ox + MARGIN, y1 + oy);
+        } else {
+            g.strokeText(l, x1 * totalScale + ox - textWidth(g, l) + MARGIN, y1 + oy);
+        }
     }
 
     public void drawLine(GraphicsContext g, double x1, double y1, double x2, double y2, Color s) {
@@ -279,57 +332,4 @@ public class RunwayCanvas extends Canvas {
         g.restore();
     }
 
-//                if ((obstacle.position + 0.0) / originalRunwayLength > 0.5) {
-//                    g.strokeLine(50 + scaledOffset, 50, 50 + scaledOffset, 350);
-//                    g.strokeLine(50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65); //TODA
-//                    g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset, 60);
-//                    g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset, 70);
-//
-//                    g.strokeLine(50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140); //ASDA
-//                    g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset, 135);
-//                    g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset, 145);
-//
-//                    g.strokeLine(50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215); //TORA
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 210);
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset, 220);
-//
-//                    g.strokeLine(50 + scaledOffset + 1000 * (data.threshold / maxLength), 275, 50 + scaledOffset + 1000 * (data.threshold / maxLength), 350);
-//                    g.strokeLine(50 + scaledOffset + 1000 * (data.threshold / maxLength), 290, 1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290); //LDA
-//                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * (data.threshold / maxLength) + scaledOffset, 285);
-//                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * (data.threshold / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * (data.threshold / maxLength) + scaledOffset, 295);
-//
-//                    g.setLineWidth(1);
-//                    g.strokeText("TODA - " + data.TODA + "m", 55 + scaledOffset, 60);
-//                    g.strokeText("ASDA - " + data.ASDA + "m", 55 + scaledOffset, 135);
-//                    g.strokeText("TORA - " + data.TORA + "m", 55 + scaledOffset, 210);
-//                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * (data.threshold / maxLength), 285);
-//
-//                } else {
-//                    
-//                    g.strokeLine(50 + scaledOffset + obscaleOffset, 50, 50 + scaledOffset + obscaleOffset, 350);
-//                    g.strokeLine(50 + scaledOffset + obscaleOffset, 65, 1000 * (data.TODA / maxLength) + 50 + scaledOffset + obscaleOffset, 65); //TODA
-//                    g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset + obscaleOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset + obscaleOffset, 60);
-//                    g.strokeLine(1000 * (data.TODA / maxLength) + 50 + scaledOffset + obscaleOffset, 65, 1000 * (data.TODA / maxLength) + 40 + scaledOffset + obscaleOffset, 70);
-//
-//                    g.strokeLine(50 + scaledOffset + obscaleOffset, 140, 1000 * (data.ASDA / maxLength) + 50 + scaledOffset + obscaleOffset, 140); //ASDA
-//                    g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset + obscaleOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset + obscaleOffset, 135);
-//                    g.strokeLine(1000 * (data.ASDA / maxLength) + 50 + scaledOffset + obscaleOffset, 140, 1000 * (data.ASDA / maxLength) + 40 + scaledOffset + obscaleOffset, 145);
-//
-//                    g.strokeLine(50 + scaledOffset + obscaleOffset, 215, 1000 * (data.TORA / maxLength) + 50 + scaledOffset + obscaleOffset, 215); //TORA
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset + obscaleOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset + obscaleOffset, 210);
-//                    g.strokeLine(1000 * (data.TORA / maxLength) + 50 + scaledOffset + obscaleOffset, 215, 1000 * (data.TORA / maxLength) + 40 + scaledOffset + obscaleOffset, 220);
-//
-//                    g.strokeLine(50 + scaledOffset + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength), 275, 50 + scaledOffset + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength), 350);
-//                    g.strokeLine(50 + scaledOffset + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength), 290, 1000 * (data.LDA / maxLength) + 50 + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength) + scaledOffset, 290); //LDA
-//                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength) + scaledOffset, 285);
-//                    g.strokeLine(1000 * (data.LDA / maxLength) + 50 + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength) + scaledOffset, 290, 1000 * (data.LDA / maxLength) + 40 + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength) + scaledOffset, 295);
-//
-//                    g.setLineWidth(1);
-//                    g.strokeText("TODA - " + data.TODA + "m", 55 + scaledOffset + obscaleOffset, 60);
-//                    g.strokeText("ASDA - " + data.ASDA + "m", 55 + scaledOffset + obscaleOffset, 135);
-//                    g.strokeText("TORA - " + data.TORA + "m", 55 + scaledOffset + obscaleOffset, 210);
-//                    g.strokeText("LDA - " + data.LDA + "m", 55 + scaledOffset + 1000 * ((data.threshold + (data.TORA - data.LDA)) / maxLength), 285);
-//                }
-//
-//            }
 }
