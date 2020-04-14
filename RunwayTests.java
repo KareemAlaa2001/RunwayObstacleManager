@@ -4,53 +4,113 @@ import org.junit.jupiter.api.Test;
 
 public class RunwayTests
 {
-	private boolean obstacleEqual(ObstacleData a, ObstacleData b)
-	{
-		return (a.position == b.position) && (a.maxHeight == b.maxHeight);
-	}
+    private boolean obstacleEqual(ObstacleData a, ObstacleData b)
+    {
+        return (a.position == b.position) && (a.maxHeight == b.maxHeight);
+    }
 
-	@Test
+    @Test
+    public void createRunwayBoundary()
+    {
+        try {
+            Runway run = new Runway(0, 0, new RunwayData(0, 0, 0, 0), new RunwayData(0, 0, 0, 0));
+            assertTrue(run.getName().equals("00L/18R"));
+            assertTrue(run.getGradedArea() == 0);
+            run = new Runway(0, new RunwayData(0, 0, 0, 0), new RunwayData(0, 0, 0, 0));
+            assertTrue(run.getName().equals("00L/18R"));
+            assertTrue(run.getGradedArea() == 400);
+        } catch (Exception e) {}
+
+        boolean bearing = false;
+        boolean leftNull = false;
+        boolean rightNull = false;
+        boolean graded = false;
+
+        try {
+            Runway run = new Runway(-1, 0, new RunwayData(0, 0, 0, 0), new RunwayData(0, 0, 0, 0));
+        } catch(Exception e) {
+            try {
+                Runway run = new Runway(-1, new RunwayData(0, 0, 0, 0), new RunwayData(0, 0, 0, 0));
+            } catch(Exception ex) {
+                bearing = true;
+            }
+        }
+        try {
+            Runway run = new Runway(0, 0, null, new RunwayData(0, 0, 0, 0));
+        } catch(Exception e) {
+            try {
+                Runway run = new Runway(0, null, new RunwayData(0, 0, 0, 0));
+            } catch(Exception ex) {
+                leftNull = true;
+            }
+        }
+        try {
+            Runway run = new Runway(0, 0, new RunwayData(0, 0, 0, 0), null);
+        } catch(Exception e) {
+            try {
+                Runway run = new Runway(0, new RunwayData(0, 0, 0, 0), null);
+            } catch(Exception ex) {
+                rightNull = true;
+            }
+        }
+        try {
+            Runway run = new Runway(0, -1, new RunwayData(0, 0, 0, 0), new RunwayData(0, 0, 0, 0));
+        } catch(Exception e) {
+            graded = true;
+        }
+        assertTrue(bearing);
+        assertTrue(leftNull);
+        assertTrue(rightNull);
+        assertTrue(graded);
+    }
+
+    @Test
     public void testRunwayNamingConventions()
     {
-    	Runway rw = null;
-    	Runway rw2 = null;
-    	Runway rw3 = null;
-    	
-		try {
-			rw = new Runway(33, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-		} catch (Exception e) {}
+        Runway rw = null;
+        Runway rw2 = null;
+        Runway rw3 = null;
+        
+        try {
+            rw = new Runway(33, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        } catch (Exception e) {}
 
         assertTrue(rw.getRunL().getName().equals("33L"));
         assertTrue(rw.getRunR().getName().equals("15R"));
+        assertTrue(rw.getName().equals("33L/15R"));
 
-		try {
-			rw2 = new Runway(1, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-		} catch (Exception e) {}
+        try {
+            rw2 = new Runway(1, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        } catch (Exception e) {}
 
         assertTrue(rw2.getRunL().getName().equals("01L"));
         assertTrue(rw2.getRunR().getName().equals("19R"));
+        assertTrue(rw2.getName().equals("01L/19R"));
 
-    	try {
-			rw3 = new Runway(13, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-		} catch (Exception e) {}
+        try {
+            rw3 = new Runway(13, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+        } catch (Exception e) {}
 
         assertTrue(rw3.getRunL().getName().equals("13L"));
         assertTrue(rw3.getRunR().getName().equals("31R"));
+        assertTrue(rw3.getName().equals("13L/31R"));
     }
 
-	@Test
+    @Test
     public void testAddingObstacles()
     {
-		try {
-			Runway rw = null;
-			rw = new Runway(33, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-	    	ObstacleData l = new ObstacleData(100, 45);
-	    	ObstacleData r = new ObstacleData(-20, 13);
-	    	rw.addObstacleL(l);
-	    	rw.addObstacleR(r);
-	
-	        assertTrue(obstacleEqual(rw.getRunL().getObstacles().get(0), l));
-	        assertTrue(obstacleEqual(rw.getRunR().getObstacles().get(0), r));
-		} catch (Exception e) {}
+        try {
+            Runway rw = null;
+            rw = new Runway(33, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+            ObstacleData l = new ObstacleData(100, 45);
+            ObstacleData r = new ObstacleData(-20, 13);
+            rw.addObstacleL(l);
+            rw.addObstacleR(r);
+    
+            assertTrue(obstacleEqual(rw.getRunL().getObstacles().get(0), l));
+            assertTrue(rw.getRunL().getObstacles().size() == 2);
+            assertTrue(obstacleEqual(rw.getRunR().getObstacles().get(1), r));
+            assertTrue(rw.getRunR().getObstacles().size() == 2);
+        } catch (Exception e) {}
     }
 }

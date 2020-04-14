@@ -8,7 +8,7 @@ public class Runway
 
 	public Runway(int leftBearing, RunwayData left, RunwayData right) throws Exception
 	{
-		if (left == null || right == null) {
+		if (leftBearing < 0 || left == null || right == null) {
 			throw new Exception("Incorrect input to create a runway");
 		}
 		this.leftBearing = leftBearing;
@@ -30,7 +30,7 @@ public class Runway
 
 	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right) throws Exception
 	{
-		if (left == null || right == null || gradedArea < 0) {
+		if (leftBearing < 0 || left == null || right == null || gradedArea < 0) {
 			throw new Exception("Incorrect input to create a runway");
 		}
 		this.gradedArea = gradedArea;
