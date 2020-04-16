@@ -4,11 +4,6 @@ import org.junit.jupiter.api.Test;
 
 public class RunwayTests
 {
-    private boolean obstacleEqual(ObstacleData a, ObstacleData b)
-    {
-        return (a.position == b.position) && (a.maxHeight == b.maxHeight);
-    }
-
     @Test
     public void createRunwayBoundary()
     {
@@ -107,9 +102,9 @@ public class RunwayTests
             rw.addObstacleL(l);
             rw.addObstacleR(r);
     
-            assertTrue(obstacleEqual(rw.getRunL().getObstacles().get(0), l));
+            assertTrue(BackendHelpers.obstacleEqual(rw.getRunL().getObstacles().get(0), l));
             assertTrue(rw.getRunL().getObstacles().size() == 2);
-            assertTrue(obstacleEqual(rw.getRunR().getObstacles().get(1), r));
+            assertTrue(BackendHelpers.obstacleEqual(rw.getRunR().getObstacles().get(1), r));
             assertTrue(rw.getRunR().getObstacles().size() == 2);
         } catch (Exception e) {}
     }

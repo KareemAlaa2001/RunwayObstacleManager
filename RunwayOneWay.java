@@ -18,10 +18,7 @@ public class RunwayOneWay
 	public void addObstacle(ObstacleData OD) throws Exception
 	{
 		Controller.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
-		System.out.println(name);
-		System.out.println(dataReCalc);
 		dataReCalc = Functions.reCalculate(dataOriginal, OD);
-		System.out.println(dataReCalc);
 		obstacles.add(OD);
 	}
 
