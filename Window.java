@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -42,7 +45,6 @@ public class Window {
     }
 
     public Stage getStage(Stage stage) throws Exception {
-
 
         stage.setResizable(false);
         stage.setMaximized(true);
@@ -130,6 +132,21 @@ public class Window {
             }
         });
 
+        TextField obstacleHeightInput = new TextField();
+        TextField obstacleLocationInput = new TextField();
+        Button addObstacleButton = new Button("Add Obstacle");
+        addObstacleButton.setOnAction(e -> {
+            if (runwaySelectionBox.getValue() != null) {
+                try {
+                    ap.addObstacle(new ObstacleData(Integer.parseInt(obstacleLocationInput.getText()),
+                            Integer.parseInt(obstacleHeightInput.getText())), (String) (runwaySelectionBox.getValue()), true);
+                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                } catch (Exception ex) {
+                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
         TabPane tabPane = new TabPane();
         Tab outputTab = new Tab("Output");
         outputTab.setClosable(false);
@@ -168,8 +185,11 @@ public class Window {
         gridMainScene.add(new Label("Select Runway:"), 1, 0);
         gridMainScene.add(runwaySelectionBox, 2, 0);
         gridMainScene.add(rotateSelect, 1, 1, 2, 1);
-        gridMainScene.add(tabPane, 1, 2, 2, 2);
-        gridMainScene.add(toCreate, 2, 3);
+        gridMainScene.add(obstacleHeightInput, 1, 2, 1, 1);
+        gridMainScene.add(obstacleLocationInput, 2, 2, 1, 1);
+        gridMainScene.add(addObstacleButton, 1, 3, 2, 1);
+        gridMainScene.add(tabPane, 1, 4, 2, 2);
+        gridMainScene.add(toCreate, 2, 5);
 
         GridPane gridCreateScene = new GridPane();
         GridPane gridAddRunways = new GridPane();
@@ -228,8 +248,8 @@ public class Window {
 
         gridAddRunways.add(hbChooseRunway, 2, 1);
         gridAddRunways.add(back, 0, 10);
-        gridAddRunways.add(hbAddRunway,1,8);
-        gridAddRunways.add(hbFinish,2,10);
+        gridAddRunways.add(hbAddRunway, 1, 8);
+        gridAddRunways.add(hbFinish, 2, 10);
 
         //all text fields
         TextField selectedAirportTextField = new TextField();
@@ -326,7 +346,7 @@ public class Window {
         gridAddRunways.add(toraLabel, 0, 5);
 
         Label stopwayLabel = new Label("Stopway:");
-        gridAddRunways.add(stopwayLabel,0, 6);
+        gridAddRunways.add(stopwayLabel, 0, 6);
 
         Label clearwayLabel = new Label("Clearway:");
         gridAddRunways.add(clearwayLabel, 0, 7);

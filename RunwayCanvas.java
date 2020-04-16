@@ -12,6 +12,7 @@ public class RunwayCanvas extends Canvas {
     private final double VRATIO = 0.7;
 
     private int w, h;
+    private Runway runway;
     private RunwayData nDataL = null;
     private RunwayData oDataL = null;
     private RunwayData nDataR = null;
@@ -26,6 +27,7 @@ public class RunwayCanvas extends Canvas {
         super(w, h);
         this.w = w;
         this.h = h;
+        this.runway = runway;
         this.oDataL = runway.getRunL().getRunwaySpec();
         this.nDataL = runway.getRunL().getUpdatedRunway();
         this.oDataR = runway.getRunR().getRunwaySpec();
@@ -341,6 +343,10 @@ public class RunwayCanvas extends Canvas {
         g.rotate(r);
         g.fillText(s, 5, 0);
         g.restore();
+    }
+    
+    public Runway getRunway() {
+        return runway;
     }
 
 }
