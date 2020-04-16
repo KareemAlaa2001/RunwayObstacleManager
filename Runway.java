@@ -63,14 +63,22 @@ public class Runway
 	public void addObstacleL(ObstacleData ODL) throws Exception
 	{ // Should not be used by any class other than Airport
 		RunL.addObstacle(ODL); // Should check if there is already an obstacle with these parameters added to the runway
-		RunR.addObstacle(new ObstacleData(RunR.getRunwaySpec().TORA - (ODL.position + RunL.getRunwaySpec().threshold), ODL.maxHeight));
+		try {
+			RunR.addObstacle(new ObstacleData(RunR.getRunwaySpec().TORA - (ODL.position + RunL.getRunwaySpec().threshold), ODL.maxHeight));
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
 	}
 
 	public void addObstacleR(ObstacleData ODR) throws Exception
 	{ // Should not be used by any class other than Airport
 		RunR.addObstacle(ODR); // Should check if there is already an obstacle with these parameters added to the runway
-		RunL.addObstacle(new ObstacleData(RunL.getRunwaySpec().TORA - (ODR.position + RunR.getRunwaySpec().threshold), ODR.maxHeight));
+		try {
+			RunL.addObstacle(new ObstacleData(RunL.getRunwaySpec().TORA - (ODR.position + RunR.getRunwaySpec().threshold), ODR.maxHeight));
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}
 
