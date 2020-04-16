@@ -45,10 +45,14 @@ public class RunwayCanvas extends Canvas {
 
     public void render(double scale, double tx, double ty, boolean rotate) {
         final GraphicsContext g = this.getGraphicsContext2D();
+
         g.setFill(Color.WHITE);
         g.setFont(Font.font("monospaced", 20));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        if (oDataL != null && oDataR != null) {
+        if (runway != null) {
+
+            nDataL = runway.getRunL().getUpdatedRunway();
+            nDataR = runway.getRunR().getUpdatedRunway();
 
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
@@ -344,7 +348,7 @@ public class RunwayCanvas extends Canvas {
         g.fillText(s, 5, 0);
         g.restore();
     }
-    
+
     public Runway getRunway() {
         return runway;
     }
