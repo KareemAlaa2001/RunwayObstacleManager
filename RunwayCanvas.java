@@ -165,9 +165,11 @@ public class RunwayCanvas extends Canvas {
             g.setLineWidth(2);
             g.setStroke(Color.WHITE);
             for (int i = 0; i < 2; i++) {
-                g.strokeLine(55 + oDataR.clearway * totalScale, bottomCL + 52 + i * 3, 70 + oDataR.clearway * totalScale, bottomCL + 52 + i * 3);
+                g.strokeLine(oDataR.clearway * totalScale + MARGIN + 5, bottomCL + 52 + i * 3, oDataR.clearway * totalScale + MARGIN + 20, bottomCL + 52 + i * 3);
+                g.strokeLine((oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 5, bottomCL + 52 + i * 3, (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 20, bottomCL + 52 + i * 3);
             }
-            g.strokeLine(115 + oDataR.clearway * totalScale, bottomCL + 52, 125 + oDataR.clearway * totalScale, bottomCL + 52);
+            g.strokeLine(oDataR.clearway * totalScale + MARGIN + 65, bottomCL + 52, oDataR.clearway * totalScale + MARGIN + 75, bottomCL + 52);
+            g.strokeLine((oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 65, bottomCL + 52, (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 75, bottomCL + 52);
 
             double maxHeight = 0.0;
             for (ObstacleData ob : obstacles) {
@@ -227,7 +229,16 @@ public class RunwayCanvas extends Canvas {
                         rightOb.maxHeight + "m", true, false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 
-            drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL + 30, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", true, false, 5, 10); //Bottom threshold label
+            if ((oDataR.clearway + nDataL.threshold) * totalScale - 5 > textWidth(g, "Threshold")) {
+                drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL - maxHeight * vScale, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, false, -5, 10); //Bottom left threshold label
+            } else {
+                drawLine(g, oDataR.clearway + nDataL.threshold, bottomCL - maxHeight * vScale, oDataR.clearway + nDataL.threshold, bottomCL + 50, Color.BLACK, "Threshold", true, false, 5, 10); //Bottom left threshold label
+            }
+            if ((oDataL.clearway + nDataR.threshold) * totalScale - 5 > textWidth(g, "Threshold")) {
+                drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.threshold, bottomCL - maxHeight * vScale, oDataR.clearway + oDataL.TORA - nDataR.threshold, bottomCL + 50, Color.BLACK, "Threshold", true, false, 5, 10); //Bottom right threshold label
+            } else {
+                drawLine(g, oDataR.clearway + oDataL.TORA - nDataR.threshold, bottomCL - maxHeight * vScale, oDataR.clearway + oDataL.TORA - nDataR.threshold, bottomCL + 50, Color.BLACK, "Threshold", false, false, -5, 10); //Bottom right threshold label
+            }
 
         }
 
