@@ -3,8 +3,6 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-
-
 public class MainWindowController extends Application
 {
     private static Window window = null;

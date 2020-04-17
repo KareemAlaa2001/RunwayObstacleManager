@@ -28,6 +28,18 @@ public class Airport
 		this.runways = runways;
 	}
 
+	public void addRunways(List<Runway> newR) throws Exception
+	{
+		if (newR == null) {
+			
+		}
+		if (runways == null) {
+			this.runways = newR;
+		} else {
+			this.runways.addAll(newR);
+		}
+	}
+
 	public RunwayOneWay getRunway(String runName) throws Exception
 	{
 		if (runName == null) {

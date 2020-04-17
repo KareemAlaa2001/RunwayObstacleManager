@@ -68,7 +68,7 @@ public class Runway
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
+		Controller.addActivityText("Added " + ODL.maxHeight + "m tall obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
 	}
 
 	public void addObstacleR(ObstacleData ODR) throws Exception

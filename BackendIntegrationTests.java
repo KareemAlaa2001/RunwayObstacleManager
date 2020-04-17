@@ -50,4 +50,10 @@ public class BackendIntegrationTests
             assertTrue(BackendHelpers.runwayDataSame(ap1.getRunway("09L").getUpdatedRunway(), new RunwayData(1222, 3040, 3040, 3040, 2679)));
         } catch (Exception e2) { assertTrue(false); }
     }
+
+    @Test
+    public void TestLateRunwayAdd()
+    {
+        runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
+    }
 }
