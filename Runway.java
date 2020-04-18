@@ -6,10 +6,10 @@ public class Runway
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
 
-	public Runway(int leftBearing, RunwayData left, RunwayData right) throws Exception
+	public Runway(int leftBearing, RunwayData left, RunwayData right) throws IllegalArgumentException
 	{
 		if (leftBearing < 0 || left == null || right == null) {
-			throw new Exception("Incorrect input to create a runway");
+			throw new IllegalArgumentException("Incorrect input to create a runway");
 		}
 		this.leftBearing = leftBearing;
 		this.gradedArea = 400;
@@ -28,10 +28,10 @@ public class Runway
 		MainWindowController.addActivityText("Created runway " + name + ", without any graded area");
 	}
 
-	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right) throws Exception
+	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right) throws IllegalArgumentException
 	{
 		if (leftBearing < 0 || left == null || right == null || gradedArea < 0) {
-			throw new Exception("Incorrect input to create a runway");
+			throw new IllegalArgumentException("Incorrect input to create a runway");
 		}
 		this.gradedArea = gradedArea;
 		this.leftBearing = leftBearing;
