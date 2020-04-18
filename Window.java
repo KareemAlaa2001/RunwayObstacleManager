@@ -1,32 +1,34 @@
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+        import java.util.ArrayList;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+        import javafx.beans.binding.Bindings;
+        import javafx.beans.binding.BooleanBinding;
+        import javafx.beans.value.ChangeListener;
+        import javafx.beans.value.ObservableValue;
+        import javafx.event.ActionEvent;
+        import javafx.event.EventHandler;
+        import javafx.geometry.Insets;
+        import javafx.geometry.Pos;
+        import javafx.geometry.Rectangle2D;
+        import javafx.scene.Scene;
+        import javafx.scene.control.*;
+        import javafx.scene.input.MouseEvent;
+        import javafx.scene.input.ScrollEvent;
+        import javafx.scene.layout.GridPane;
+        import javafx.scene.layout.HBox;
+        import javafx.scene.layout.Pane;
+        import javafx.scene.text.Font;
+        import javafx.scene.text.FontWeight;
+        import javafx.scene.text.Text;
+        import javafx.stage.FileChooser;
+        import javafx.stage.Screen;
+        import javafx.stage.Stage;
 
 public class Window {
 
@@ -209,12 +211,13 @@ public class Window {
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
 
         //all buttons
-        Button chooseAirportFile = new Button("Choose file");
+        Button chooseAirportFile = new Button("Choose XML file");
         Button loadAirportButton = new Button("Load Airport");
         Button createAirportButton = new Button("Create Airport");
 
-        Button chooseRunwayFile = new Button("Choose file(s)");
+        Button chooseRunwayFile = new Button("Choose XML file(s)");
         Button addRunway = new Button("Add runway to the airport");
+        Button addRunwayManually = new Button("Add runway to the airport");
         Button finish = new Button("Finish");
         Button back = new Button("<-- Back");
 
@@ -240,18 +243,25 @@ public class Window {
         hbAddRunway.getChildren().add(addRunway);
         hbAddRunway.setAlignment(Pos.CENTER);
 
+        HBox hbAddRunwayManually = new HBox(10);
+        hbAddRunwayManually.getChildren().add(addRunwayManually);
+        hbAddRunwayManually.setAlignment(Pos.CENTER);
+
         gridCreateScene.add(hbChooseAirport, 2, 3);
         gridCreateScene.add(hbLoadAirport, 1, 4);
-        gridCreateScene.add(hbCreateAirport, 1, 14);
+        gridCreateScene.add(hbCreateAirport, 1, 12);
 
         gridAddRunways.add(hbChooseRunway, 2, 1);
-        gridAddRunways.add(back, 0, 10);
-        gridAddRunways.add(hbAddRunway, 1, 8);
-        gridAddRunways.add(hbFinish, 2, 10);
+        gridAddRunways.add(back, 0, 11);
+        gridAddRunways.add(hbAddRunway, 1, 9);
+        gridAddRunways.add(hbAddRunwayManually, 1, 2);
+        gridAddRunways.add(hbFinish, 2, 11);
 
         //all text fields
         TextField selectedAirportTextField = new TextField();
         selectedAirportTextField.setPromptText("No file selected");
+        selectedAirportTextField.setDisable(true);
+        selectedAirportTextField.setStyle("-fx-opacity: 1;");
         gridCreateScene.add(selectedAirportTextField, 1, 3);
 
         TextField airportNameTextField = new TextField();
@@ -260,18 +270,46 @@ public class Window {
 
         TextField resaValue = new TextField();
         resaValue.setPromptText("No value given");
+        resaValue.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
         gridCreateScene.add(resaValue, 1, 8);
 
         TextField stripEndValue = new TextField();
         stripEndValue.setPromptText("No value given");
+        stripEndValue.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
         gridCreateScene.add(stripEndValue, 1, 9);
 
         TextField blastAllowanceValue = new TextField();
         blastAllowanceValue.setPromptText("No value given");
+        blastAllowanceValue.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
         gridCreateScene.add(blastAllowanceValue, 1, 10);
 
         TextField minSlopeValue = new TextField();
         minSlopeValue.setPromptText("No value given");
+        minSlopeValue.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
         gridCreateScene.add(minSlopeValue, 1, 11);
 
         TextField selectedRunwayTextField = new TextField();
@@ -280,24 +318,104 @@ public class Window {
 
         TextField threshold = new TextField();
         threshold.setPromptText("No value given");
-        gridAddRunways.add(threshold, 1, 4);
+        threshold.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(threshold, 1, 5);
 
         TextField tora = new TextField();
         tora.setPromptText("No value given");
-        gridAddRunways.add(tora, 1, 5);
+        tora.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(tora, 1, 6);
 
         TextField stopway = new TextField();
         stopway.setPromptText("No value given");
-        gridAddRunways.add(stopway, 1, 6);
+        stopway.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(stopway, 1, 7);
 
         TextField clearway = new TextField();
         clearway.setPromptText("No value given");
-        gridAddRunways.add(clearway, 1, 7);
+        clearway.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(clearway, 1, 8);
+
+        BooleanBinding isAirportNameEmpty = Bindings.createBooleanBinding(() -> {
+            if (airportNameTextField.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, airportNameTextField.textProperty());
+
+        BooleanBinding isResaEmpty = Bindings.createBooleanBinding(() -> {
+            if (resaValue.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, resaValue.textProperty());
+
+        BooleanBinding isStripEndEmpty = Bindings.createBooleanBinding(() -> {
+            if (stripEndValue.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, stripEndValue.textProperty());
+
+        BooleanBinding isBlastAllowanceEmpty = Bindings.createBooleanBinding(() -> {
+            if (blastAllowanceValue.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, blastAllowanceValue.textProperty());
+
+        BooleanBinding isMinimumSlopeEmpty = Bindings.createBooleanBinding(() -> {
+            if (minSlopeValue.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, minSlopeValue.textProperty());
+        createAirportButton.disableProperty().bind(isAirportNameEmpty.not().and(isBlastAllowanceEmpty).not().and(isMinimumSlopeEmpty).not().and(isResaEmpty).not().and(isStripEndEmpty).not());
+
+        BooleanBinding isRunwayTextFieldEmpty = Bindings.createBooleanBinding(() -> {
+            if (selectedRunwayTextField.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, selectedRunwayTextField.textProperty());
+        addRunwayManually.disableProperty().bind(isRunwayTextFieldEmpty.not());
+
+        BooleanBinding isAirportTextFieldEmpty = Bindings.createBooleanBinding(() -> {
+            if (selectedAirportTextField.getText().isEmpty())
+                return false;
+            else
+                return true;
+        }, selectedAirportTextField.textProperty());
+        loadAirportButton.disableProperty().bind(isAirportTextFieldEmpty.not());
 
         //just text
         Text welcomeText = new Text("Welcome to the runway redeclaration tool");
-        welcomeText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridCreateScene.add(welcomeText, 0, 0, 2, 1);
+        welcomeText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 22));
+        gridCreateScene.add(welcomeText, 0, 0, 3, 1);
 
         Text loadAirport = new Text("Load Airport");
         loadAirport.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
@@ -313,7 +431,7 @@ public class Window {
 
         Text createRunways = new Text("Create new runways");
         createRunways.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridAddRunways.add(createRunways, 0, 3, 2, 1);
+        gridAddRunways.add(createRunways, 0, 4, 2, 1);
 
         //all labels
         Label selectedFile = new Label("Selected File:");
@@ -338,16 +456,16 @@ public class Window {
         gridAddRunways.add(selectedRunway, 0, 1);
 
         Label thresholdLabel = new Label("Threshold:");
-        gridAddRunways.add(thresholdLabel, 0, 4);
+        gridAddRunways.add(thresholdLabel, 0, 5);
 
         Label toraLabel = new Label("TORA:");
-        gridAddRunways.add(toraLabel, 0, 5);
+        gridAddRunways.add(toraLabel, 0, 6);
 
         Label stopwayLabel = new Label("Stopway:");
-        gridAddRunways.add(stopwayLabel, 0, 6);
+        gridAddRunways.add(stopwayLabel, 0, 7);
 
         Label clearwayLabel = new Label("Clearway:");
-        gridAddRunways.add(clearwayLabel, 0, 7);
+        gridAddRunways.add(clearwayLabel, 0, 8);
 
         //file choosers with filters
         FileChooser xmlFileChooser = new FileChooser();
@@ -355,6 +473,7 @@ public class Window {
         FileChooser.ExtensionFilter xmlExtensionFilter = new FileChooser.ExtensionFilter(
                 "XML Files (*.xml)", "*.xml");
         xmlFileChooser.getExtensionFilters().add(xmlExtensionFilter);
+        airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
 
         chooseRunwayFile.setOnAction(e -> {
             File selectedRunwayFile = xmlFileChooser.showOpenDialog(stage);
@@ -366,6 +485,7 @@ public class Window {
             File selectedAirportFile = airportFileChooser.showOpenDialog(stage);
             selectedAirportTextField.setText(selectedAirportFile.getName());
             selectedAirportTextField.setStyle("-fx-background-color: yellowgreen");
+            selectedAirportTextField.setStyle("-fx-opacity: 1;");
         });
 
         toCreate.setOnAction(e -> stage.setScene(sceneLoadOrCreate));
