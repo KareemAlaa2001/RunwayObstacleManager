@@ -78,7 +78,7 @@ public class RunwayCanvas extends Canvas {
             if (rotate) {
                 g.save();
                 g.translate(this.getWidth() / 2, this.getWidth() / 2);
-                g.rotate(Integer.parseInt(name.substring(0, 2)) * 10.0 - 90.0);
+                g.rotate(Integer.parseInt(runwayL.getName().substring(0, 2)) * 10.0 - 90.0);
                 g.translate(-this.getWidth() / 2, -this.getWidth() / 2);
             }
 
