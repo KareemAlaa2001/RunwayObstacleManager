@@ -51,6 +51,9 @@ public class RunwayCanvas extends Canvas {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (runway != null) {
 
+            g.setFill(Color.LIGHTGRAY);
+            g.fillRect(0, 0, this.getWidth(), g.getCanvas().getHeight() * VRATIO);
+
             nDataL = runway.getRunL().getUpdatedRunway();
             nDataR = runway.getRunR().getUpdatedRunway();
 
@@ -70,7 +73,7 @@ public class RunwayCanvas extends Canvas {
             }
 
             g.setLineWidth(1);
-            g.setFill(Color.LIGHTGRAY);
+            g.setFill(Color.WHITE);
             double[] xPoints = new double[]{0,
                 oDataR.clearway * totalScale + MARGIN,
                 (oDataR.clearway + 200) * totalScale + MARGIN,
@@ -78,6 +81,10 @@ public class RunwayCanvas extends Canvas {
                 (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
+                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
+                (oDataR.clearway + 200) * totalScale + MARGIN,
+                oDataR.clearway * totalScale + MARGIN,
                 0};
             double[] yPoints = new double[]{runwayVpos - 25,
                 runwayVpos - 25,
@@ -85,26 +92,13 @@ public class RunwayCanvas extends Canvas {
                 runwayVpos + 25 - gradedArea * totalScale,
                 runwayVpos - 25,
                 runwayVpos - 25,
-                0,
-                0};
-            g.fillPolygon(xPoints, yPoints, 8);
-            xPoints = new double[]{0,
-                oDataR.clearway * totalScale + MARGIN,
-                (oDataR.clearway + 200) * totalScale + MARGIN,
-                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
-                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
-                this.getWidth(),
-                this.getWidth(),
-                0};
-            yPoints = new double[]{runwayVpos + 75,
+                runwayVpos + 75,
                 runwayVpos + 75,
                 runwayVpos + 25 + gradedArea * totalScale,
                 runwayVpos + 25 + gradedArea * totalScale,
                 runwayVpos + 75,
-                runwayVpos + 75,
-                this.getWidth(),
-                this.getWidth()};
-            g.fillPolygon(xPoints, yPoints, 8);
+                runwayVpos + 75};
+            g.fillPolygon(xPoints, yPoints, 12);
 
             drawRect(g, oDataR.clearway, runwayVpos, oDataL.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
             drawRect(g, oDataR.clearway - oDataR.stopway, runwayVpos, oDataR.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top left stopway
