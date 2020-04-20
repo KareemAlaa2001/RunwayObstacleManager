@@ -125,7 +125,7 @@ public class MainWindowScene extends WindowScene {
                             Integer.parseInt(obstacleHeightInput.getText())), (String) (runwaySelectionBox.getValue()), true);
                     updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
                 } catch (Exception ex) {
-                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainWindowScene.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
