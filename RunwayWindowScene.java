@@ -5,10 +5,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -31,8 +28,8 @@ public class RunwayWindowScene extends WindowScene {
         
         //all buttons
         Button chooseRunwayFile = new Button("Choose XML file(s)");
-        Button addRunway = new Button("Add runway to the airport");
         Button addRunwayManually = new Button("Add runway to the airport");
+        Button addRunway = new Button("Add runway to the airport");
         Button finish = new Button("Finish");
         Button back = new Button("<-- Back");
         
@@ -43,18 +40,18 @@ public class RunwayWindowScene extends WindowScene {
         hbFinish.getChildren().add(finish);
         hbFinish.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox hbAddRunway = new HBox(10);
-        hbAddRunway.getChildren().add(addRunway);
-        hbAddRunway.setAlignment(Pos.CENTER);
-
         HBox hbAddRunwayManually = new HBox(10);
         hbAddRunwayManually.getChildren().add(addRunwayManually);
         hbAddRunwayManually.setAlignment(Pos.CENTER);
+
+        HBox hbAddRunway = new HBox(10);
+        hbAddRunway.getChildren().add(addRunway);
+        hbAddRunway.setAlignment(Pos.CENTER);
         
         gridAddRunways.add(hbChooseRunway, 2, 1);
         gridAddRunways.add(back, 0, 11);
-        gridAddRunways.add(hbAddRunway, 1, 9);
-        gridAddRunways.add(hbAddRunwayManually, 1, 2);
+        gridAddRunways.add(hbAddRunwayManually, 1, 9);
+        gridAddRunways.add(hbAddRunway, 1, 2);
         gridAddRunways.add(hbFinish, 2, 11);
         
         //all text fields
@@ -105,14 +102,26 @@ public class RunwayWindowScene extends WindowScene {
         }
         ));
         gridAddRunways.add(clearway, 1, 8);
-        
-        BooleanBinding isRunwayTextFieldEmpty = Bindings.createBooleanBinding(() -> {
-            if (selectedRunwayTextField.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, selectedRunwayTextField.textProperty());
-        addRunwayManually.disableProperty().bind(isRunwayTextFieldEmpty.not());
+
+        addRunway.setOnAction(e -> {
+            if (selectedRunwayTextField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("You are not able to add a runway");
+                alert.setContentText("Please choose a file");
+                alert.showAndWait();
+            }
+        });
+
+        addRunwayManually.setOnAction(e -> {
+            if (threshold.getText().isEmpty() || tora.getText().isEmpty() || stopway.getText().isEmpty() || clearway.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("You are not able to add a runway");
+                alert.setContentText("Please fill all the text fields");
+                alert.showAndWait();
+            }
+        });
 
         //just text
         Text loadRunways = new Text("Add existing runways to the airport");

@@ -159,8 +159,11 @@ public class MainWindowScene extends WindowScene {
         activityScrollPane.setPrefHeight(700);
         activityTab.setContent(activityScrollPane);
 
-        Button toCreate = new Button("Go to create scene");
-        toCreate.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+        Button toAirportScene = new Button("To airport scene");
+        toAirportScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+
+        Button toRunwayScene = new Button("To runway scene");
+        toRunwayScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
 
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
@@ -173,7 +176,8 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(obstacleLocationInput, 2, 2, 1, 1);
         gridPane.add(addObstacleButton, 1, 3, 2, 1);
         gridPane.add(tabPane, 1, 4, 2, 2);
-        gridPane.add(toCreate, 2, 5);
+        gridPane.add(toRunwayScene, 2, 5);
+        gridPane.add(toAirportScene, 2, 6);
         
         scene = new Scene(gridPane);
     }
