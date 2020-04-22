@@ -13,6 +13,7 @@ public class RunwayCanvas extends Canvas {
 
     private int w, h;
     private Runway runway;
+    private RunwayOneWay runwayL, runwayR;
     private RunwayData nDataL = null;
     private RunwayData oDataL = null;
     private RunwayData nDataR = null;
@@ -28,10 +29,19 @@ public class RunwayCanvas extends Canvas {
         this.w = w;
         this.h = h;
         this.runway = runway;
-        this.oDataL = runway.getRunL().getRunwaySpec();
-        this.nDataL = runway.getRunL().getUpdatedRunway();
-        this.oDataR = runway.getRunR().getRunwaySpec();
-        this.nDataR = runway.getRunR().getUpdatedRunway();
+        if (Integer.parseInt(runway.getRunL().getName().substring(0, 2)) < Integer.parseInt(runway.getRunR().getName().substring(0, 2))) {
+            runwayL = runway.getRunL();
+            runwayR = runway.getRunR();
+        } else {
+            runwayL = runway.getRunR();
+            runwayR = runway.getRunL();
+        }
+
+        this.oDataL = runwayL.getRunwaySpec();
+        this.nDataL = runwayL.getUpdatedRunway();
+        this.oDataR = runwayR.getRunwaySpec();
+        this.nDataR = runwayR.getUpdatedRunway();
+
         this.name = runway.getName();
         this.obstacles = runway.getRunL().getObstacles();
         totalScale = (w - (MARGIN * 2)) / (oDataR.clearway + oDataL.TORA + oDataL.clearway + 0.0);
@@ -51,6 +61,9 @@ public class RunwayCanvas extends Canvas {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (runway != null) {
 
+            g.setFill(Color.LIGHTGRAY);
+            g.fillRect(0, 0, this.getWidth(), g.getCanvas().getHeight() * VRATIO);
+
             nDataL = runway.getRunL().getUpdatedRunway();
             nDataR = runway.getRunR().getUpdatedRunway();
 
@@ -65,12 +78,12 @@ public class RunwayCanvas extends Canvas {
             if (rotate) {
                 g.save();
                 g.translate(this.getWidth() / 2, this.getWidth() / 2);
-                g.rotate(Integer.parseInt(name.substring(0, 2)) * 10.0 - 90.0);
+                g.rotate(Integer.parseInt(runwayL.getName().substring(0, 2)) * 10.0 - 90.0);
                 g.translate(-this.getWidth() / 2, -this.getWidth() / 2);
             }
 
             g.setLineWidth(1);
-            g.setFill(Color.LIGHTGRAY);
+            g.setFill(Color.WHITE);
             double[] xPoints = new double[]{0,
                 oDataR.clearway * totalScale + MARGIN,
                 (oDataR.clearway + 200) * totalScale + MARGIN,
@@ -78,6 +91,10 @@ public class RunwayCanvas extends Canvas {
                 (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
                 this.getWidth(),
                 this.getWidth(),
+                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
+                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
+                (oDataR.clearway + 200) * totalScale + MARGIN,
+                oDataR.clearway * totalScale + MARGIN,
                 0};
             double[] yPoints = new double[]{runwayVpos - 25,
                 runwayVpos - 25,
@@ -85,26 +102,13 @@ public class RunwayCanvas extends Canvas {
                 runwayVpos + 25 - gradedArea * totalScale,
                 runwayVpos - 25,
                 runwayVpos - 25,
-                0,
-                0};
-            g.fillPolygon(xPoints, yPoints, 8);
-            xPoints = new double[]{0,
-                oDataR.clearway * totalScale + MARGIN,
-                (oDataR.clearway + 200) * totalScale + MARGIN,
-                (oDataL.TORA + oDataR.clearway - 200) * totalScale + MARGIN,
-                (oDataL.TORA + oDataR.clearway) * totalScale + MARGIN,
-                this.getWidth(),
-                this.getWidth(),
-                0};
-            yPoints = new double[]{runwayVpos + 75,
+                runwayVpos + 75,
                 runwayVpos + 75,
                 runwayVpos + 25 + gradedArea * totalScale,
                 runwayVpos + 25 + gradedArea * totalScale,
                 runwayVpos + 75,
-                runwayVpos + 75,
-                this.getWidth(),
-                this.getWidth()};
-            g.fillPolygon(xPoints, yPoints, 8);
+                runwayVpos + 75};
+            g.fillPolygon(xPoints, yPoints, 12);
 
             drawRect(g, oDataR.clearway, runwayVpos, oDataL.TORA, 50, Color.GRAY, Color.BLACK); // Top runway
             drawRect(g, oDataR.clearway - oDataR.stopway, runwayVpos, oDataR.stopway, 50, Color.LIGHTGREY, Color.BLACK); //Top left stopway
@@ -126,8 +130,8 @@ public class RunwayCanvas extends Canvas {
                     g.strokeLine((oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 65, runwayVpos + 5 + i * 30 + j * 5, (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 75, runwayVpos + 5 + i * 30 + j * 5); //Top right second markers
                 }
             }
-            drawRotatedText(g, name.split("/")[0], oDataR.clearway * totalScale + MARGIN + 38, runwayVpos + 20 - (textWidth(g, name.split("/")[0]) / 2), 90, Color.WHITE); //Top left bearing marker
-            drawRotatedText(g, name.split("/")[1], (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 38, runwayVpos + 30 + (textWidth(g, name.split("/")[1]) / 2), 270, Color.WHITE); //Top right bearing marker
+            drawRotatedText(g, runwayL.getName(), oDataR.clearway * totalScale + MARGIN + 38, runwayVpos + 20 - (textWidth(g, runwayL.getName()) / 2), 90, Color.WHITE); //Top left bearing marker
+            drawRotatedText(g, runwayR.getName(), (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 38, runwayVpos + 30 + (textWidth(g, runwayR.getName()) / 2), 270, Color.WHITE); //Top right bearing marker
 
             for (ObstacleData ob : obstacles) {
                 drawRect(g, ob.position + oDataL.threshold + oDataR.clearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
