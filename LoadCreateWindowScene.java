@@ -5,16 +5,15 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+
+import javax.swing.*;
 
 
 public class LoadCreateWindowScene extends WindowScene {
@@ -103,50 +102,26 @@ public class LoadCreateWindowScene extends WindowScene {
         }
         ));
         gridCreateScene.add(minSlopeValue, 1, 11);
-        
-        BooleanBinding isAirportNameEmpty = Bindings.createBooleanBinding(() -> {
-            if (airportNameTextField.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, airportNameTextField.textProperty());
 
-        BooleanBinding isResaEmpty = Bindings.createBooleanBinding(() -> {
-            if (resaValue.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, resaValue.textProperty());
+        loadAirportButton.setOnAction(e -> {
+            if (selectedAirportTextField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("You are not able to load an airport");
+                alert.setContentText("Please choose a file");
+                alert.showAndWait();
+            } else app.setScene(app.runwayWindowScene);
+        });
 
-        BooleanBinding isStripEndEmpty = Bindings.createBooleanBinding(() -> {
-            if (stripEndValue.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, stripEndValue.textProperty());
-
-        BooleanBinding isBlastAllowanceEmpty = Bindings.createBooleanBinding(() -> {
-            if (blastAllowanceValue.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, blastAllowanceValue.textProperty());
-
-        BooleanBinding isMinimumSlopeEmpty = Bindings.createBooleanBinding(() -> {
-            if (minSlopeValue.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, minSlopeValue.textProperty());
-        createAirportButton.disableProperty().bind(isAirportNameEmpty.not().and(isBlastAllowanceEmpty).not().and(isMinimumSlopeEmpty).not().and(isResaEmpty).not().and(isStripEndEmpty).not());
-
-        BooleanBinding isAirportTextFieldEmpty = Bindings.createBooleanBinding(() -> {
-            if (selectedAirportTextField.getText().isEmpty())
-                return false;
-            else
-                return true;
-        }, selectedAirportTextField.textProperty());
-        loadAirportButton.disableProperty().bind(isAirportTextFieldEmpty.not());
+        createAirportButton.setOnAction(e -> {
+            if (airportNameTextField.getText().isEmpty() || resaValue.getText().isEmpty() || stripEndValue.getText().isEmpty() || blastAllowanceValue.getText().isEmpty() || minSlopeValue.getText().isEmpty()) {
+                Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                alert1.setTitle("Error");
+                alert1.setHeaderText("You are not able to create an airport");
+                alert1.setContentText("Please fill all the text fields");
+                alert1.showAndWait();
+            } else app.setScene(app.runwayWindowScene);
+        });
 
         //just text
         Text welcomeText = new Text("Welcome to the runway redeclaration tool");
@@ -194,9 +169,6 @@ public class LoadCreateWindowScene extends WindowScene {
             selectedAirportTextField.setStyle("-fx-background-color: yellowgreen");
             selectedAirportTextField.setStyle("-fx-opacity: 1;");
         });
-        
-        createAirportButton.setOnAction(e -> app.setScene(app.runwayWindowScene));
-        loadAirportButton.setOnAction(e -> app.setScene(app.mainWindowScene));
         
         scene = new Scene(gridCreateScene, 300, 250);
     }
