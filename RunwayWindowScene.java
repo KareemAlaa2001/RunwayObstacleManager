@@ -1,4 +1,3 @@
-
 import java.io.File;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -17,9 +16,11 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 
-public class RunwayWindowScene extends WindowScene {
-    
-    public RunwayWindowScene(Launcher app) {
+
+public class RunwayWindowScene extends WindowScene
+{
+    public RunwayWindowScene(Launcher app)
+    {
         super(app);
         GridPane gridAddRunways = new GridPane();
         
