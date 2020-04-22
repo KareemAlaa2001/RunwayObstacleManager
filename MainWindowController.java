@@ -1,16 +1,17 @@
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller {
+public class MainWindowController {
 
     private static MainWindowScene outputScene;
     
-    public Controller(MainWindowScene outputScene) {
+    public MainWindowController(MainWindowScene outputScene)
+    {
         this.outputScene = outputScene;
     }
     
-    public static Airport initAirport() {
+    public static Airport initAirport()
+    {
         try {
             List<Runway> runwayList = new ArrayList();
 

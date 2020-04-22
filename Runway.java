@@ -25,7 +25,7 @@ public class Runway
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
 		this.name = RunL.getName() + "/" + RunR.getName();
-		Controller.addActivityText("Created runway " + name + ", without any graded area");
+		MainWindowController.addActivityText("Created runway " + name + ", without any graded area");
 	}
 
 	public Runway(int leftBearing, int gradedArea, RunwayData left, RunwayData right) throws IllegalArgumentException
@@ -47,7 +47,7 @@ public class Runway
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
 		this.name = RunL.getName() + "/" + RunR.getName();
-		Controller.addActivityText("Created runway " + name);
+		MainWindowController.addActivityText("Created runway " + name);
 	}
 
 	public String getName()
@@ -68,7 +68,7 @@ public class Runway
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		Controller.addActivityText("Added " + ODL.maxHeight + "m tall obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
+		MainWindowController.addActivityText("Added " + ODL.maxHeight + "m tall obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
 	}
 
 	public void addObstacleR(ObstacleData ODR) throws Exception
@@ -79,7 +79,7 @@ public class Runway
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		Controller.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
+		MainWindowController.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}
 
 	public RunwayOneWay getRunL()
