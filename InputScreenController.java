@@ -5,4 +5,8 @@ import javafx.stage.Stage;
 
 public class InputScreenController extends Application
 {
+    @Override   //TODO  method stub
+    public void start(Stage stage) throws Exception {
+        return;
+    }
 }
