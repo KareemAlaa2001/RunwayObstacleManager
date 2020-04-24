@@ -9,10 +9,10 @@ public class Airport
 
 	private List<Runway> runways;
 
-	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope) throws Exception
+	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
 	{
 		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope > 90 || MinSlope < 0) {
-			throw new Exception("Invalid data given for airport");
+			throw new IllegalArgumentException("Invalid data given for airport");
 		}
 		this.RESA = RESA;
 		this.StripEnd = StripEnd;
@@ -33,6 +33,7 @@ public class Airport
 		if (newR == null) {
 			
 		}
+
 		if (runways == null) {
 			this.runways = newR;
 		} else {

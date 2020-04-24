@@ -10,7 +10,7 @@ public class Launcher extends Application {
     public LoadCreateWindowScene loadCreateWindowScene;
     public RunwayWindowScene runwayWindowScene;
     
-    private Controller controller;
+    private MainWindowController mainWindowController;
     
     private Stage stage;
     
@@ -36,9 +36,9 @@ public class Launcher extends Application {
         loadCreateWindowScene = new LoadCreateWindowScene(this);
         runwayWindowScene = new RunwayWindowScene(this);
         
-        controller = new Controller(mainWindowScene);
+        mainWindowController = new MainWindowController(mainWindowScene);
         //Temporary
-        mainWindowScene.setAirport(controller.initAirport());
+        mainWindowScene.setAirport(mainWindowController.initAirport());
         //
         
         setScene(loadCreateWindowScene);

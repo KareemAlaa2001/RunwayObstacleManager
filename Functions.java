@@ -27,28 +27,28 @@ public class Functions
 
 			thresholdBreakdown.put("RESA", Airport.RESA);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("obstacle distance from threshold - RESA - strip end = New LDA");
-			Controller.addOutputText(obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
+			MainWindowController.addOutputText("obstacle distance from threshold - RESA - strip end = New LDA");
+			MainWindowController.addOutputText(obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else if (Airport.RESA > slopeAllowance) {
 			newThreshold = runway.threshold + obstacle.position + Airport.RESA + Airport.StripEnd;
 			newLDA = runway.LDA - obstacle.position - Airport.RESA - Airport.StripEnd;
 
 			thresholdBreakdown.put("RESA", Airport.RESA);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
-			Controller.addOutputText(runway.threshold + " + " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
-			Controller.addOutputText("old LDA - obstacle distance from threshold + RESA + strip end = New LDA");
-			Controller.addOutputText(runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
+			MainWindowController.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
+			MainWindowController.addOutputText(runway.threshold + " + " + obstacle.position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
+			MainWindowController.addOutputText("old LDA - obstacle distance from threshold + RESA + strip end = New LDA");
+			MainWindowController.addOutputText(runway.LDA + " - " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
 		} else {
 			newThreshold = runway.threshold + obstacle.position + slopeAllowance + Airport.StripEnd;
 			newLDA = runway.LDA - obstacle.position - slopeAllowance - Airport.StripEnd;
 
 			thresholdBreakdown.put("Slope Allowance", slopeAllowance);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
-			Controller.addOutputText(runway.threshold + " + " + obstacle.position + " + " + slopeAllowance + " + " + Airport.StripEnd + " = " + newThreshold);
-			Controller.addOutputText("old LDA - obstacle distance from threshold - slope allowance - strip end = New LDA");
-			Controller.addOutputText(runway.LDA + " - " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newLDA);
+			MainWindowController.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
+			MainWindowController.addOutputText(runway.threshold + " + " + obstacle.position + " + " + slopeAllowance + " + " + Airport.StripEnd + " = " + newThreshold);
+			MainWindowController.addOutputText("old LDA - obstacle distance from threshold - slope allowance - strip end = New LDA");
+			MainWindowController.addOutputText(runway.LDA + " - " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newLDA);
 		}
 
 		// Calculates values that depend on the usable length of the runway
@@ -57,15 +57,15 @@ public class Functions
 
 			thresholdBreakdown.put("Slope Allowance", slopeAllowance);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("old threshold + obstacle distance from threshold - slope allowance - strip end = New TORA, TODA and ASDA");
-			Controller.addOutputText(runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
+			MainWindowController.addOutputText("old threshold + obstacle distance from threshold - slope allowance - strip end = New TORA, TODA and ASDA");
+			MainWindowController.addOutputText(runway.threshold + " + " + obstacle.position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
 		} else if (towards && slopeAllowance < Airport.RESA) {
 			newTORA = newTODA = newASDA = runway.threshold + obstacle.position - Airport.RESA - Airport.StripEnd;
 
 			thresholdBreakdown.put("RESA", Airport.RESA);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("old threshold + obstacle distance from threshold - RESA - strip end = New TORA, TODA and ASDA");
-			Controller.addOutputText(runway.threshold + " + " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newTORA);
+			MainWindowController.addOutputText("old threshold + obstacle distance from threshold - RESA - strip end = New TORA, TODA and ASDA");
+			MainWindowController.addOutputText(runway.threshold + " + " + obstacle.position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newTORA);
 		} else if (Airport.BlastAllowance > (Airport.RESA + Airport.StripEnd)) {
 			newTakeoffThreshold = runway.threshold + obstacle.position + Airport.BlastAllowance;
 
@@ -74,12 +74,12 @@ public class Functions
 			newASDA = newTORA + runway.stopway;
 
 			thresholdBreakdown.put("Blast Allowance", Airport.BlastAllowance);
-			Controller.addOutputText("old TORA - blast allowance  - old Threshold - obstacle distance from threshold = New TORA");
-			Controller.addOutputText(runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + obstacle.position + " = " + newTORA);
-			Controller.addOutputText("new TORA + clearway = New TODA");
-			Controller.addOutputText(newTORA + " + " + runway.clearway + " = " + newTODA);
-			Controller.addOutputText("new TORA + stopway = New ASDA");
-			Controller.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
+			MainWindowController.addOutputText("old TORA - blast allowance  - old Threshold - obstacle distance from threshold = New TORA");
+			MainWindowController.addOutputText(runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + obstacle.position + " = " + newTORA);
+			MainWindowController.addOutputText("new TORA + clearway = New TODA");
+			MainWindowController.addOutputText(newTORA + " + " + runway.clearway + " = " + newTODA);
+			MainWindowController.addOutputText("new TORA + stopway = New ASDA");
+			MainWindowController.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 			newTakeoffThreshold = runway.threshold + obstacle.position + Airport.RESA + Airport.StripEnd;
 			
@@ -89,14 +89,14 @@ public class Functions
 
 			thresholdBreakdown.put("RESA", Airport.RESA);
 			thresholdBreakdown.put("Strip End", Airport.StripEnd);
-			Controller.addOutputText("old TORA - RESA - strip end - obstacle distance from threshold = New TORA");
-			Controller.addOutputText(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
-			Controller.addOutputText("new TORA + clearway = New TODA");
-			Controller.addOutputText(newTORA + " + " + runway.clearway + " = " + newTODA);
-			Controller.addOutputText("new TORA + stopway = New ASDA");
-			Controller.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
+			MainWindowController.addOutputText("old TORA - RESA - strip end - obstacle distance from threshold = New TORA");
+			MainWindowController.addOutputText(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + obstacle.position + " = " + newTORA);
+			MainWindowController.addOutputText("new TORA + clearway = New TODA");
+			MainWindowController.addOutputText(newTORA + " + " + runway.clearway + " = " + newTODA);
+			MainWindowController.addOutputText("new TORA + stopway = New ASDA");
+			MainWindowController.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
 		}
-		Controller.addOutputText("");
+		MainWindowController.addOutputText("");
 		return new RunwayData(newThreshold, newTakeoffThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA, thresholdBreakdown);
 	}
 }
