@@ -1,13 +1,10 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainWindowController
 {
     private static MainWindowScene outputScene;
 
     public static void setScene(MainWindowScene outputScene)
     {
-        this.outputScene = outputScene;
+        MainWindowController.outputScene = outputScene;
     }
 
     public static void addOutputText(String string) {
