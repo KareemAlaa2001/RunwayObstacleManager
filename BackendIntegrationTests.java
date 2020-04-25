@@ -22,7 +22,7 @@ public class BackendIntegrationTests
             ap1.addObstacle(new ObstacleData(-1, 2), "09L/27R", true);
             ods = ap1.getRunway("09L").getObstacles();
         } catch (Exception e1) {}
-        
+
         ObstacleData od = null;
         try {
             od = ods.get(0);
@@ -54,15 +54,16 @@ public class BackendIntegrationTests
     @Test
     public void TestLateRunwayAdd()
     {
-        ArrayList<Runway> runwayList = new ArrayList<Runway>();
+        List<Runway> runwayList = new ArrayList<Runway>();
         runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
-        ap1 = new Airport(runwayList);
+        Airport ap1 = new Airport(runwayList);
 
         runwayList = new ArrayList<Runway>();
         runwayList.add(new Runway(13, new RunwayData(306, 3200, 3200, 3200, 3200), new RunwayData(0, 3100, 3100, 3100, 3100)));
 
         assertFalse(ap1.getRunwayFull("09L/27R") == null);
         ap1.addRunways(runwayList);
-        assertFalse(ap1.getRunwayFull("13L/23R") == null);
+        assertFalse(ap1.getRunwayFull("13L/31R") == null);
+        assertFalse(ap1.getRunwayFull("09L/27R") == null);
     }
 }

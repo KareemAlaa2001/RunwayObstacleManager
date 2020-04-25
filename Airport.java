@@ -11,7 +11,7 @@ public class Airport
 
 	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
 	{
-		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope > 90 || MinSlope < 0) {
+		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope < 0) {
 			throw new IllegalArgumentException("Invalid data given for airport");
 		}
 		this.RESA = RESA;

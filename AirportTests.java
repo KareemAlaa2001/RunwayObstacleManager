@@ -56,13 +56,9 @@ public class AirportTests
             blastallowance = true;
         }
         try {
-            Airport ap = new Airport(1, 2, 3, 91);
+            Airport ap = new Airport(1, 2, 3, -1);
         } catch(Exception e) {
-            try {
-                Airport ap = new Airport(1, 2, 3, -1);
-            } catch(Exception ex) {
-                minslope = true;
-            }
+            minslope = true;
         }
         assertTrue(resa);
         assertTrue(stripend);
