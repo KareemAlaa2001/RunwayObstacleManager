@@ -1,14 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainWindowController {
-
+public class MainWindowController
+{
     private static MainWindowScene outputScene;
-    
-    public MainWindowController(MainWindowScene outputScene)
-    {
-        this.outputScene = outputScene;
-    }
     
     public static Airport initAirport()
     {
@@ -38,6 +33,11 @@ public class MainWindowController {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    public static void setScene(MainWindowScene outputScene)
+    {
+        this.outputScene = outputScene;
     }
 
     public static void addOutputText(String string) {
