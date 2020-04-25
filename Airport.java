@@ -20,18 +20,18 @@ public class Airport
 		this.MinSlope = MinSlope;
 	}
 
-	public Airport(List<Runway> runways) throws Exception
+	public Airport(List<Runway> runways)
 	{
 		if (runways == null || runways.size() == 0) {
-			throw new Exception("Error creating Airport from given runways");
+			throw new IllegalArgumentException("Error creating Airport from given runways");
 		}
 		this.runways = runways;
 	}
 
-	public void addRunways(List<Runway> newR) throws Exception
+	public void addRunways(List<Runway> newR)
 	{
 		if (newR == null) {
-			
+			throw new IllegalArgumentException("Error adding runways to airport");
 		}
 
 		if (runways == null) {
@@ -41,10 +41,10 @@ public class Airport
 		}
 	}
 
-	public RunwayOneWay getRunway(String runName) throws Exception
+	public RunwayOneWay getRunway(String runName)
 	{
 		if (runName == null) {
-			throw new Exception("No name given for runway");
+			throw new IllegalArgumentException("No name given for runway");
 		}
 		boolean left = runName.charAt(2) == 'L';
 
@@ -61,20 +61,20 @@ public class Airport
 				}
 			}
 		}
-		throw new Exception("There is no runway in this airport with identifier '" + runName + "'");
+		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + runName + "'");
 	}
 
-	public Runway getRunwayFull(String name) throws Exception
+	public Runway getRunwayFull(String name)
 	{
 		if (name == null) {
-			throw new Exception("No name give for runway");
+			throw new IllegalArgumentException("No name give for runway");
 		}
 		for (Runway run : runways) {
 			if (run.getName().equals(name)) {
 				return run;
 			}
 		}
-		throw new Exception("There is no runway in this airport with identifier '" + name + "'");
+		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + name + "'");
 	}
 
 	public List<Runway> getRunways()
@@ -82,10 +82,10 @@ public class Airport
 		return runways;
 	}
 
-	public void addObstacle(ObstacleData OD, String runName, boolean left) throws Exception
+	public void addObstacle(ObstacleData OD, String runName, boolean left)
 	{
 		if (OD == null) {
-			throw new Exception("No obstacleData given to add to runway " + runName);
+			throw new IllegalArgumentException("No obstacleData given to add to runway " + runName);
 		}
 		try {
 			if (left) {
