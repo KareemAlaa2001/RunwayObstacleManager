@@ -17,8 +17,9 @@ import javax.swing.*;
 
 
 public class LoadCreateWindowScene extends WindowScene {
-    
-    public LoadCreateWindowScene(Launcher app) {
+
+//    public LoadCreateWindowScene(Launcher app) {
+    public LoadCreateWindowScene(Launcher app, MainController control) {
         super(app);
         GridPane gridCreateScene = new GridPane();
         
@@ -110,7 +111,9 @@ public class LoadCreateWindowScene extends WindowScene {
                 alert.setHeaderText("You are not able to load an airport");
                 alert.setContentText("Please choose a file");
                 alert.showAndWait();
-            } else app.setScene(app.runwayWindowScene);
+            } else {
+                // TODO  fill in functionality
+            }
         });
 
         createAirportButton.setOnAction(e -> {
@@ -120,7 +123,19 @@ public class LoadCreateWindowScene extends WindowScene {
                 alert1.setHeaderText("You are not able to create an airport");
                 alert1.setContentText("Please fill all the text fields");
                 alert1.showAndWait();
-            } else app.setScene(app.runwayWindowScene);
+            } else {
+                String airportName = airportNameTextField.getText();
+                int resa = Integer.parseInt(resaValue.getText());
+                int stripEnd = Integer.parseInt(stripEndValue.getText());
+                int blastAllowance = Integer.parseInt(blastAllowanceValue.getText());
+                int minSlope = Integer.parseInt(minSlopeValue.getText());
+
+                Airport ap = new Airport(resa, stripEnd,blastAllowance, minSlope);
+
+                control.switchToRunwaysScreen(airportName, ap);
+//                app.setScene(app.runwayWindowScene);
+
+            }
         });
 
         //just text
@@ -154,7 +169,12 @@ public class LoadCreateWindowScene extends WindowScene {
 
         Label minSlope = new Label("Minimum Slope:");
         gridCreateScene.add(minSlope, 0, 11);
-        
+
+        Label defResa = new Label("" + Airport.RESA);
+        Label defStripEnd = new Label("" + Airport.StripEnd);
+        Label defBlast = new Label("" + Airport.BlastAllowance);
+        Label defSlope = new Label("" + Airport.MinSlope);
+
         //file choosers with filters
         FileChooser xmlFileChooser = new FileChooser();
         FileChooser airportFileChooser = new FileChooser();

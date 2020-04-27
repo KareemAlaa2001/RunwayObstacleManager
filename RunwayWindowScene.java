@@ -1,4 +1,7 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
@@ -16,7 +19,8 @@ import javafx.stage.FileChooser;
 
 public class RunwayWindowScene extends WindowScene
 {
-    public RunwayWindowScene(Launcher app)
+//    public RunwayWindowScene(Launcher app)
+    public RunwayWindowScene(Launcher app, MainController control, String airportName,Airport ap)
     {
         super(app);
         GridPane gridAddRunways = new GridPane();
@@ -26,7 +30,9 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.setHgap(20);
         gridAddRunways.setVgap(20);
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
-        
+
+        List<Runway> runwayList = new ArrayList<>();
+
         //all buttons
         Button chooseRunwayFile = new Button("Choose XML file(s)");
         Button addRunwayManually = new Button("Add runway to the airport");
@@ -56,9 +62,23 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.add(hbFinish, 2, 11);
         
         //all text fields
+        TextField runLeftBearingField = new TextField();
+        runLeftBearingField.setPromptText("Ex. 09L/27R");
+        runLeftBearingField.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(runLeftBearingField, 1, 4);
+        gridAddRunways.add(new Label("Enter Runway Left Bearing:"), 0, 4);
+
+
         TextField selectedRunwayTextField = new TextField();
         selectedRunwayTextField.setPromptText("No file(s) selected");
         gridAddRunways.add(selectedRunwayTextField, 1, 1);
+
 
         TextField threshold = new TextField();
         threshold.setPromptText("No value given");
@@ -71,6 +91,18 @@ public class RunwayWindowScene extends WindowScene
         ));
         gridAddRunways.add(threshold, 1, 5);
 
+        TextField threshold2 = new TextField();
+        threshold2.setPromptText("No value given");
+        threshold2.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(threshold2, 2, 5);
+
+
         TextField tora = new TextField();
         tora.setPromptText("No value given");
         tora.setTextFormatter(new TextFormatter<>(c -> {
@@ -81,6 +113,7 @@ public class RunwayWindowScene extends WindowScene
         }
         ));
         gridAddRunways.add(tora, 1, 6);
+
 
         TextField stopway = new TextField();
         stopway.setPromptText("No value given");
@@ -93,6 +126,18 @@ public class RunwayWindowScene extends WindowScene
         ));
         gridAddRunways.add(stopway, 1, 7);
 
+        TextField stopway2 = new TextField();
+        stopway2.setPromptText("No value given");
+        stopway2.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(stopway2, 2, 7);
+
+
         TextField clearway = new TextField();
         clearway.setPromptText("No value given");
         clearway.setTextFormatter(new TextFormatter<>(c -> {
@@ -103,6 +148,22 @@ public class RunwayWindowScene extends WindowScene
         }
         ));
         gridAddRunways.add(clearway, 1, 8);
+
+        TextField clearway2 = new TextField();
+        clearway2.setPromptText("No value given");
+        clearway2.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d*"))
+                return null;
+            else
+                return c;
+        }
+        ));
+        gridAddRunways.add(clearway2, 2, 8);
+
+
+        Label currRuns = new Label ("Runways Currently Added:");
+        gridAddRunways.add(currRuns, 0, 10);
+
 
         addRunway.setOnAction(e -> {
             if (selectedRunwayTextField.getText().isEmpty()) {
@@ -115,12 +176,38 @@ public class RunwayWindowScene extends WindowScene
         });
 
         addRunwayManually.setOnAction(e -> {
-            if (threshold.getText().isEmpty() || tora.getText().isEmpty() || stopway.getText().isEmpty() || clearway.getText().isEmpty()) {
+            if (runLeftBearingField.getText().isEmpty() || threshold.getText().isEmpty() || threshold2.getText().isEmpty()
+                    || tora.getText().isEmpty() || stopway.getText().isEmpty() || stopway2.getText().isEmpty() || clearway.getText().isEmpty() ||clearway2.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("You are not able to add a runway");
                 alert.setContentText("Please fill all the text fields");
                 alert.showAndWait();
+            } else {
+
+                int runwayLeftBearing = Integer.parseInt(runLeftBearingField.getText());
+                int thresh = Integer.parseInt(threshold.getText());
+                int thresh2 = Integer.parseInt(threshold2.getText());
+                int toraa = Integer.parseInt(tora.getText());
+                int stop = Integer.parseInt(stopway.getText());
+                int stop2 = Integer.parseInt(stopway2.getText());
+                int clr = Integer.parseInt(clearway.getText());
+                int clr2 = Integer.parseInt(clearway2.getText());
+
+                Runway newRunway = new Runway(runwayLeftBearing, new RunwayData(thresh,toraa,stop,clr), new RunwayData(thresh2,toraa,stop2,clr2));
+                runwayList.add(newRunway);
+
+                runLeftBearingField.clear();
+                threshold.clear();
+                threshold2.clear();
+                tora.clear();
+                stopway.clear();
+                stopway2.clear();
+                clearway.clear();
+                clearway2.clear();
+
+                Label currRunsCopy = new Label(currRuns.getText());
+                currRuns.setText(currRunsCopy.getText() + " " + runwayLeftBearing + "L,");
             }
         });
 
@@ -131,7 +218,7 @@ public class RunwayWindowScene extends WindowScene
 
         Text createRunways = new Text("Create new runways");
         createRunways.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridAddRunways.add(createRunways, 0, 4, 2, 1);
+        gridAddRunways.add(createRunways, 0, 3, 2, 1);
         
         //all labels
         Label selectedRunway = new Label("Selected Runway(s):");
@@ -140,7 +227,7 @@ public class RunwayWindowScene extends WindowScene
         Label thresholdLabel = new Label("Threshold:");
         gridAddRunways.add(thresholdLabel, 0, 5);
 
-        Label toraLabel = new Label("TORA:");
+        Label toraLabel = new Label("Runway Length:");
         gridAddRunways.add(toraLabel, 0, 6);
 
         Label stopwayLabel = new Label("Stopway:");
@@ -148,7 +235,15 @@ public class RunwayWindowScene extends WindowScene
 
         Label clearwayLabel = new Label("Clearway:");
         gridAddRunways.add(clearwayLabel, 0, 8);
-        
+
+
+
+
+
+
+
+
+
         //file choosers with filters
         FileChooser xmlFileChooser = new FileChooser();
         FileChooser airportFileChooser = new FileChooser();
@@ -163,10 +258,19 @@ public class RunwayWindowScene extends WindowScene
             selectedRunwayTextField.setStyle("-fx-background-color: yellowgreen");
         });
         
-        back.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
-        finish.setOnAction(e -> app.setScene(app.mainWindowScene));
-        
+//        back.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+//        finish.setOnAction(e -> app.setScene(app.mainWindowScene));
+        finish.setOnAction(e -> {
+            ap.addRunways(runwayList);
+            control.switchToMainScreen(ap);
+        });
+
         scene = new Scene(gridAddRunways, 300, 250);
+    }
+
+    private void displayCurrentRunways() {
+
+
     }
     
 }

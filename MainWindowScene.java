@@ -37,10 +37,12 @@ public class MainWindowScene extends WindowScene {
     private RunwayCanvas currentCanvas;
     private double currentXOffset, currentYOffset;
     private TextArea outputTextArea, activityTextArea;
-    
-    public MainWindowScene(Launcher app) {
+
+    public MainWindowScene(Launcher app, MainController control, Airport airp) {
+//    public MainWindowScene(Launcher app) {
         super(app);
-        
+
+
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
@@ -160,10 +162,10 @@ public class MainWindowScene extends WindowScene {
         activityTab.setContent(activityScrollPane);
 
         Button toAirportScene = new Button("To airport scene");
-        toAirportScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+//        toAirportScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
 
         Button toRunwayScene = new Button("To runway scene");
-        toRunwayScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+//        toRunwayScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
 
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
@@ -180,6 +182,9 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(toAirportScene, 2, 6);
         
         scene = new Scene(gridPane);
+
+        this.setAirport(airp);
+
     }
 
     public void updateCanvas(Pane pane, RunwayCanvas canvas, double scale, double tx, double ty, boolean rotate) {
