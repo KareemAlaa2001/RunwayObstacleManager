@@ -38,9 +38,8 @@ public class MainWindowScene extends WindowScene {
     private double currentXOffset, currentYOffset;
     private TextArea outputTextArea, activityTextArea;
 
-    public MainWindowScene(Launcher app, MainController control, Airport airp) {
-//    public MainWindowScene(Launcher app) {
-        super(app);
+    public MainWindowScene(MainController control, Airport airp) {
+        super(control);
 
 
         GridPane gridPane = new GridPane();
@@ -48,7 +47,7 @@ public class MainWindowScene extends WindowScene {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
-        gridPane.setPrefSize(app.getStage().getWidth(), app.getStage().getWidth());
+        gridPane.setPrefSize(control.getAppStage().getWidth(), control.getAppStage().getWidth());
         gridPane.setAlignment(Pos.TOP_LEFT);
         
         Pane emptyPane = new Pane();
@@ -162,10 +161,10 @@ public class MainWindowScene extends WindowScene {
         activityTab.setContent(activityScrollPane);
 
         Button toAirportScene = new Button("To airport scene");
-//        toAirportScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+        toAirportScene.setOnAction(e -> control.backToAirportScreen());
 
         Button toRunwayScene = new Button("To runway scene");
-//        toRunwayScene.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
+        toRunwayScene.setOnAction(e -> control.backToRunwayScreen(ap));
 
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);

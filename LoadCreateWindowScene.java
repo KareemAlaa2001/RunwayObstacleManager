@@ -19,8 +19,8 @@ import javax.swing.*;
 public class LoadCreateWindowScene extends WindowScene {
 
 //    public LoadCreateWindowScene(Launcher app) {
-    public LoadCreateWindowScene(Launcher app, MainController control) {
-        super(app);
+    public LoadCreateWindowScene(MainController control) {
+        super(control);
         GridPane gridCreateScene = new GridPane();
         
         gridCreateScene.setStyle("-fx-background-color: rgba(172,168,247,0.58)");
@@ -33,13 +33,15 @@ public class LoadCreateWindowScene extends WindowScene {
         Button chooseAirportFile = new Button("Choose XML file");
         Button loadAirportButton = new Button("Load Airport");
         Button createAirportButton = new Button("Create Airport");
-        
+        Button quickCreate = new Button("Quick Create Airport");
+
         HBox hbChooseAirport = new HBox(10);
         hbChooseAirport.getChildren().add(chooseAirportFile);
 
         HBox hbLoadAirport = new HBox(10);
         hbLoadAirport.getChildren().add(loadAirportButton);
         hbLoadAirport.setAlignment(Pos.CENTER);
+
 
         HBox hbCreateAirport = new HBox(10);
         hbCreateAirport.getChildren().add(createAirportButton);
@@ -48,7 +50,8 @@ public class LoadCreateWindowScene extends WindowScene {
         gridCreateScene.add(hbChooseAirport, 2, 3);
         gridCreateScene.add(hbLoadAirport, 1, 4);
         gridCreateScene.add(hbCreateAirport, 1, 12);
-        
+        gridCreateScene.add(quickCreate, 2, 12);
+
         //all text fields
         TextField selectedAirportTextField = new TextField();
         selectedAirportTextField.setPromptText("No file selected");
@@ -132,11 +135,17 @@ public class LoadCreateWindowScene extends WindowScene {
 
                 Airport ap = new Airport(resa, stripEnd,blastAllowance, minSlope);
 
-                control.switchToRunwaysScreen(airportName, ap);
+                control.switchToRunwaysScreen(ap);
 //                app.setScene(app.runwayWindowScene);
 
             }
         });
+
+        quickCreate.setOnAction((e -> {
+            Airport qap = new Airport(Airport.RESA, Airport.StripEnd, Airport.BlastAllowance, Airport.MinSlope);
+
+            control.switchToRunwaysScreen(qap);
+        }));
 
         //just text
         Text welcomeText = new Text("Welcome to the runway redeclaration tool");
@@ -184,7 +193,7 @@ public class LoadCreateWindowScene extends WindowScene {
         airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         
         chooseAirportFile.setOnAction(e -> {
-            File selectedAirportFile = airportFileChooser.showOpenDialog(app.getStage());
+            File selectedAirportFile = airportFileChooser.showOpenDialog(control.getAppStage());
             selectedAirportTextField.setText(selectedAirportFile.getName());
             selectedAirportTextField.setStyle("-fx-background-color: yellowgreen");
             selectedAirportTextField.setStyle("-fx-opacity: 1;");

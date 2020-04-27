@@ -4,11 +4,11 @@ import javafx.scene.Scene;
 
 public abstract class WindowScene {
     
-    protected Launcher app;
+    protected MainController control;
     protected Scene scene;
     
-    public WindowScene(Launcher app) {
-        this.app = app;
+    public WindowScene(MainController control) {
+        this.control = control;
     }
     
     public Scene getScene() {

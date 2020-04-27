@@ -19,10 +19,12 @@ import javafx.stage.FileChooser;
 
 public class RunwayWindowScene extends WindowScene
 {
+    Airport ap;
 //    public RunwayWindowScene(Launcher app)
-    public RunwayWindowScene(Launcher app, MainController control, String airportName,Airport ap)
+    public RunwayWindowScene(MainController control,Airport ap)
     {
-        super(app);
+        super(control);
+
         GridPane gridAddRunways = new GridPane();
         
         gridAddRunways.setStyle("-fx-background-color: rgba(172,168,247,0.58)");
@@ -31,7 +33,13 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.setVgap(20);
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
 
+        this.ap = ap;
         List<Runway> runwayList = new ArrayList<>();
+
+        if (ap.getRunways() != null)
+            ap.getRunways().forEach(runway -> { runwayList.add(runway);});
+
+
 
         //all buttons
         Button chooseRunwayFile = new Button("Choose XML file(s)");
@@ -39,7 +47,9 @@ public class RunwayWindowScene extends WindowScene
         Button addRunway = new Button("Add runway to the airport");
         Button finish = new Button("Finish");
         Button back = new Button("<-- Back");
-        
+        Button quickAdd = new Button("Quick add runways");
+
+
         HBox hbChooseRunway = new HBox(10);
         hbChooseRunway.getChildren().add(chooseRunwayFile);
 
@@ -63,7 +73,7 @@ public class RunwayWindowScene extends WindowScene
         
         //all text fields
         TextField runLeftBearingField = new TextField();
-        runLeftBearingField.setPromptText("Ex. 09L/27R");
+        runLeftBearingField.setPromptText("Ex. 09, 16, 27, 30");
         runLeftBearingField.setTextFormatter(new TextFormatter<>(c -> {
             if (!c.getControlNewText().matches("\\d*"))
                 return null;
@@ -161,8 +171,9 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.add(clearway2, 2, 8);
 
 
-        Label currRuns = new Label ("Runways Currently Added:");
+        Label currRuns = new Label ("Runways Currently in airport: ");
         gridAddRunways.add(currRuns, 0, 10);
+
 
 
         addRunway.setOnAction(e -> {
@@ -211,6 +222,18 @@ public class RunwayWindowScene extends WindowScene
             }
         });
 
+        quickAdd.setOnAction(e -> {
+            List<Runway> quickRunways = new ArrayList<>();
+            Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+            Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
+            Runway r3 = new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660));
+            quickRunways.add(r1);
+            quickRunways.add(r2);quickRunways.add(r3);
+            ap.addRunways(quickRunways);
+            control.switchToMainScreen(ap);
+        });
+        gridAddRunways.add(quickAdd, 1, 11);
+
         //just text
         Text loadRunways = new Text("Add existing runways to the airport");
         loadRunways.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -224,7 +247,7 @@ public class RunwayWindowScene extends WindowScene
         Label selectedRunway = new Label("Selected Runway(s):");
         gridAddRunways.add(selectedRunway, 0, 1);
 
-        Label thresholdLabel = new Label("Threshold:");
+        Label thresholdLabel = new Label("Threshold Displacement:");
         gridAddRunways.add(thresholdLabel, 0, 5);
 
         Label toraLabel = new Label("Runway Length:");
@@ -253,13 +276,17 @@ public class RunwayWindowScene extends WindowScene
         airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         
         chooseRunwayFile.setOnAction(e -> {
-            File selectedRunwayFile = xmlFileChooser.showOpenDialog(app.getStage());
+            File selectedRunwayFile = xmlFileChooser.showOpenDialog(control.getAppStage());
             selectedRunwayTextField.setText(selectedRunwayFile.getName());
             selectedRunwayTextField.setStyle("-fx-background-color: yellowgreen");
         });
         
-//        back.setOnAction(e -> app.setScene(app.loadCreateWindowScene));
-//        finish.setOnAction(e -> app.setScene(app.mainWindowScene));
+        back.setOnAction(e -> {
+            control.backToAirportScreen();
+        });
+
+
+
         finish.setOnAction(e -> {
             ap.addRunways(runwayList);
             control.switchToMainScreen(ap);
@@ -268,9 +295,8 @@ public class RunwayWindowScene extends WindowScene
         scene = new Scene(gridAddRunways, 300, 250);
     }
 
-    private void displayCurrentRunways() {
-
-
+    public void setAirport(Airport ap) {
+        this.ap = ap;
     }
     
 }
