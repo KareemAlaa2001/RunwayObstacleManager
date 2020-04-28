@@ -18,8 +18,15 @@ public class RunwayOneWay
 	public void addObstacle(ObstacleData OD) throws Exception
 	{
 		MainWindowController.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
-		dataReCalc = Functions.reCalculate(dataOriginal, OD);
-		obstacles.add(OD);
+		RunwayData newData = Functions.reCalculate(dataOriginal, OD);
+		
+		if (newData == null) {
+			MainWindowController.addOutputText("Re-Calculating Runway " + name + " causes definate closure, new values are too extreme");
+			MainWindowController.addOutputText("");
+		} else {
+			dataReCalc = newData;
+			obstacles.add(OD);
+		}
 	}
 
 	public String getName()

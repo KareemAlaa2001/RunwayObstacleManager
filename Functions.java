@@ -82,7 +82,7 @@ public class Functions
 			MainWindowController.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
 		} else if (Airport.BlastAllowance <= (Airport.RESA + Airport.StripEnd)) {
 			newTakeoffThreshold = runway.threshold + obstacle.position + Airport.RESA + Airport.StripEnd;
-			
+
 			newTORA = runway.TORA - Airport.RESA - Airport.StripEnd - obstacle.position - runway.threshold;
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
@@ -97,6 +97,11 @@ public class Functions
 			MainWindowController.addOutputText(newTORA + " + " + runway.stopway + " = " + newASDA);
 		}
 		MainWindowController.addOutputText("");
-		return new RunwayData(newThreshold, newTakeoffThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA, thresholdBreakdown);
+		
+		if (newThreshold < 0 || newThreshold < 0 || newTakeoffThreshold < 0 || runway.stopway < 0 || runway.clearway < 0 || newTORA < 0 || newASDA < 0 || newTODA < 0 || newLDA < 0 || thresholdBreakdown == null) {
+			return null;
+		} else {
+			return new RunwayData(newThreshold, newTakeoffThreshold, runway.stopway, runway.clearway, newTORA, newASDA, newTODA, newLDA, thresholdBreakdown);
+		}
 	}
 }
