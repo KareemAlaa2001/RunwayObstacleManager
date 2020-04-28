@@ -25,6 +25,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class MainWindowScene extends WindowScene {
     
@@ -116,8 +119,20 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
+
         TextField obstacleHeightInput = new TextField();
         TextField obstacleLocationInput = new TextField();
+
+
+        Text addObstacle = new Text("Add a new obstacle: ");
+        addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+
+        Label obsHeightLabel = new Label("Obstacle Height: ");
+        Label obsDistLabel = new Label("Obstacle Distance: ");
+        obstacleHeightInput.setPromptText("Enter obstacle height");
+        obstacleLocationInput.setPromptText("Enter obstacle distance from start of runway");
+
         Button addObstacleButton = new Button("Add Obstacle");
         addObstacleButton.setOnAction(e -> {
             if (runwaySelectionBox.getValue() != null) {
@@ -169,17 +184,20 @@ public class MainWindowScene extends WindowScene {
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
 
-        gridPane.add(emptyPane, 0, 0, 1, 4);
+        gridPane.add(emptyPane, 0, 0, 1, 9);
         gridPane.add(new Label("Select Runway:"), 1, 0);
         gridPane.add(runwaySelectionBox, 2, 0);
         gridPane.add(rotateSelect, 1, 1, 2, 1);
-        gridPane.add(obstacleHeightInput, 1, 2, 1, 1);
-        gridPane.add(obstacleLocationInput, 2, 2, 1, 1);
-        gridPane.add(addObstacleButton, 1, 3, 2, 1);
-        gridPane.add(tabPane, 1, 4, 2, 2);
-        gridPane.add(toRunwayScene, 2, 5);
-        gridPane.add(toAirportScene, 2, 6);
-        
+        gridPane.add(obstacleHeightInput, 1, 4, 1, 1);
+        gridPane.add(obstacleLocationInput, 2, 4, 1, 1);
+        gridPane.add(addObstacleButton, 1, 5, 2, 1);
+        gridPane.add(tabPane, 1, 6, 3, 2);
+        gridPane.add(toRunwayScene, 2, 7);
+        gridPane.add(toAirportScene, 3, 7);
+        gridPane.add(addObstacle, 1, 2, 2, 1);
+        gridPane.add(obsHeightLabel, 1, 3, 1,1);
+        gridPane.add(obsDistLabel, 2, 3, 1,1);
+
         scene = new Scene(gridPane);
 
         this.setAirport(airp);
