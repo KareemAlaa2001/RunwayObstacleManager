@@ -41,6 +41,13 @@ public class Airport
 		}
 	}
 
+	public void setRunways(List<Runway> newRunways) {
+		if (newRunways == null)
+			throw new IllegalArgumentException("Tried to set list of runways to null!");
+
+		this.runways = newRunways;
+	}
+
 	public RunwayOneWay getRunway(String runName)
 	{
 		if (runName == null) {

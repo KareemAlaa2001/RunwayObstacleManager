@@ -4,6 +4,8 @@ import java.util.List;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,10 +22,13 @@ import javafx.stage.FileChooser;
 public class RunwayWindowScene extends WindowScene
 {
     Airport ap;
+    List<Runway> runwayList;
+    ComboBox<String> runwayComboBox;
 //    public RunwayWindowScene(Launcher app)
     public RunwayWindowScene(MainController control,Airport ap)
     {
         super(control);
+        runwayComboBox = new ComboBox<>();
 
         GridPane gridAddRunways = new GridPane();
         
@@ -34,12 +39,11 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
 
         this.ap = ap;
-        List<Runway> runwayList = new ArrayList<>();
 
-        if (ap.getRunways() != null)
-            ap.getRunways().forEach(runway -> { runwayList.add(runway);});
-
-
+        if (ap.getRunways() != null) {
+            ap.getRunways().forEach(runway -> addRunway(runway));
+            this.setRunwayList(ap.getRunways());
+        }  else this.setRunwayList(new ArrayList<>());
 
         //all buttons
         Button chooseRunwayFile = new Button("Choose XML file(s)");
@@ -48,6 +52,7 @@ public class RunwayWindowScene extends WindowScene
         Button finish = new Button("Finish");
         Button back = new Button("<-- Back");
         Button quickAdd = new Button("Quick add runways");
+        Button removeSelected = new Button("Remove Selected Runway");
 
 
         HBox hbChooseRunway = new HBox(10);
@@ -183,8 +188,13 @@ public class RunwayWindowScene extends WindowScene
                 alert.setHeaderText("You are not able to add a runway");
                 alert.setContentText("Please choose a file");
                 alert.showAndWait();
+            } else {
+                //  TODO IMPLEMENT XML RUNWAY
             }
         });
+
+        gridAddRunways.add(runwayComboBox, 1, 10);
+        gridAddRunways.add(removeSelected, 2, 10);
 
         addRunwayManually.setOnAction(e -> {
             if (runLeftBearingField.getText().isEmpty() || threshold.getText().isEmpty() || threshold2.getText().isEmpty()
@@ -206,8 +216,7 @@ public class RunwayWindowScene extends WindowScene
                 int clr2 = Integer.parseInt(clearway2.getText());
 
                 Runway newRunway = new Runway(runwayLeftBearing, new RunwayData(thresh,toraa,stop,clr), new RunwayData(thresh2,toraa,stop2,clr2));
-                runwayList.add(newRunway);
-
+                addRunway(newRunway);
                 runLeftBearingField.clear();
                 threshold.clear();
                 threshold2.clear();
@@ -217,10 +226,14 @@ public class RunwayWindowScene extends WindowScene
                 clearway.clear();
                 clearway2.clear();
 
-                Label currRunsCopy = new Label(currRuns.getText());
-                currRuns.setText(currRunsCopy.getText() + " " + runwayLeftBearing + "L,");
             }
         });
+
+        removeSelected.setOnAction(e -> {
+            String rmName = runwayComboBox.getValue();
+            removeComboRunway(rmName);
+        });
+
 
         quickAdd.setOnAction(e -> {
             List<Runway> quickRunways = new ArrayList<>();
@@ -229,7 +242,9 @@ public class RunwayWindowScene extends WindowScene
             Runway r3 = new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660));
             quickRunways.add(r1);
             quickRunways.add(r2);quickRunways.add(r3);
-            ap.addRunways(quickRunways);
+
+            quickRunways.forEach(runway -> addRunway(runway));
+            ap.setRunways(this.runwayList);
             control.switchToMainScreen(ap);
         });
         gridAddRunways.add(quickAdd, 1, 11);
@@ -288,7 +303,7 @@ public class RunwayWindowScene extends WindowScene
 
 
         finish.setOnAction(e -> {
-            ap.addRunways(runwayList);
+            ap.setRunways(this.runwayList);
             control.switchToMainScreen(ap);
         });
 
@@ -298,5 +313,39 @@ public class RunwayWindowScene extends WindowScene
     public void setAirport(Airport ap) {
         this.ap = ap;
     }
-    
+
+    private void setRunwayList(List<Runway> runways) {
+        this.runwayList = runways;
+        if (runways != null)
+            runways.forEach(runway -> { this.runwayComboBox.getItems().add(runway.getName()); });
+    }
+
+    private void removeComboRunway(String runName) {
+        Runway runToRm = null;
+
+        for (Runway run: this.runwayList) {
+            if (run.getName().equals(runName)) runToRm = run;
+        }
+        if (runToRm != null) {
+            removeRunway(runToRm);
+            this.runwayComboBox.getItems().remove(runName);
+        } else {
+            throw new IllegalArgumentException("Somehow the name passed was not found in the runway list!");
+        }
+    }
+
+    private void addRunway(Runway runway) {
+        if (this.runwayList.contains(runway)) {
+            return;
+        } else {
+            this.runwayList.add(runway);
+            this.runwayComboBox.getItems().add(runway.getName());
+        }
+    }
+
+    private void removeRunway(Runway runway) {
+
+        if (this.runwayList.remove(runway)) { }
+        else throw new IllegalArgumentException("Tried to remove a runway which isnt in the list!");
+    }
 }
