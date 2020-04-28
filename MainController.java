@@ -24,6 +24,7 @@ public class MainController {
 
     public void switchToMainScreen(Airport ap) {
         mainScene = new MainWindowScene(this, ap);
+        MainWindowController.setScene(mainScene);
         app.setScene(mainScene);
     }
 
