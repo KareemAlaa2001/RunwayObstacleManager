@@ -1,8 +1,37 @@
 
+import com.sun.tools.javac.Main;
+import javafx.stage.Stage;
+
 import java.util.List;
 
 public class InputScreenController
 {
+	private static LoadCreateWindowScene loadCreateWindowScene = null;
+	private static RunwayWindowScene runwayWindowScene = null;
+
+	public static void goToRunwayScreen(Airport ap) {
+		if (runwayWindowScene == null)
+			runwayWindowScene = new RunwayWindowScene(ap);
+
+		runwayWindowScene.setAirport(ap);
+		Launcher.setScene(runwayWindowScene);
+	}
+
+	public static void goToLoadCreateWindowScene() {
+		if (loadCreateWindowScene == null)
+			loadCreateWindowScene = new LoadCreateWindowScene();
+
+		Launcher.setScene(loadCreateWindowScene);
+	}
+
+	public static void goToMainScene(Airport ap) {
+		MainWindowController.goToMainScreen(ap);
+	}
+
+	public static Stage getAppStage() {
+		return MainController.getAppStage();
+	}
+
 	public static Airport initialiseAirport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
 	{
 		return new Airport(RESA, StripEnd, BlastAllowance, MinSlope);

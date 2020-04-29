@@ -1,7 +1,6 @@
 
 import java.io.File;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,15 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
-import javax.swing.*;
+import javafx.stage.Stage;
 
 
 public class LoadCreateWindowScene extends WindowScene {
 
-//    public LoadCreateWindowScene(Launcher app) {
-    public LoadCreateWindowScene(MainController control) {
-        super(control);
+    public LoadCreateWindowScene() {
+
         GridPane gridCreateScene = new GridPane();
         
         gridCreateScene.setStyle("-fx-background-color: rgba(172,168,247,0.58)");
@@ -133,18 +130,13 @@ public class LoadCreateWindowScene extends WindowScene {
                 int blastAllowance = Integer.parseInt(blastAllowanceValue.getText());
                 int minSlope = Integer.parseInt(minSlopeValue.getText());
 
-                Airport ap = new Airport(resa, stripEnd,blastAllowance, minSlope);
-
-                control.switchToRunwaysScreen(ap);
-//                app.setScene(app.runwayWindowScene);
+                goToNextStep(resa, stripEnd, blastAllowance, minSlope);
 
             }
         });
 
         quickCreate.setOnAction((e -> {
-            Airport qap = new Airport(Airport.RESA, Airport.StripEnd, Airport.BlastAllowance, Airport.MinSlope);
-
-            control.switchToRunwaysScreen(qap);
+            goToNextStep(Airport.RESA, Airport.StripEnd, Airport.BlastAllowance, Airport.MinSlope);
         }));
 
         //just text
@@ -193,7 +185,7 @@ public class LoadCreateWindowScene extends WindowScene {
         airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         
         chooseAirportFile.setOnAction(e -> {
-            File selectedAirportFile = airportFileChooser.showOpenDialog(control.getAppStage());
+            File selectedAirportFile = airportFileChooser.showOpenDialog(getAppStage());
             selectedAirportTextField.setText(selectedAirportFile.getName());
             selectedAirportTextField.setStyle("-fx-background-color: yellowgreen");
             selectedAirportTextField.setStyle("-fx-opacity: 1;");
@@ -201,5 +193,14 @@ public class LoadCreateWindowScene extends WindowScene {
         
         scene = new Scene(gridCreateScene, 300, 250);
     }
-    
+
+    private void goToNextStep(int resa, int stripEnd, int blastAllowance, int minSlope) {
+        Airport ap = InputScreenController.initialiseAirport(resa, stripEnd, blastAllowance, minSlope);
+        InputScreenController.goToRunwayScreen(ap);
+    }
+
+    private Stage getAppStage() {
+       return InputScreenController.getAppStage();
+    }
+
 }

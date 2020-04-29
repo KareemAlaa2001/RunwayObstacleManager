@@ -60,6 +60,18 @@ public class Runway
 		return gradedArea;
 	}
 
+	public void removeObstacle(ObstacleData ODL) {
+		RunL.removeObstacle(ODL);
+		RunR.removeObstacle(ODL);
+		MainWindowController.addActivityText("Removed " + ODL.maxHeight + "m tall obstacle from runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
+	}
+
+	public void clear() {
+		RunL.clear();
+		RunR.clear();
+		MainWindowController.addActivityText(" Removed Obstacle from runway " + name);
+	}
+
 	public void addObstacleL(ObstacleData ODL) throws Exception
 	{ // Should not be used by any class other than Airport
 		RunL.addObstacle(ODL); // Should check if there is already an obstacle with these parameters added to the runway

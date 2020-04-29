@@ -1,10 +1,27 @@
+import javafx.stage.Stage;
+
 public class MainWindowController
 {
-    private static MainWindowScene outputScene;
+    private static MainWindowScene outputScene = null;
 
     public static void setScene(MainWindowScene outputScene)
     {
         MainWindowController.outputScene = outputScene;
+    }
+
+    public static void goToMainScreen(Airport ap) {
+
+        outputScene = new MainWindowScene(ap);
+
+        Launcher.setScene(outputScene);
+    }
+
+    public static void goToRunwayScreen(Airport ap) {
+        InputScreenController.goToRunwayScreen(ap);
+    }
+
+    public static void goToCreateScreen() {
+        InputScreenController.goToLoadCreateWindowScene();
     }
 
     public static void addOutputText(String string) {
@@ -37,5 +54,9 @@ public class MainWindowController
             return;
         }
         outputScene.clearActivity();
+    }
+
+    public static Stage getAppStage() {
+        return InputScreenController.getAppStage();
     }
 }

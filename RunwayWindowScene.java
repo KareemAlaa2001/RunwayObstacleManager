@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
+import javafx.stage.Stage;
 
 
 public class RunwayWindowScene extends WindowScene
@@ -24,12 +24,12 @@ public class RunwayWindowScene extends WindowScene
     Airport ap;
     List<Runway> runwayList;
     ComboBox<String> runwayComboBox;
-//    public RunwayWindowScene(Launcher app)
-    public RunwayWindowScene(MainController control,Airport ap)
-    {
-        super(control);
-        runwayComboBox = new ComboBox<>();
 
+    public RunwayWindowScene(Airport ap)
+    {
+        runwayComboBox = new ComboBox<>();
+        this.runwayList = new ArrayList<>();
+        this.setAirport(ap);
         GridPane gridAddRunways = new GridPane();
         
         gridAddRunways.setStyle("-fx-background-color: rgba(172,168,247,0.58)");
@@ -38,12 +38,7 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.setVgap(20);
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
 
-        this.ap = ap;
 
-        if (ap.getRunways() != null) {
-            ap.getRunways().forEach(runway -> addRunway(runway));
-            this.setRunwayList(ap.getRunways());
-        }  else this.setRunwayList(new ArrayList<>());
 
         //all buttons
         Button chooseRunwayFile = new Button("Choose XML file(s)");
@@ -244,8 +239,7 @@ public class RunwayWindowScene extends WindowScene
             quickRunways.add(r2);quickRunways.add(r3);
 
             quickRunways.forEach(runway -> addRunway(runway));
-            ap.setRunways(this.runwayList);
-            control.switchToMainScreen(ap);
+            goToMainScene(ap);
         });
         gridAddRunways.add(quickAdd, 1, 11);
 
@@ -291,20 +285,19 @@ public class RunwayWindowScene extends WindowScene
         airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         
         chooseRunwayFile.setOnAction(e -> {
-            File selectedRunwayFile = xmlFileChooser.showOpenDialog(control.getAppStage());
+            File selectedRunwayFile = xmlFileChooser.showOpenDialog(getAppStage());
             selectedRunwayTextField.setText(selectedRunwayFile.getName());
             selectedRunwayTextField.setStyle("-fx-background-color: yellowgreen");
         });
         
         back.setOnAction(e -> {
-            control.backToAirportScreen();
+            goToLoadCreateScene();
         });
 
 
 
         finish.setOnAction(e -> {
-            ap.setRunways(this.runwayList);
-            control.switchToMainScreen(ap);
+            goToMainScene(ap);
         });
 
         scene = new Scene(gridAddRunways, 300, 250);
@@ -312,12 +305,17 @@ public class RunwayWindowScene extends WindowScene
 
     public void setAirport(Airport ap) {
         this.ap = ap;
+
+        if (ap.getRunways() != null)
+            this.setRunwayList(ap.getRunways());
     }
 
     private void setRunwayList(List<Runway> runways) {
+
+
         this.runwayList = runways;
-        if (runways != null)
-            runways.forEach(runway -> { this.runwayComboBox.getItems().add(runway.getName()); });
+        this.runwayComboBox.getItems().clear();
+        this.runwayList.forEach(runway -> runwayComboBox.getItems().add(runway.getName()));
     }
 
     private void removeComboRunway(String runName) {
@@ -335,17 +333,28 @@ public class RunwayWindowScene extends WindowScene
     }
 
     private void addRunway(Runway runway) {
-        if (this.runwayList.contains(runway)) {
-            return;
-        } else {
+
             this.runwayList.add(runway);
             this.runwayComboBox.getItems().add(runway.getName());
-        }
+
     }
 
     private void removeRunway(Runway runway) {
 
         if (this.runwayList.remove(runway)) { }
         else throw new IllegalArgumentException("Tried to remove a runway which isnt in the list!");
+    }
+
+    private Stage getAppStage() {
+        return InputScreenController.getAppStage();
+    }
+
+    private void goToLoadCreateScene() {
+        InputScreenController.goToLoadCreateWindowScene();
+    }
+
+    private void goToMainScene(Airport ap) {
+        ap.setRunways(this.runwayList);
+        InputScreenController.goToMainScene(ap);
     }
 }

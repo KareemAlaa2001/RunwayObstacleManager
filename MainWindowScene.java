@@ -28,29 +28,28 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class MainWindowScene extends WindowScene {
     
     private Airport ap;
     private Map<String, RunwayCanvas> runways;
     private List<String> runwayNames;
-    private ComboBox runwaySelectionBox;
+    private ComboBox<String> runwaySelectionBox;
     private double currentScroll;
     private double mouseDX, mouseDY;
     private RunwayCanvas currentCanvas;
     private double currentXOffset, currentYOffset;
     private TextArea outputTextArea, activityTextArea;
 
-    public MainWindowScene(MainController control, Airport airp) {
-        super(control);
-
+    public MainWindowScene(Airport airp) {
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
-        gridPane.setPrefSize(control.getAppStage().getWidth(), control.getAppStage().getWidth());
+        gridPane.setPrefSize(getAppStage().getWidth(), getAppStage().getWidth());
         gridPane.setAlignment(Pos.TOP_LEFT);
         
         Pane emptyPane = new Pane();
@@ -146,6 +145,17 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
+        // TODO reimplement this for sprint 3
+        Button rmObstacles = new Button("Remove obstacle");
+        rmObstacles.setOnAction(e -> {
+            if (runwaySelectionBox.getValue() != null) {
+                String runName = runwaySelectionBox.getValue();
+                ap.clearRunway(runName);
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+            }
+        });
+
+
         TabPane tabPane = new TabPane();
         Tab outputTab = new Tab("Output");
         outputTab.setClosable(false);
@@ -176,10 +186,10 @@ public class MainWindowScene extends WindowScene {
         activityTab.setContent(activityScrollPane);
 
         Button toAirportScene = new Button("To airport scene");
-        toAirportScene.setOnAction(e -> control.backToAirportScreen());
+        toAirportScene.setOnAction(e -> MainWindowController.goToCreateScreen());
 
         Button toRunwayScene = new Button("To runway scene");
-        toRunwayScene.setOnAction(e -> control.backToRunwayScreen(ap));
+        toRunwayScene.setOnAction(e -> MainWindowController.goToRunwayScreen(ap));
 
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
@@ -192,12 +202,12 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(obstacleLocationInput, 2, 4, 1, 1);
         gridPane.add(addObstacleButton, 1, 5, 2, 1);
         gridPane.add(tabPane, 1, 6, 3, 2);
-        gridPane.add(toRunwayScene, 2, 7);
-        gridPane.add(toAirportScene, 3, 7);
+        gridPane.add(toRunwayScene, 2, 8);
+        gridPane.add(toAirportScene, 3, 8);
         gridPane.add(addObstacle, 1, 2, 2, 1);
         gridPane.add(obsHeightLabel, 1, 3, 1,1);
         gridPane.add(obsDistLabel, 2, 3, 1,1);
-
+        gridPane.add(rmObstacles, 2, 5, 1, 1);
         scene = new Scene(gridPane);
 
         this.setAirport(airp);
@@ -247,6 +257,10 @@ public class MainWindowScene extends WindowScene {
         
         runwaySelectionBox.getItems().clear();
         runwaySelectionBox.getItems().addAll(runwayNames);
+    }
+
+    private Stage getAppStage() {
+        return MainWindowController.getAppStage();
     }
     
 }

@@ -104,4 +104,14 @@ public class Airport
 			System.err.println(e.getMessage());
 		}
 	}
+
+	public void clearRunway(String runName) {
+		getRunwayFull(runName).clear();
+	}
+
+	// TODO reimplement
+	public void removeObstacle(ObstacleData OD, String runName, boolean left) {
+		if (OD == null) throw new IllegalArgumentException("Obstacle you tried to remove is null!");
+		getRunwayFull(runName).removeObstacle(OD);
+	}
 }

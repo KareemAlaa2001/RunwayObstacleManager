@@ -29,6 +29,20 @@ public class RunwayOneWay
 		}
 	}
 
+	// TODO properly reimplement this for sprint 3
+	public void removeObstacle(ObstacleData OD) {
+		if (OD == null) throw new IllegalArgumentException("Trying to remove a null obstacle!");
+		if (!obstacles.contains(OD)) throw new IllegalArgumentException("The obstacle you are trying to remove is not in this runwayOneWay!");
+		MainWindowController.addOutputText("Re-calculating runway " + name + " due to the removal of the obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
+		dataReCalc = dataOriginal;
+		obstacles.remove(OD);
+	}
+
+	public void clear() {
+		dataReCalc = dataOriginal;
+		obstacles.clear();
+	}
+
 	public String getName()
 	{
 		return name;
