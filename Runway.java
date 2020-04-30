@@ -17,7 +17,7 @@ public class Runway
 		if (leftBearing < 10) {
 			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
-		} else if (leftBearing < 28 && leftBearing > 18) {
+		} else if (leftBearing < 28 && leftBearing >= 18) {
 			RunL = new RunwayOneWay(leftBearing + "L", left);
 			RunR = new RunwayOneWay("0" + ((leftBearing + 18) % 36) + "R", right);
 		} else {
