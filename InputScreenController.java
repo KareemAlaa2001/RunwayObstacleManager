@@ -1,5 +1,3 @@
-
-import com.sun.tools.javac.Main;
 import javafx.stage.Stage;
 
 import java.util.List;
