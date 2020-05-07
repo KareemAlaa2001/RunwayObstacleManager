@@ -69,6 +69,6 @@ public class MathsHelpers
 	public static int[] calculatePositionFromIntersection(int[] runAStart, Runway runA, int runAIntersection, Runway runB, int runBIntersection)
 	{
 		int[] intersectionPoint = calculateOtherStart(runAIntersection, runA.getLeftBearing(), runAStart);
-		return calculateOtherStart(intersectionPoint, runB.getRightBearing(), intersectionPoint);
+		return calculateOtherStart(runBIntersection, runB.getRightBearing(), intersectionPoint);
 	}
 }
