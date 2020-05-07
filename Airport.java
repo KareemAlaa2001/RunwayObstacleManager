@@ -37,6 +37,30 @@ public class Airport
 		}
 	}
 
+	public void addRunway(Runway run)
+	{
+		if (run == null) {
+			throw new IllegalArgumentException("Error adding runways to airport");
+		}
+		runwayPositions.add(run.getName(), new int[] {0, 0});
+
+		if (runways == null) {
+			this.runways = new ArrayList<Runway>() { run };
+		} else {
+			this.runways.add(run);
+		}
+	}
+
+	public void addRunway(int[] runStart, Runway run, int intersectionPoint, Runway otherRun, int otherRunIntersection)
+	{
+		runwayPositions.add(run, runstart);
+
+		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, run, intersectionPoint, otherRun, otherRunIntersection);
+
+		runwayPositions.add(otherRun, runstart);
+
+	}
+
 	public void addRunways(List<Runway> newR, List<int[]> pos)
 	{
 		if (newR == null) {

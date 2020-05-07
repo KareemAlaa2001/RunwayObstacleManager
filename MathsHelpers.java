@@ -65,4 +65,10 @@ public class MathsHelpers
 	{ // Distance between 2 points
 		return Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2));
 	}
+
+	public static int[] calculatePositionFromIntersection(int[] runAStart, Runway runA, int runAIntersection, Runway runB, int runBIntersection)
+	{
+		int[] intersectionPoint = calculateOtherStart(runAIntersection, runA.getLeftBearing(), runAStart);
+		return calculateOtherStart(intersectionPoint, runB.getRightBearing(), intersectionPoint);
+	}
 }
