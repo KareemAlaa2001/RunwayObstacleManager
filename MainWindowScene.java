@@ -254,7 +254,7 @@ public class MainWindowScene extends WindowScene {
         runwayNames = new ArrayList();
         for (Runway runway : ap.getRunways()) {
             runwayNames.add(runway.getName());
-            RunwayCanvas runwayCanvas = new RunwayCanvas(1100, 900, runway);
+            RunwayCanvas runwayCanvas = new RunwayCanvas(1100, 900, runway, ap.getRunwayPos(runway.getName()));
             runways.put(runway.getName(), runwayCanvas);
         }
         

@@ -11,6 +11,7 @@ public class RunwayCanvas extends Canvas {
     private final int MARGIN = 50;
     private final double VRATIO = 0.7;
 
+    private int[] runwayStartLocation;
     private int w, h;
     private Runway runway;
     private RunwayOneWay runwayL, runwayR;
@@ -24,11 +25,12 @@ public class RunwayCanvas extends Canvas {
     private double gradedArea = 0;
     private double runwayVpos = 0;
 
-    public RunwayCanvas(int w, int h, Runway runway) {
+    public RunwayCanvas(int w, int h, Runway runway, int[] runwayStartLocation) {
         super(w, h);
         this.w = w;
         this.h = h;
         this.runway = runway;
+        this.runwayStartLocation = runwayStartLocation;
         if (Integer.parseInt(runway.getRunL().getName().substring(0, 2)) < Integer.parseInt(runway.getRunR().getName().substring(0, 2))) {
             runwayL = runway.getRunL();
             runwayR = runway.getRunR();
@@ -134,7 +136,8 @@ public class RunwayCanvas extends Canvas {
             drawRotatedText(g, runwayR.getName(), (oDataR.clearway + oDataL.TORA) * totalScale + MARGIN - 38, runwayVpos + 30 + (textWidth(g, runwayR.getName()) / 2), 270, Color.WHITE); //Top right bearing marker
 
             for (ObstacleData ob : obstacles) {
-                drawRect(g, ob.position + oDataL.threshold + oDataR.clearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
+                int position = MathsHelpers.calculateDistance(ob, runway.getLeftBearing(), runway.getRunL().getRunwaySpec().TORA, runwayStartLocation);
+                drawRect(g, position + oDataL.threshold + oDataR.clearway - 50, runwayVpos + 5, 100, 40, Color.RED, Color.BLACK); //Top obstacle
             }
 
             drawLine(g, oDataR.clearway + nDataL.takeoffThreshold, 235 + MARGIN, oDataR.clearway + nDataL.takeoffThreshold, runwayVpos, Color.BLACK); //Left tTake off threshold
@@ -188,54 +191,59 @@ public class RunwayCanvas extends Canvas {
             double vScale = 100.0 / maxHeight;
 
             ObstacleData leftOb = null;
+            int leftObPos = 0;
             ObstacleData rightOb = null;
+            int rightObPos = 0;
             for (ObstacleData ob : obstacles) {
-                drawTriangle(g, ob.position + oDataL.threshold + oDataR.clearway, bottomCL + 50, ob.maxHeight * vScale, Color.RED, Color.BLACK); //Bottom obstacle
-                if (ob.position > oDataL.TORA / 2) {
-                    if (rightOb == null || (ob.position - ob.maxHeight * Airport.MinSlope) < (rightOb.position - rightOb.maxHeight * Airport.MinSlope)) {
+                int position = MathsHelpers.calculateDistance(ob, runway.getLeftBearing(), runway.getRunL().getRunwaySpec().TORA, runwayStartLocation);
+                drawTriangle(g, position + oDataL.threshold + oDataR.clearway, bottomCL + 50, ob.maxHeight * vScale, Color.RED, Color.BLACK); //Bottom obstacle
+                if (position > oDataL.TORA / 2) {
+                    if (rightOb == null || (position - ob.maxHeight * Airport.MinSlope) < (rightObPos - rightOb.maxHeight * Airport.MinSlope)) {
                         rightOb = ob;
+                        rightObPos = position;
                     }
                 } else {
-                    if (leftOb == null || (ob.position + ob.maxHeight * Airport.MinSlope) > (leftOb.position + leftOb.maxHeight * Airport.MinSlope)) {
+                    if (leftOb == null || (position + ob.maxHeight * Airport.MinSlope) > (leftObPos + leftOb.maxHeight * Airport.MinSlope)) {
                         leftOb = ob;
+                        leftObPos = position;
                     }
                 }
             }
 
             if (leftOb != null) {
                 double angle = Math.atan((leftOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
-                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
-                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
+                drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 75,
+                        leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", true, false, 5, 15); //Left horizontal label
-                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
-                        leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
-                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
-                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
-                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 50 - leftOb.maxHeight * vScale,
-                        leftOb.position + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
-                drawRotatedText(g, "            ALS", (leftOb.position + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
+                drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
+                        leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
+                drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
+                drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
+                drawRotatedText(g, "            ALS", (leftObPos + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
-                drawLine(g, leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
-                        leftOb.position + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50, Color.BLACK,
+                drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
+                        leftObPos + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50, Color.BLACK,
                         leftOb.maxHeight + "m", true, false, 0, -10); //Left vertical label
             }
 
             if (rightOb != null) {
                 double angle = Math.atan((rightOb.maxHeight * Airport.MinSlope * totalScale) / 100.0);
-                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 75,
-                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
+                drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 75,
+                        rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK,
                         rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m", true, false,
                         - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15); //Right horizontal marker
-                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 60,
-                        rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
-                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
-                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
-                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway, bottomCL + 50 - rightOb.maxHeight * vScale,
-                        rightOb.position + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Right slope
-                drawRotatedText(g, "TOCS", (rightOb.position + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN - 100 * Math.sin(angle), bottomCL + 45 - rightOb.maxHeight * vScale + 100 * Math.cos(angle),
+                drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
+                        rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
+                drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
+                        rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
+                drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Right slope
+                drawRotatedText(g, "TOCS", (rightObPos + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN - 100 * Math.sin(angle), bottomCL + 45 - rightOb.maxHeight * vScale + 100 * Math.cos(angle),
                         -(90 - Math.toDegrees(angle)), Color.BLACK); //Right slope label
-                drawLine(g, rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
-                        rightOb.position + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50, Color.BLACK,
+                drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50 - rightOb.maxHeight * vScale,
+                        rightObPos + oDataL.threshold + oDataR.clearway + 70, bottomCL + 50, Color.BLACK,
                         rightOb.maxHeight + "m", true, false, -(int) textWidth(g, rightOb.maxHeight + "m"), -10); //Right vertical label
             }
 

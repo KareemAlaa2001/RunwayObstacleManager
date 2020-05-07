@@ -76,6 +76,11 @@ public class Airport
 		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + runName + "'");
 	}
 
+	public int[] getRunwayPos(String runName)
+	{
+		return runwayPositions.get(runName);
+	}
+
 	public Runway getRunwayFull(String name)
 	{
 		if (name == null) {
