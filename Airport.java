@@ -37,7 +37,7 @@ public class Airport
 		}
 	}
 
-	public void addRunway(Runway run)
+	public void addFirstRunway(Runway run)
 	{
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
@@ -51,14 +51,29 @@ public class Airport
 		}
 	}
 
-	public void addRunway(Runway run, int intersectionPoint, Runway otherRun, int otherRunIntersection)
+	public void addRunway(Runway run)
 	{
+		if (run == null) {
+			throw new IllegalArgumentException("Error adding runways to airport");
+		}
+		runwayPositions.add(run.getName(), new int[] {10000 * runways.size(), 10000 * runways.size()});
+
+		if (runways == null) {
+			this.runways = new ArrayList<Runway>() { run };
+		} else {
+			this.runways.add(run);
+		}
+	}
+
+	public void addRunway(Runway oldRun, int intersectionPoint, Runway toAdd, int newRunIntersection)
+	{ // intersectionPoint: 	distance from start of left threshold in oldRun that an intersection occurs
+	  // newRunIntersection:	distance from start of left runway in toAdd that an intersection occurs
 		int[] runStart = runwayPositions.get(run.getName());
-		runwayPositions.add(run, runstart);
 
-		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, run, intersectionPoint, otherRun, otherRunIntersection);
+		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
 
-		runwayPositions.add(otherRun, runstart);
+		runwayPositions.add(otherRun, otherRunStart);
+		this.runways.add(otherRun)
 	}
 
 	public RunwayOneWay getRunway(String runName)
