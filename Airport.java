@@ -71,20 +71,28 @@ public class Airport
 		return this.MinSlope;
 	}
 
-	public void addRunways(List<Runway> newR, List<int[]> pos)
+	public void addRunway(Runway run)
 	{
-		if (newR == null) {
+		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
+		runwayPositions.add(run.getName(), new int[] {0, 0});
 
 		if (runways == null) {
-			this.runways = newR;
+			this.runways = new ArrayList<Runway>() { run };
 		} else {
-			this.runways.addAll(newR);
+			this.runways.add(run);
 		}
-		for (int i = 0; i < newR.size(); i++) {
-			runwayPositions.put(newR.get(i).getName(), pos.get(i));
-		}
+	}
+
+	public void addRunway(Runway run, int intersectionPoint, Runway otherRun, int otherRunIntersection)
+	{
+		int[] runStart = runwayPositions.get(run.getName());
+		runwayPositions.put(run, runstart);
+
+		int[] otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, run, intersectionPoint, otherRun, otherRunIntersection);
+
+		runwayPositions.put(otherRun, otherRunStart);
 	}
 
 	public RunwayOneWay getRunway(String runName)
@@ -108,6 +116,11 @@ public class Airport
 			}
 		}
 		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + runName + "'");
+	}
+
+	public int[] getRunwayPos(String runName)
+	{
+		return runwayPositions.get(runName);
 	}
 
 	public Runway getRunwayFull(String name)
