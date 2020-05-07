@@ -76,10 +76,11 @@ public class Airport
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
-		runwayPositions.add(run.getName(), new int[] {10000 * runways.size(), 10000 * runways.size()});
+		runwayPositions.put(run.getName(), new int[] {10000 * runways.size(), 10000 * runways.size()});
 
 		if (runways == null) {
-			this.runways = new ArrayList<Runway>() { run };
+			this.runways = new ArrayList<Runway>();
+			this.runways.add(run);
 		} else {
 			this.runways.add(run);
 		}
@@ -91,8 +92,8 @@ public class Airport
 		int[] runStart = runwayPositions.get(oldRun.getName());
 		int[] otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
 
-		runwayPositions.add(otherRun, otherRunStart);
-		this.runways.add(otherRun)
+		runwayPositions.put(toAdd.getName(), otherRunStart);
+		this.runways.add(toAdd);
 	}
 
 	public RunwayOneWay getRunway(String runName)

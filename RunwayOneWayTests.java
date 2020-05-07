@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 public class RunwayOneWayTests
-{
+{ /*
     @Test
     public void createRunwayBoundary()
     {
@@ -20,5 +20,5 @@ public class RunwayOneWayTests
         } catch (Exception e) {
             assertTrue(false);
         }
-    }
+    } */
 }
