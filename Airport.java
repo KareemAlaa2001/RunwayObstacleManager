@@ -51,8 +51,9 @@ public class Airport
 		}
 	}
 
-	public void addRunway(int[] runStart, Runway run, int intersectionPoint, Runway otherRun, int otherRunIntersection)
+	public void addRunway(Runway run, int intersectionPoint, Runway otherRun, int otherRunIntersection)
 	{
+		int[] runStart = runwayPositions.get(run.getName());
 		runwayPositions.add(run, runstart);
 
 		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, run, intersectionPoint, otherRun, otherRunIntersection);
@@ -62,7 +63,7 @@ public class Airport
 	}
 
 	public void addRunways(List<Runway> newR, List<int[]> pos)
-	{
+	{ // Not recommended to use
 		if (newR == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
