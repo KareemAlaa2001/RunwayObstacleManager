@@ -104,6 +104,7 @@ public class LoadCreateWindowScene extends WindowScene {
         ));
         gridCreateScene.add(minSlopeValue, 1, 11);
 
+
         loadAirportButton.setOnAction(e -> {
             if (selectedAirportTextField.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);

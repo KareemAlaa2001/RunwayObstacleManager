@@ -10,9 +10,9 @@ public class Launcher extends Application {
     
     private static Stage stage;
     private MainController control;
-    
+
     public static void main(String[] args) {
-        
+
         launch(args);
     }
 

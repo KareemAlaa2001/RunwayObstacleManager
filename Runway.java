@@ -1,5 +1,11 @@
-import java.util.List;
 
+import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "runway")
+@XmlType(propOrder = { "name", "gradedArea", "leftBearing", "runL", "runR"})
 public class Runway
 {
 	private String name;
@@ -8,6 +14,8 @@ public class Runway
 	private int rightBearing;
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
+
+	private Runway() { }
 
 	public Runway(int leftBearing, RunwayData left, RunwayData right) throws IllegalArgumentException
 	{
@@ -64,16 +72,6 @@ public class Runway
 		}
 	}
 
-	public String getName()
-	{
-		return name;
-	}
-
-	public int getGradedArea()
-	{
-		return gradedArea;
-	}
-
 	public void removeObstacle(ObstacleData OD, int[] leftStart, int[] rightStart)
 	{
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(OD, leftStart, rightStart);
@@ -111,24 +109,65 @@ public class Runway
 		}
 		MainWindowController.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}
+<<<<<<< Updated upstream
 	*/
+
+	@XmlElement(name = "name")
+	public String getName()
+	{
+		return name;
+	}
+
+	@XmlElement(name = "gradedArea")
+	public int getGradedArea()
+	{
+		return gradedArea;
+	}
+
+	@XmlElement(name = "leftBearing")
+	public int getLeftBearing() {
+		return this.leftBearing;
+	}
+
+
+	@XmlElement(name = "runL")
 	public RunwayOneWay getRunL()
 	{
 		return RunL;
 	}
 
+	@XmlElement(name = "runR")
 	public RunwayOneWay getRunR()
 	{
 		return RunR;
 	}
 
-	public int getLeftBearing()
-	{
-		return leftBearing;
+	@XmlElement(name = "rightBearing")
+	public int getRightBearing() {
+		return rightBearing;
 	}
 
-	public int getRightBearing()
-	{
-		return rightBearing;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setGradedArea(int gradedArea) {
+		this.gradedArea = gradedArea;
+	}
+
+	public void setLeftBearing(int leftBearing) {
+		this.leftBearing = leftBearing;
+	}
+
+	public void setRightBearing(int rightBearing) {
+		this.rightBearing = rightBearing;
+	}
+
+	public void setRunL(RunwayOneWay runL) {
+		this.RunL = runL;
+	}
+
+	public void setRunR(RunwayOneWay runR) {
+		this.RunR = runR;
 	}
 }

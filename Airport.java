@@ -1,5 +1,8 @@
 import java.util.*;
+import javax.xml.bind.annotation.*;
 
+@XmlRootElement
+@XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways"})
 public class Airport
 { // Default values below, can be set
 	public static int RESA = 240;
@@ -12,11 +15,16 @@ public class Airport
 	private List<ObstacleData> obstacles;
 	private List<Runway> runways;
 
+	private Airport() {
+		runways = new ArrayList<>();
+	}
+
 	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
 	{
 		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope < 0) {
 			throw new IllegalArgumentException("Invalid data given for airport");
 		}
+		runways = new ArrayList<>();
 		this.RESA = RESA;
 		this.StripEnd = StripEnd;
 		this.BlastAllowance = BlastAllowance;
@@ -35,6 +43,32 @@ public class Airport
 		for (int i = 0; i < runways.size(); i++) {
 			runwayPositions.put(runways.get(i).getName(), pos.get(i));
 		}
+	}
+
+	@XmlElementWrapper(name = "runways")
+	@XmlElement(name = "runway")
+	public List<Runway> getRunways() {
+		return runways;
+	}
+
+	@XmlElement(name = "resa")
+	public int getResa() {
+		return this.RESA;
+	}
+
+	@XmlElement(name = "stripEnd")
+	public int getStripEnd() {
+		return this.StripEnd;
+	}
+
+	@XmlElement(name = "blastAllowance")
+	public int getBlastAllowance() {
+		return this.BlastAllowance;
+	}
+
+	@XmlElement(name = "minSlope")
+	public int getMinSlope() {
+		return this.MinSlope;
 	}
 
 	public void addRunways(List<Runway> newR, List<int[]> pos)
@@ -87,11 +121,6 @@ public class Airport
 			}
 		}
 		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + name + "'");
-	}
-
-	public List<Runway> getRunways()
-	{
-		return runways;
 	}
 
 	// runName is taken to be the full name,  "09L/27R"
