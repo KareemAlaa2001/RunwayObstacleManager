@@ -1,5 +1,8 @@
 import java.util.*;
+import javax.xml.bind.annotation.*;
 
+@XmlRootElement
+@XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways"})
 public class Airport
 { // Default values below, can be set
 	public static int RESA = 240;
@@ -12,11 +15,16 @@ public class Airport
 	private List<ObstacleData> obstacles;
 	private List<Runway> runways;
 
+	private Airport() {
+		runways = new ArrayList<>();
+	}
+
 	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
 	{
 		if (RESA < 0 || StripEnd < 0 || BlastAllowance < 0 || MinSlope < 0) {
 			throw new IllegalArgumentException("Invalid data given for airport");
 		}
+		runways = new ArrayList<>();
 		this.RESA = RESA;
 		this.StripEnd = StripEnd;
 		this.BlastAllowance = BlastAllowance;
@@ -37,18 +45,30 @@ public class Airport
 		}
 	}
 
-	public void addFirstRunway(Runway run)
-	{
-		if (run == null) {
-			throw new IllegalArgumentException("Error adding runways to airport");
-		}
-		runwayPositions.add(run.getName(), new int[] {0, 0});
+	@XmlElementWrapper(name = "runways")
+	@XmlElement(name = "runway")
+	public List<Runway> getRunways() {
+		return runways;
+	}
 
-		if (runways == null) {
-			this.runways = new ArrayList<Runway>() { run };
-		} else {
-			this.runways.add(run);
-		}
+	@XmlElement(name = "resa")
+	public int getResa() {
+		return this.RESA;
+	}
+
+	@XmlElement(name = "stripEnd")
+	public int getStripEnd() {
+		return this.StripEnd;
+	}
+
+	@XmlElement(name = "blastAllowance")
+	public int getBlastAllowance() {
+		return this.BlastAllowance;
+	}
+
+	@XmlElement(name = "minSlope")
+	public int getMinSlope() {
+		return this.MinSlope;
 	}
 
 	public void addRunway(Runway run)
@@ -68,9 +88,8 @@ public class Airport
 	public void addRunway(Runway oldRun, int intersectionPoint, Runway toAdd, int newRunIntersection)
 	{ // intersectionPoint: 	distance from start of left threshold in oldRun that an intersection occurs
 	  // newRunIntersection:	distance from start of left runway in toAdd that an intersection occurs
-		int[] runStart = runwayPositions.get(run.getName());
-
-		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
+		int[] runStart = runwayPositions.get(oldRun.getName());
+		int[] otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
 
 		runwayPositions.add(otherRun, otherRunStart);
 		this.runways.add(otherRun)
@@ -115,11 +134,6 @@ public class Airport
 			}
 		}
 		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + name + "'");
-	}
-
-	public List<Runway> getRunways()
-	{
-		return runways;
 	}
 
 	// runName is taken to be the full name,  "09L/27R"

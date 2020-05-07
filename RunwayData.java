@@ -1,17 +1,28 @@
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Map;
 
 public class RunwayData
 {
+	@XmlElement
 	public int threshold;	// Displaced threshold after recalculation (could be the same value)
+	@XmlElement
 	public int takeoffThreshold; // Similar to above but for the start of the takeoff run
+	@XmlElement
 	public int stopway;
+	@XmlElement
 	public int clearway;
+	@XmlElement
 	public int TORA;		// Take Off Run Available
+	@XmlElement
 	public int TODA;		// Take Off Distance Available
+	@XmlElement
 	public int ASDA;		// Accelerate-Stop Distance Available
+	@XmlElement
 	public int LDA;			// Landing Distance Available
 
 	private Map<String, Integer> thresholdBreakdown;
+
+	private RunwayData() {}
 
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
 	{ // clearway totally seperate to stopway, call this function when initialising a runway

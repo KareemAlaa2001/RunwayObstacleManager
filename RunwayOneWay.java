@@ -1,5 +1,11 @@
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.*;
 
+@XmlRootElement(name = "runwayoneway")
+@XmlType(propOrder = { "name", "runwaySpec", "updatedRunway", "obstacles"})
 public class RunwayOneWay
 {
 	private String name;
@@ -7,6 +13,11 @@ public class RunwayOneWay
 	private RunwayData dataReCalc;
 	private List<ObstacleData> impactfulObstacles;
 	private List<ObstacleData> otherObstacles;
+
+	private RunwayOneWay() {
+		impactfulObstacles = new ArrayList<>();
+		otherObstacles = new ArrayList<>();
+	}
 
 	public RunwayOneWay(String name, RunwayData RD)
 	{
@@ -68,21 +79,27 @@ public class RunwayOneWay
 		return ret;
 	}
 
+	@XmlElement
 	public String getName()
 	{
 		return name;
 	}
 
+	@XmlElement
 	public RunwayData getRunwaySpec()
 	{ // Returns the runway data as specified without obstacles
 		return dataOriginal;
 	}
 
+	@XmlElement
 	public RunwayData getUpdatedRunway()
 	{ // Same as dataOriginal if no obstacles added
 		return dataReCalc;
 	}
 
+
+	@XmlElementWrapper(name = "obstacles")
+	@XmlElement(name = "obstacle")
     public List<ObstacleData> getObstacles() 
     {
         return otherObstacles;
@@ -113,4 +130,20 @@ public class RunwayOneWay
     			newData.TORA < dataReCalc.TORA || newData.TODA < dataReCalc.TODA ||
     			newData.ASDA < dataReCalc.ASDA || newData.LDA < dataReCalc.LDA;
     }
+
+    public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setRunwaySpec(RunwayData dataOriginal) {
+		this.dataOriginal = dataOriginal;
+	}
+
+	public void setUpdatedRunway(RunwayData dataReCalc) {
+		this.dataReCalc = dataReCalc;
+	}
+
+//	public void setObstacles(List<ObstacleData> obstacles) {
+//		this.obstacles = obstacles;
+//	}
 }

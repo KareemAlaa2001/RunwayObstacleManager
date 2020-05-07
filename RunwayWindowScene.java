@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.xml.bind.JAXBException;
 
 
 public class RunwayWindowScene extends WindowScene
@@ -361,4 +364,20 @@ public class RunwayWindowScene extends WindowScene
         ap.addRunways(runwayList, places);
         InputScreenController.goToMainScene(ap);
     }
+
+
+    //  TODO complete implementation to throw alert window
+    private Runway importRunway(String filePath) {
+        Runway imported = null;
+        try {
+            imported = InputScreenController.importRunway(filePath);
+        } catch (FileNotFoundException fnfe) {
+            return null;
+        } catch (JAXBException je) {
+            return null;
+        }
+
+        return imported;
+    }
+
 }

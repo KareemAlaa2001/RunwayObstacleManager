@@ -1,5 +1,8 @@
+
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -54,5 +57,9 @@ public class InputScreenController
 		}
 		airport.addRunways(runways, places);
 		return airport;
+	}
+
+	public static Runway importRunway(String filePath) throws JAXBException, FileNotFoundException {
+		return XMLLoader.importRunway(filePath);
 	}
 }
