@@ -136,8 +136,11 @@ public class MainWindowScene extends WindowScene {
         addObstacleButton.setOnAction(e -> {
             if (runwaySelectionBox.getValue() != null) {
                 try {
-                    ap.addObstacle(new ObstacleData(Integer.parseInt(obstacleLocationInput.getText()),
-                            Integer.parseInt(obstacleHeightInput.getText())), (String) (runwaySelectionBox.getValue()), true);
+                    ap.addObstacle( Integer.parseInt(obstacleHeightInput.getText()),
+                                    Integer.parseInt(obstacleLocationInput.getText()),
+                                    0,
+                                    (String)(runwaySelectionBox.getValue()), 
+                                    true );
                     updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
                 } catch (Exception ex) {
                     Logger.getLogger(MainWindowScene.class.getName()).log(Level.SEVERE, null, ex);

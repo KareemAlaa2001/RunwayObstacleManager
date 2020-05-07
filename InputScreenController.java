@@ -1,7 +1,7 @@
-
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class InputScreenController
 {
@@ -48,7 +48,11 @@ public class InputScreenController
 
 	public static Airport addRunwaysToAirport(Airport airport, List<Runway> runways) throws Exception
 	{
-		airport.addRunways(runways);
+		List<int[]> places = new ArrayList<int[]>();
+		for (Runway run : runways) {
+			places.add(new int[] {0, 0});
+		}
+		airport.addRunways(runways, places);
 		return airport;
 	}
 }

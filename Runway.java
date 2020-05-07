@@ -1,8 +1,11 @@
+import java.util.List;
+
 public class Runway
 {
 	private String name;
 	private int gradedArea; // distance from centreline in m, like radius it is only measured on one side and is symmetrical
 	private int leftBearing;
+	private int rightBearing;
 	private RunwayOneWay RunL;
 	private RunwayOneWay RunR;
 
@@ -11,8 +14,6 @@ public class Runway
 		if (leftBearing < 0 || left == null || right == null) {
 			throw new IllegalArgumentException("Incorrect input to create a runway");
 		}
-		this.leftBearing = leftBearing;
-		this.gradedArea = 400;
 
 		if (leftBearing < 10) {
 			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
@@ -25,6 +26,9 @@ public class Runway
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
 		this.name = RunL.getName() + "/" + RunR.getName();
+		this.leftBearing = leftBearing;
+		this.rightBearing = ((leftBearing + 18) % 36);
+		this.gradedArea = 400;
 		MainWindowController.addActivityText("Created runway " + name + ", without any graded area");
 	}
 
@@ -33,8 +37,6 @@ public class Runway
 		if (leftBearing < 0 || left == null || right == null || gradedArea < 0) {
 			throw new IllegalArgumentException("Incorrect input to create a runway");
 		}
-		this.gradedArea = gradedArea;
-		this.leftBearing = leftBearing;
 
 		if (leftBearing < 10) {
 			RunL = new RunwayOneWay("0" + leftBearing + "L", left);
@@ -47,7 +49,19 @@ public class Runway
 			RunR = new RunwayOneWay(((leftBearing + 18) % 36) + "R", right);
 		}
 		this.name = RunL.getName() + "/" + RunR.getName();
+		this.gradedArea = gradedArea;
+		this.leftBearing = leftBearing;
+		this.rightBearing = ((leftBearing + 18) % 36);
 		MainWindowController.addActivityText("Created runway " + name);
+	}
+
+	public void checkObstacle(ObstacleData od, int[] leftStart)
+	{
+		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));
+		if (distanceFromCentreLine < 60) {
+			RunL.addObstacle(distanceFromCentreLine, od, leftBearing, leftStart);
+			RunR.addObstacle(-distanceFromCentreLine, od, rightBearing, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));
+		}
 	}
 
 	public String getName()
@@ -60,18 +74,22 @@ public class Runway
 		return gradedArea;
 	}
 
-	public void removeObstacle(ObstacleData ODL) {
-		RunL.removeObstacle(ODL);
-		RunR.removeObstacle(ODL);
-		MainWindowController.addActivityText("Removed " + ODL.maxHeight + "m tall obstacle from runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
+	public void removeObstacle(ObstacleData OD, int[] leftStart, int[] rightStart)
+	{
+		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(OD, leftStart, rightStart);
+		RunL.removeObstacle(OD, distanceFromCentreLine, leftBearing, leftStart);
+		RunR.removeObstacle(OD, -distanceFromCentreLine, rightBearing, rightStart);
+		MainWindowController.addActivityText("Removed obstacle at " + OD.position + ", "  + OD.maxHeight + "m high from " + name);
 	}
 
-	public void clear() {
-		RunL.clear();
-		RunR.clear();
-		MainWindowController.addActivityText(" Removed Obstacle from runway " + name);
+	public List<ObstacleData> clear()
+	{
+		List<ObstacleData> obs = RunL.clear();
+		obs.addAll(RunR.clear());
+		MainWindowController.addActivityText("Removed all obstacles from runway " + name);
+		return obs;
 	}
-
+	/*
 	public void addObstacleL(ObstacleData ODL) throws Exception
 	{ // Should not be used by any class other than Airport
 		RunL.addObstacle(ODL); // Should check if there is already an obstacle with these parameters added to the runway
@@ -93,7 +111,7 @@ public class Runway
 		}
 		MainWindowController.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
 	}
-
+	*/
 	public RunwayOneWay getRunL()
 	{
 		return RunL;
@@ -102,5 +120,15 @@ public class Runway
 	public RunwayOneWay getRunR()
 	{
 		return RunR;
+	}
+
+	public int getLeftBearing()
+	{
+		return leftBearing;
+	}
+
+	public int getRightBearing()
+	{
+		return rightBearing;
 	}
 }

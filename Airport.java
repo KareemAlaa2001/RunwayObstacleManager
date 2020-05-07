@@ -7,6 +7,9 @@ public class Airport
 	public static int BlastAllowance = 300;
 	public static int MinSlope = 50;
 
+	// Runway designations, position of start of left runway
+	private Map<String, int[]> runwayPositions;
+	private List<ObstacleData> obstacles;
 	private List<Runway> runways;
 
 	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
@@ -18,17 +21,23 @@ public class Airport
 		this.StripEnd = StripEnd;
 		this.BlastAllowance = BlastAllowance;
 		this.MinSlope = MinSlope;
+		this.obstacles = new ArrayList<ObstacleData>();
+		runwayPositions = new HashMap<String, int[]>();
 	}
 
-	public Airport(List<Runway> runways)
+	public Airport(List<Runway> runways, List<int[]> pos)
 	{
 		if (runways == null || runways.size() == 0) {
 			throw new IllegalArgumentException("Error creating Airport from given runways");
 		}
 		this.runways = runways;
+		runwayPositions = new HashMap<String, int[]>();
+		for (int i = 0; i < runways.size(); i++) {
+			runwayPositions.put(runways.get(i).getName(), pos.get(i));
+		}
 	}
 
-	public void addRunways(List<Runway> newR)
+	public void addRunways(List<Runway> newR, List<int[]> pos)
 	{
 		if (newR == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
@@ -39,13 +48,9 @@ public class Airport
 		} else {
 			this.runways.addAll(newR);
 		}
-	}
-
-	public void setRunways(List<Runway> newRunways) {
-		if (newRunways == null)
-			throw new IllegalArgumentException("Tried to set list of runways to null!");
-
-		this.runways = newRunways;
+		for (int i = 0; i < newR.size(); i++) {
+			runwayPositions.put(newR.get(i).getName(), pos.get(i));
+		}
 	}
 
 	public RunwayOneWay getRunway(String runName)
@@ -89,29 +94,59 @@ public class Airport
 		return runways;
 	}
 
-	public void addObstacle(ObstacleData OD, String runName, boolean left)
+	// runName is taken to be the full name,  "09L/27R"
+	public void addObstacle(int height, int runwayPosition, String runName, boolean left)
 	{
-		if (OD == null) {
-			throw new IllegalArgumentException("No obstacleData given to add to runway " + runName);
+		if (runName == null) {
+			throw new IllegalArgumentException("No runway specified to add obstacle to");
 		}
-		try {
-			if (left) {
-				getRunwayFull(runName).addObstacleL(OD);
-			} else {
-				getRunwayFull(runName).addObstacleR(OD);			
+
+		if (left) {
+			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getLeftBearing(), runwayPosition, 0, runwayPositions.get(runName)), height));
+		} else {
+			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getRightBearing(), runwayPosition, 0, MathsHelpers.calculatePositionInner(getRunwayFull(runName).getLeftBearing(), getRunwayFull(runName).getRunR().getRunwaySpec().TORA, runwayPositions.get(runName))), height));
+		}
+	}
+
+	// runName is taken to be the full name,  "09L/27R"
+	public void addObstacle(int height, int runwayPosition, int distanceFromCentreLine, String runName, boolean left)
+	{
+		if (runName == null) {
+			throw new IllegalArgumentException("No runway specified to add obstacle to");
+		}
+
+		if (left) {
+			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getLeftBearing(), runwayPosition, distanceFromCentreLine, runwayPositions.get(runName)), height));
+		} else {
+			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getRightBearing(), runwayPosition, distanceFromCentreLine, MathsHelpers.calculatePositionInner(getRunwayFull(runName).getLeftBearing(), getRunwayFull(runName).getRunR().getRunwaySpec().TORA, runwayPositions.get(runName))), height));
+		}
+	}
+
+	public void clearRunway(String runName)
+	{
+		List<ObstacleData> obstaclesToRemove = getRunwayFull(runName).clear();
+		for (Runway run : runways) {
+			for (ObstacleData ob : obstaclesToRemove) {
+				run.removeObstacle(ob, runwayPositions.get(run.getName()), MathsHelpers.calculateOtherStart(run.getRunL().getRunwaySpec().TORA, run.getLeftBearing(), runwayPositions.get(run.getName())));
 			}
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
+		}
+		obstacles.removeAll(obstaclesToRemove);
+	}
+
+	public void removeObstacle(ObstacleData OD)
+	{
+		if (OD == null) throw new IllegalArgumentException("Obstacle you tried to remove is null");
+		obstacles.remove(OD);
+		for (Runway run : runways) {
+			run.removeObstacle(OD, runwayPositions.get(run.getName()), MathsHelpers.calculateOtherStart(run.getRunL().getRunwaySpec().TORA, run.getLeftBearing(), runwayPositions.get(run.getName())));
 		}
 	}
 
-	public void clearRunway(String runName) {
-		getRunwayFull(runName).clear();
-	}
-
-	// TODO reimplement
-	public void removeObstacle(ObstacleData OD, String runName, boolean left) {
-		if (OD == null) throw new IllegalArgumentException("Obstacle you tried to remove is null!");
-		getRunwayFull(runName).removeObstacle(OD);
+	private void addObstacle(ObstacleData OD)
+	{
+		obstacles.add(OD);
+		for (Runway run : runways) {
+			run.checkObstacle(OD, runwayPositions.get(run.getName()));
+		}
 	}
 }

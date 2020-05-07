@@ -354,7 +354,11 @@ public class RunwayWindowScene extends WindowScene
     }
 
     private void goToMainScene(Airport ap) {
-        ap.setRunways(this.runwayList);
+        List<int[]> places = new ArrayList<int[]>();
+        for (Runway run : runwayList) {
+            places.add(new int[] {0, 0});
+        }
+        ap.addRunways(runwayList, places);
         InputScreenController.goToMainScene(ap);
     }
 }
