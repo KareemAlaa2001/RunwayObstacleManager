@@ -59,23 +59,6 @@ public class Airport
 		otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, run, intersectionPoint, otherRun, otherRunIntersection);
 
 		runwayPositions.add(otherRun, runstart);
-
-	}
-
-	public void addRunways(List<Runway> newR, List<int[]> pos)
-	{ // Not recommended to use
-		if (newR == null) {
-			throw new IllegalArgumentException("Error adding runways to airport");
-		}
-
-		if (runways == null) {
-			this.runways = newR;
-		} else {
-			this.runways.addAll(newR);
-		}
-		for (int i = 0; i < newR.size(); i++) {
-			runwayPositions.put(newR.get(i).getName(), pos.get(i));
-		}
 	}
 
 	public RunwayOneWay getRunway(String runName)
