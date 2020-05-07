@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class ControllerIntegrationTests
-{
+{ /*
     @Test
     public void addObstacleToRunway()
     {
@@ -22,7 +22,7 @@ public class ControllerIntegrationTests
             ap1.addObstacle(new ObstacleData(-1, 2), "09L/27R", true);
             ods = ap1.getRunway("09L").getObstacles();
         } catch (Exception e1) {}
-        
+
         ObstacleData od = null;
         try {
             od = ods.get(0);
@@ -73,5 +73,5 @@ public class ControllerIntegrationTests
             assertTrue(ap.getRunway("27R").getUpdatedRunway() != ap.getRunway("27R").getRunwaySpec());
             assertTrue(ap.getRunway("09L").getUpdatedRunway() != ap.getRunway("09L").getRunwaySpec());
         } catch (Exception e2) { assertTrue(false); }
-    }
+    } */
 }
