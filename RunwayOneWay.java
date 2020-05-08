@@ -2,7 +2,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.*;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import java.awt.Point;
 
 @XmlRootElement(name = "runwayoneway")
 @XmlType(propOrder = { "name", "runwaySpec", "updatedRunway", "obstacles"})
@@ -28,7 +32,7 @@ public class RunwayOneWay
 		impactfulObstacles = new ArrayList<ObstacleData>();
 	}
 
-	public void addObstacle(int distanceFromCentreLine, ObstacleData OD, int bearing, int[] start)
+	public void addObstacle(int distanceFromCentreLine, ObstacleData OD, int bearing, Point start)
 	{
 		MainWindowController.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold " + distanceFromCentreLine + "m from the centreline.");
 		RunwayData newData = Functions.reCalculate(dataOriginal, MathsHelpers.calculateDistance(OD, bearing, dataOriginal.TORA, start), OD.maxHeight);
@@ -49,7 +53,7 @@ public class RunwayOneWay
 	}
 
 	// TODO properly reimplement this for sprint 3
-	public void removeObstacle(ObstacleData OD, int distanceFromCentreLine, int bearing, int[] start) {
+	public void removeObstacle(ObstacleData OD, int distanceFromCentreLine, int bearing, Point start) {
 		if (OD == null) throw new IllegalArgumentException("Trying to remove a null obstacle!");
 		if (otherObstacles.contains(OD) || impactfulObstacles.contains(OD)) {
 			MainWindowController.addOutputText("Re-calculating runway " + name + " due to the removal of the obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold.");
@@ -142,8 +146,4 @@ public class RunwayOneWay
 	public void setUpdatedRunway(RunwayData dataReCalc) {
 		this.dataReCalc = dataReCalc;
 	}
-
-//	public void setObstacles(List<ObstacleData> obstacles) {
-//		this.obstacles = obstacles;
-//	}
 }

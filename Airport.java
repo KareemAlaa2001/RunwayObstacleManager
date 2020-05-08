@@ -1,5 +1,6 @@
 import java.util.*;
 import javax.xml.bind.annotation.*;
+import java.awt.Point;
 
 @XmlRootElement
 @XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways"})
@@ -11,7 +12,7 @@ public class Airport
 	public static int MinSlope = 50;
 
 	// Runway designations, position of start of left runway
-	private Map<String, int[]> runwayPositions;
+	private Map<String, Point> runwayPositions;
 	private List<ObstacleData> obstacles;
 	private List<Runway> runways;
 
@@ -30,16 +31,16 @@ public class Airport
 		this.BlastAllowance = BlastAllowance;
 		this.MinSlope = MinSlope;
 		this.obstacles = new ArrayList<ObstacleData>();
-		runwayPositions = new HashMap<String, int[]>();
+		runwayPositions = new HashMap<String, Point>();
 	}
 
-	public Airport(List<Runway> runways, List<int[]> pos)
+	public Airport(List<Runway> runways, List<Point> pos)
 	{
 		if (runways == null || runways.size() == 0) {
 			throw new IllegalArgumentException("Error creating Airport from given runways");
 		}
 		this.runways = runways;
-		runwayPositions = new HashMap<String, int[]>();
+		runwayPositions = new HashMap<String, Point>();
 		for (int i = 0; i < runways.size(); i++) {
 			runwayPositions.put(runways.get(i).getName(), pos.get(i));
 		}
@@ -76,7 +77,7 @@ public class Airport
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
-		runwayPositions.put(run.getName(), new int[] {10000 * runways.size(), 10000 * runways.size()});
+		runwayPositions.put(run.getName(), new Point(10000 * runways.size(), 10000 * runways.size()));
 		
 		this.runways.add(run);
 	}
@@ -84,8 +85,8 @@ public class Airport
 	public void addRunway(Runway oldRun, int intersectionPoint, Runway toAdd, int newRunIntersection)
 	{ // intersectionPoint: 	distance from start of left threshold in oldRun that an intersection occurs
 	  // newRunIntersection:	distance from start of left runway in toAdd that an intersection occurs
-		int[] runStart = runwayPositions.get(oldRun.getName());
-		int[] otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
+		Point runStart = runwayPositions.get(oldRun.getName());
+		Point otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoint, toAdd, newRunIntersection);
 
 		runwayPositions.put(toAdd.getName(), otherRunStart);
 		this.runways.add(toAdd);
@@ -114,7 +115,7 @@ public class Airport
 		throw new IllegalArgumentException("There is no runway in this airport with identifier '" + runName + "'");
 	}
 
-	public int[] getRunwayPos(String runName)
+	public Point getRunwayPos(String runName)
 	{
 		return runwayPositions.get(runName);
 	}

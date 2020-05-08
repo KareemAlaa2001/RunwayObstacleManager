@@ -1,5 +1,8 @@
 
 import java.util.List;
+
+import java.awt.Point;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -11,7 +14,7 @@ public class RunwayCanvas extends Canvas {
     private final int MARGIN = 50;
     private final double VRATIO = 0.7;
 
-    private int[] runwayStartLocation;
+    private Point runwayStartLocation;
     private int w, h;
     private Runway runway;
     private RunwayOneWay runwayL, runwayR;
@@ -25,7 +28,7 @@ public class RunwayCanvas extends Canvas {
     private double gradedArea = 0;
     private double runwayVpos = 0;
 
-    public RunwayCanvas(int w, int h, Runway runway, int[] runwayStartLocation) {
+    public RunwayCanvas(int w, int h, Runway runway, Point runwayStartLocation) {
         super(w, h);
         this.w = w;
         this.h = h;

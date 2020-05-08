@@ -234,14 +234,10 @@ public class RunwayWindowScene extends WindowScene
 
 
         quickAdd.setOnAction(e -> {
-            List<Runway> quickRunways = new ArrayList<>();
-            Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
-            Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
-            Runway r3 = new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660));
-            quickRunways.add(r1);
-            quickRunways.add(r2);quickRunways.add(r3);
-
-            quickRunways.forEach(runway -> addRunway(runway));
+            addRunway(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
+            addRunway(new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353)));
+            addRunway(new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660)));
+            
             goToMainScene(ap);
         });
         gridAddRunways.add(quickAdd, 1, 11);
@@ -357,14 +353,11 @@ public class RunwayWindowScene extends WindowScene
     }
 
     private void goToMainScene(Airport ap) {
-        List<int[]> places = new ArrayList<int[]>();
         for (Runway run : runwayList) {
-            places.add(new int[] {0, 0});
+            ap.addRunway(run);
         }
-        ap.addRunways(runwayList, places);
         InputScreenController.goToMainScene(ap);
     }
-
 
     //  TODO complete implementation to throw alert window
     private Runway importRunway(String filePath) {

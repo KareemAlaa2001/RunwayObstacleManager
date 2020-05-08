@@ -51,11 +51,9 @@ public class InputScreenController
 
 	public static Airport addRunwaysToAirport(Airport airport, List<Runway> runways) throws Exception
 	{
-		List<int[]> places = new ArrayList<int[]>();
 		for (Runway run : runways) {
-			places.add(new int[] {0, 0});
+			airport.addRunway(run);
 		}
-		airport.addRunways(runways, places);
 		return airport;
 	}
 
