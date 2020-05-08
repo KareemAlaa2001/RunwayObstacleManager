@@ -53,6 +53,55 @@ public class MathsHelpers
 		return (int)Math.round(2 * area * lineA);
 	}
 
+	public static Boolean linesintersect(Point startA, int bearingA, int distanceA, Point startB, int bearingB, int distanceB)
+	{
+		Point endA = calculatePositionInner(bearingA, distanceA, startA);
+		Point endB = calculatePositionInner(bearingB, distanceB, startB);
+
+		return intersect(startA, endA, startB, endB);
+	}
+
+	private static Boolean onLine(Point startA, Point endA, Point p)
+	{
+		return p.y == ((endA.y - startA.y) / (endA.x - startA.x)) * p.x;
+	}
+
+	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect
+	private static Boolean intersect(Point startA, Point endA, Point startB, Point endB)
+	{
+	   int dir1 = direction(startA, endA, startB);
+	   int dir2 = direction(startA, endA, endB);
+	   int dir3 = direction(startB, endB, startA);
+	   int dir4 = direction(startB, endB, endA);
+
+	   if (dir1 != dir2 && dir3 != dir4) {
+	      return true;
+	   } if (dir1 == 0 && onLine(startA, endA, startB))  {
+	      return true;
+	   } if (dir2 == 0 && onLine(startA, endA, endB)) {
+	      return true;
+	   } if (dir3 == 0 && onLine(startB, endB, startA)) {
+	      return true;
+	   } if (dir4 == 0 && onLine(startB, endB, endA)) {
+	      return true;
+	   }
+	   return false;
+	}
+
+	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect
+	// Magic number return:  0 -> colinear, 1-> anti-clockwise, 2 -> clockwise
+	private static int direction(Point a, Point b, Point c)
+	{
+		double val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+		if (val == 0) {
+		    return 0;
+		} else if (val < 0) {
+		    return 1;
+		} else {
+			return 2;
+		}
+	}
+
 	public static int calculateDistance(ObstacleData od, int bearing, int TORA, Point leftStart)
 	{ // Basically just pythag
 		return (int)Math.round(Math.sqrt(Math.pow(calculateDistance(leftStart, od.position), 2) - Math.pow(getDistanceFromCentreLine(od, leftStart, calculateOtherStart(TORA, bearing, leftStart)), 2)));

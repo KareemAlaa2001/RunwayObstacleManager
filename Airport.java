@@ -84,6 +84,23 @@ public class Airport
 		this.runways.add(toAdd);
 	}
 
+	public Map<Runway, Point> getIntersectingRunways(Runway run)
+	{
+		Map<Runway, Point> returnVals = new HashMap<Runway, Point>();
+		Point relativePoint = runwayPositions.get(run.getName());
+		returnVals.put(run, new Point(0, 0));
+
+		for (Runway runway : runways) {
+			if (runway != run && MathsHelpers.linesintersect(	runwayPositions.get(run.getName()), 	run.getLeftBearing(), 		run.getRunL().getRunwaySpec().TORA,
+																runwayPositions.get(runway.getName()), 	runway.getLeftBearing(),	runway.getRunL().getRunwaySpec().TORA)) {
+
+				Point properPoint = runwayPositions.get(runway.getName());
+				returnVals.put(run, new Point(properPoint.x - relativePoint.x, properPoint.y - relativePoint.y));
+			}
+		}
+		return returnVals;
+	}
+
 	public RunwayOneWay getRunway(String runName)
 	{
 		if (runName == null) {
