@@ -1,5 +1,7 @@
+import java.awt.Point;
 
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -63,7 +65,7 @@ public class Runway
 		MainWindowController.addActivityText("Created runway " + name);
 	}
 
-	public void checkObstacle(ObstacleData od, int[] leftStart)
+	public void checkObstacle(ObstacleData od, Point leftStart)
 	{
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));
 		if (distanceFromCentreLine < 60) {
@@ -72,7 +74,7 @@ public class Runway
 		}
 	}
 
-	public void removeObstacle(ObstacleData OD, int[] leftStart, int[] rightStart)
+	public void removeObstacle(ObstacleData OD, Point leftStart, Point rightStart)
 	{
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(OD, leftStart, rightStart);
 		RunL.removeObstacle(OD, distanceFromCentreLine, leftBearing, leftStart);
@@ -87,30 +89,6 @@ public class Runway
 		MainWindowController.addActivityText("Removed all obstacles from runway " + name);
 		return obs;
 	}
-	/*
-	public void addObstacleL(ObstacleData ODL) throws Exception
-	{ // Should not be used by any class other than Airport
-		RunL.addObstacle(ODL); // Should check if there is already an obstacle with these parameters added to the runway
-		try {
-			RunR.addObstacle(new ObstacleData(RunR.getRunwaySpec().TORA - (ODL.position + RunL.getRunwaySpec().threshold), ODL.maxHeight));
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-		MainWindowController.addActivityText("Added " + ODL.maxHeight + "m tall obstacle to runway " + name + ", " + ODL.position + "m from the " + RunL.getName() + " threshold.");
-	}
-
-	public void addObstacleR(ObstacleData ODR) throws Exception
-	{ // Should not be used by any class other than Airport
-		RunR.addObstacle(ODR); // Should check if there is already an obstacle with these parameters added to the runway
-		try {
-			RunL.addObstacle(new ObstacleData(RunL.getRunwaySpec().TORA - (ODR.position + RunR.getRunwaySpec().threshold), ODR.maxHeight));
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-		MainWindowController.addActivityText("Added obstacle to runway " + name + ", " + ODR.position + "m from the " + RunR.getName() + " threshold.");
-	}
-<<<<<<< Updated upstream
-	*/
 
 	@XmlElement(name = "name")
 	public String getName()
