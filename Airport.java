@@ -33,18 +33,6 @@ public class Airport
 		runwayPositions = new HashMap<String, int[]>();
 	}
 
-	public Airport(List<Runway> runways, List<int[]> pos)
-	{
-		if (runways == null || runways.size() == 0) {
-			throw new IllegalArgumentException("Error creating Airport from given runways");
-		}
-		this.runways = runways;
-		runwayPositions = new HashMap<String, int[]>();
-		for (int i = 0; i < runways.size(); i++) {
-			runwayPositions.put(runways.get(i).getName(), pos.get(i));
-		}
-	}
-
 	@XmlElementWrapper(name = "runways")
 	@XmlElement(name = "runway")
 	public List<Runway> getRunways() {
@@ -69,6 +57,10 @@ public class Airport
 	@XmlElement(name = "minSlope")
 	public int getMinSlope() {
 		return this.MinSlope;
+	}
+
+	public void setRunways(List<Runway> runways) {
+		this.runways = runways;
 	}
 
 	public void addRunway(Runway run)

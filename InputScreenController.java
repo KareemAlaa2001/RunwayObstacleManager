@@ -49,15 +49,15 @@ public class InputScreenController
 		return new RunwayData(threshold, TORA, stopway, clearway);
 	}
 
-	public static Airport addRunwaysToAirport(Airport airport, List<Runway> runways) throws Exception
-	{
-		List<int[]> places = new ArrayList<int[]>();
-		for (Runway run : runways) {
-			places.add(new int[] {0, 0});
-		}
-		airport.addRunways(runways, places);
-		return airport;
-	}
+//	public static Airport addRunwaysToAirport(Airport airport, List<Runway> runways) throws Exception
+//	{
+//		List<int[]> places = new ArrayList<int[]>();
+//		for (Runway run : runways) {
+//			places.add(new int[] {0, 0});
+//		}
+//		airport.addRunways(runways, places);
+//		return airport;
+//	}
 
 	public static Runway importRunway(String filePath) throws JAXBException, FileNotFoundException {
 		return XMLLoader.importRunway(filePath);
