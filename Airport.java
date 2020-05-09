@@ -13,6 +13,7 @@ public class Airport
 
 	// Runway designations, position of start of left runway
 	private Map<String, Point> runwayPositions;
+
 	private List<ObstacleData> obstacles;
 	private List<Runway> runways;
 
@@ -196,5 +197,30 @@ public class Airport
 		for (Runway run : runways) {
 			run.checkObstacle(OD, runwayPositions.get(run.getName()));
 		}
+	}
+
+	public List<ObstacleData> getRunwayObstacles(Runway run) {
+		if (!this.getRunways().contains(run)) throw new IllegalArgumentException("Passed a runway which is not part of this airport!");
+		else {
+			List<ObstacleData> runObs = new ArrayList<>();
+
+			return runObs;
+		}
+	}
+
+	public List<ObstacleData> getObstacles() {
+		return obstacles;
+	}
+
+	public void setObstacles(List<ObstacleData> obstacles) {
+		this.obstacles = obstacles;
+	}
+
+	public static Runway findRunwayByName(String runName, List<Runway> runways) {
+		for (Runway run: runways) {
+			if (run.getName().equals(runName)) return run;
+		}
+
+		throw new IllegalArgumentException("Runway name doesn't match that of any runways in the passed list!");
 	}
 }

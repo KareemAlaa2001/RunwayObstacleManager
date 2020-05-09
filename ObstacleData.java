@@ -18,4 +18,9 @@ public class ObstacleData
 		this.position = position;
 		this.maxHeight = maxHeight;
 	}
+
+	public String getName() {
+		return "P: " + this.position + ", MH: " + this.maxHeight;
+	}
+
 }

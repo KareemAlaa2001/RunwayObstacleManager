@@ -65,6 +65,12 @@ public class Runway
 		MainWindowController.addActivityText("Created runway " + name);
 	}
 
+	public boolean isRelevantObstacle(ObstacleData od, Point leftStart) {
+		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));
+		if (distanceFromCentreLine < 60) return true;
+		else return false;
+	}
+
 	public void checkObstacle(ObstacleData od, Point leftStart)
 	{
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));

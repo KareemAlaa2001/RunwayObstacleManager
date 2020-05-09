@@ -217,11 +217,11 @@ public class RunwayWindowScene extends WindowScene
         Label clearwayLabel = new Label("Clearway:");
         gridAddRunways.add(clearwayLabel, 0, 8);
 
-        Label newRunIntLabel = new Label("Intersection locations:");
-        gridAddRunways.add(newRunIntLabel, 0,11);
+        Label selectIntRunLabel = new Label("Select Intersecting Runways:");
+        gridAddRunways.add(selectIntRunLabel,0,11);
 
-        Label selectIntRunLabel = new Label("Select Intersecting Runway:");
-        gridAddRunways.add(selectIntRunLabel,0,12);
+        Label newRunIntLabel = new Label("Intersection locations:");
+        gridAddRunways.add(newRunIntLabel, 0,12);
 
         Label currRuns = new Label ("Runways Currently in airport: ");
         gridAddRunways.add(currRuns, 0, 14);
@@ -251,11 +251,11 @@ public class RunwayWindowScene extends WindowScene
 
         gridAddRunways.add(hbAddRunwayManually, 1, 9);
 
-        gridAddRunways.add(run1IntPoint, 1, 11);
-        gridAddRunways.add(run2IntPoint, 2,11);
+        gridAddRunways.add(runwaySelectCombo, 1,11);
+        gridAddRunways.add(runSelectCombo2, 2,11);
 
-        gridAddRunways.add(runwaySelectCombo, 1,12);
-        gridAddRunways.add(runSelectCombo2, 2,12);
+        gridAddRunways.add(run1IntPoint, 1, 12);
+        gridAddRunways.add(run2IntPoint, 2,12);
 
         gridAddRunways.add(addIntButton, 1, 13);
 
@@ -306,7 +306,7 @@ public class RunwayWindowScene extends WindowScene
             this.setRunwayList(ap.getRunways());
     }
 
-    private TextField initNumTextField(String prompt) {
+    public static TextField initNumTextField(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
         field.setTextFormatter(new TextFormatter<>(c -> {
