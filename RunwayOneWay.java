@@ -106,7 +106,7 @@ public class RunwayOneWay
 	@XmlElement(name = "obstacle")
     public List<ObstacleData> getObstacles() 
     {
-        return otherObstacles;
+        return impactfulObstacles;
     }
 
     private void setNewData(RunwayData newData)

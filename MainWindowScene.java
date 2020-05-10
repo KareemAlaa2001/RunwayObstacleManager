@@ -59,10 +59,11 @@ public class MainWindowScene extends WindowScene {
         emptyPane.setPrefSize(1100, 900);
         
         CheckBox rotateSelect = new CheckBox("Rotate Runway");
+        CheckBox hideObsSelect = new CheckBox("Hide obstacles");
         
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900);
         emptyPane.getChildren().add(defaultCanvas);
-        defaultCanvas.render(1.0, 0, 0, false);
+        defaultCanvas.render(1.0, 0, 0, false, false);
         currentCanvas = defaultCanvas;
         emptyPane.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
@@ -77,7 +78,7 @@ public class MainWindowScene extends WindowScene {
                     currentXOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getWidth(), currentXOffset));
                     currentYOffset += canvasY * delta * 0.001;
                     currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() * 0.7, currentYOffset));
-                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
                 }
             }
         });
@@ -90,7 +91,7 @@ public class MainWindowScene extends WindowScene {
                 currentYOffset = Math.max(0.0, Math.min(emptyPane.getWidth() * (1.0 + currentScroll * 0.001) - emptyPane.getHeight() * 0.7, currentYOffset));
                 mouseDX = t.getX();
                 mouseDY = t.getY();
-                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
         emptyPane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -111,14 +112,14 @@ public class MainWindowScene extends WindowScene {
                 currentYOffset = 235.0;
                 currentCanvas = runways.get(newVal);
                 populateObstacles(newVal);
-                updateCanvas(emptyPane, runways.get(newVal), currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                updateCanvas(emptyPane, runways.get(newVal), currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
 
         rotateSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
 
@@ -149,7 +150,7 @@ public class MainWindowScene extends WindowScene {
                     obstacleLocationInput.clear();
                     obsCentrelineInput.clear();
 
-                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
                 } catch (Exception ex) {
                     Logger.getLogger(MainWindowScene.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -162,7 +163,7 @@ public class MainWindowScene extends WindowScene {
             if (runwaySelectionBox.getValue() != null) {
                 String runName = runwaySelectionBox.getValue();
                 ap.clearRunway(runName);
-                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected());
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
 
@@ -203,6 +204,13 @@ public class MainWindowScene extends WindowScene {
         toRunwayScene.setOnAction(e -> MainWindowController.goToRunwayScreen(ap));
 
         Label rmObsLabel = new Label("Remove an obstacle: ");
+        
+        hideObsSelect.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
+            }
+        });
 
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
@@ -215,7 +223,7 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(obstacleLocationInput, 2, 4, 1, 1);
         gridPane.add(obsCentrelineInput, 3, 4);
         gridPane.add(addObstacleButton, 1, 5, 2, 1);
-        gridPane.add(tabPane, 1, 6, 5, 2);
+        gridPane.add(tabPane, 1, 7, 5, 2);
         gridPane.add(toRunwayScene, 2, 8);
         gridPane.add(toAirportScene, 3, 8);
         gridPane.add(addObstacle, 1, 2, 2, 1);
@@ -225,16 +233,17 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(rmObstacles, 4, 5, 1, 1);
         gridPane.add(rmObsLabel, 2,5);
         gridPane.add(obstacleSelectionBox, 3,5);
+        gridPane.add(hideObsSelect, 1, 6);
         scene = new Scene(gridPane);
 
         this.setAirport(airp);
 
     }
 
-    public void updateCanvas(Pane pane, RunwayCanvas canvas, double scale, double tx, double ty, boolean rotate) {
+    public void updateCanvas(Pane pane, RunwayCanvas canvas, double scale, double tx, double ty, boolean rotate, boolean hideObs) {
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
-        canvas.render((1.0 + scale * 0.001), tx, ty, rotate);
+        canvas.render((1.0 + scale * 0.001), tx, ty, rotate, hideObs);
     }
 
     public void addOutputText(String string) {

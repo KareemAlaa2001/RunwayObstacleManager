@@ -2,6 +2,7 @@
 import java.util.List;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -58,8 +59,7 @@ public class RunwayCanvas extends Canvas {
         super(w, h);
     }
 
-
-    public void render(double scale, double tx, double ty, boolean rotate) {
+    public void render(double scale, double tx, double ty, boolean rotate, boolean hideObs) {
         final GraphicsContext g = this.getGraphicsContext2D();
 
         g.setFill(Color.WHITE);
@@ -70,8 +70,17 @@ public class RunwayCanvas extends Canvas {
             g.setFill(Color.LIGHTGRAY);
             g.fillRect(0, 0, this.getWidth(), g.getCanvas().getHeight() * VRATIO);
 
-            nDataL = runway.getRunL().getUpdatedRunway();
-            nDataR = runway.getRunR().getUpdatedRunway();
+            this.obstacles = runway.getRunL().getObstacles();
+            List<ObstacleData> obstacles;
+            if (hideObs) {
+                obstacles = new ArrayList();
+                nDataL = runway.getRunL().getRunwaySpec();
+                nDataR = runway.getRunR().getRunwaySpec();
+            } else {
+                obstacles = this.obstacles;
+                nDataL = runway.getRunL().getUpdatedRunway();
+                nDataR = runway.getRunR().getUpdatedRunway();
+            }
 
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
@@ -484,7 +493,6 @@ public class RunwayCanvas extends Canvas {
 //        g.strokeText(name, 10, 20);
 //
 //    }
-
     public void drawRect(GraphicsContext g, double x, double y, double w, double h, Color f, Color s) {
         g.setLineWidth(1);
         g.setFill(f);
