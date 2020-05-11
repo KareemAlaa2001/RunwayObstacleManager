@@ -68,10 +68,7 @@ public class Runway
 	public void checkObstacle(ObstacleData od, Point leftStart)
 	{
 		Point endpos = MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart);
-		System.out.println("Endrun pos: " + endpos.x + ", " + endpos.y);
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, endpos);
-
-		System.out.println(name + ": " + distanceFromCentreLine);
 
 		if (distanceFromCentreLine <= 60) {
 			RunL.addObstacle(distanceFromCentreLine, od, leftBearing, leftStart);
