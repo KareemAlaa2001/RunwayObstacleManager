@@ -4,53 +4,56 @@ import java.awt.Point;
 
 public class MathsHelpers
 {
+	public static void main(String[] args)
+	{ // For debugging, will be turned into unit test
+		/*
+		Point result = calculatePosition(1, 1000, 60, new Point(10,10));
+		System.out.println("Out: " + result.x + ", " + result.y);
+		*/
+
+		
+		int result = getDistanceFromCentreLine(new ObstacleData(new Point(60, 60), 10), new Point(0, 0), new Point(3000, 0));
+		System.out.println(result);
+		
+	}
+
 	public static Point calculatePosition(int bearing, int distance, int distanceFromCentre, Point start)
 	{ // Nice wrapper for generating the position of an obstacle given the input that we previously got
-		double angle = Math.toRadians((double)bearing * 10) + Math.atan(distanceFromCentre/distance);
-		return calculatePositionInner(angle, distance, start);
+		double angle = Math.toRadians((double)bearing * 10) + Math.atan((double)distanceFromCentre/(double)distance);
+		return calculatePositionInner(angle, getHypotenuse(distance, distanceFromCentre), start);
 	}
 
 	public static Point calculatePositionInner(double angle, int distance, Point start)
 	{ // Generates a new set of coordinates, could be converted to polar equations
-		if (angle < 0.5 * Math.PI) {
+
+		if (angle <= 0.5 * Math.PI) {
 			return new Point((int)Math.round(start.x + Math.sin(angle) * distance), (int)Math.round(start.y + Math.cos(angle) * distance));
-		} else if (angle < Math.PI) {
+		} else if (angle <= Math.PI) {
 			angle -= 0.5 * Math.PI;
-			return new Point((int)Math.round(start.x + Math.sin(angle) * distance), (int)Math.round(start.y - Math.cos(angle) * distance));
-		} else if (angle < 1.5 * Math.PI) {
+			return new Point((int)Math.round(start.x + Math.cos(angle) * distance), (int)Math.round(start.y - Math.sin(angle) * distance));
+		} else if (angle <= 1.5 * Math.PI) {
 			angle -= Math.PI;
-			return new Point((int)Math.round(start.x - Math.sin(angle) * distance), (int)Math.round(start.y - Math.cos(angle) * distance));
+			return new Point((int)Math.round(start.x - Math.cos(angle) * distance), (int)Math.round(start.y - Math.sin(angle) * distance));
 		} else {
 			angle -= 1.5 * Math.PI;
-			return new Point((int)Math.round(start.x - Math.sin(angle) * distance), (int)Math.round(start.y + Math.cos(angle) * distance));
+			return new Point((int)Math.round(start.x - Math.cos(angle) * distance), (int)Math.round(start.y + Math.sin(angle) * distance));
 		}
 	}
 
 	public static Point calculatePositionInner(int bearing, int distance, Point start)
-	{ // Generates a new set of coordinates, could be converted to polar equations
-		double angle = Math.toRadians((double)bearing * 10);
-		if (angle < 0.5 * Math.PI) {
-			return new Point((int)Math.round(start.x + Math.sin(angle) * distance), (int)Math.round(start.y + Math.cos(angle) * distance));
-		} else if (angle < Math.PI) {
-			angle -= 0.5 * Math.PI;
-			return new Point((int)Math.round(start.x + Math.sin(angle) * distance), (int)Math.round(start.y - Math.cos(angle) * distance));
-		} else if (angle < 1.5 * Math.PI) {
-			angle -= Math.PI;
-			return new Point((int)Math.round(start.x - Math.sin(angle) * distance), (int)Math.round(start.y - Math.cos(angle) * distance));
-		} else {
-			angle -= 1.5 * Math.PI;
-			return new Point((int)Math.round(start.x - Math.sin(angle) * distance), (int)Math.round(start.y + Math.cos(angle) * distance));
-		}
+	{ // Epic wrapper lmao
+		return calculatePositionInner(Math.toRadians((double)bearing * 10), distance, start);
 	}
 
 	public static int getDistanceFromCentreLine(ObstacleData od, Point leftStart, Point rightStart)
 	{ // Scalene triangle using the area generated from Heron's formula
+		// System.out.println("Start: " + leftStart.x + ", " + leftStart.y + " End: " + rightStart.x + ", " + rightStart.y); // Important debugging line do not delete
 		double lineA = calculateDistance(leftStart, rightStart);
 		double lineB = calculateDistance(leftStart, od.position);
 		double lineC = calculateDistance(od.position, rightStart);
 		double sPerimeter = 0.5 * (lineA + lineB + lineC);
 		double area = Math.sqrt(sPerimeter * (sPerimeter - lineA) * (sPerimeter - lineB) * (sPerimeter - lineC));
-		return (int)Math.round(2 * area * lineA);
+		return (int)Math.round((2 * area) / lineA);
 	}
 
 	public static Boolean linesintersect(Point startA, int bearingA, int distanceA, Point startB, int bearingB, int distanceB)
@@ -115,6 +118,11 @@ public class MathsHelpers
 	private static double calculateDistance(Point a, Point b)
 	{ // Distance between 2 points
 		return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
+	}
+
+	private static int getHypotenuse(int a, int b)
+	{
+		return (int)Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
 	}
 
 	public static Point calculatePositionFromIntersection(Point runAStart, Runway runA, int runAIntersection, Runway runB, int runBIntersection)
