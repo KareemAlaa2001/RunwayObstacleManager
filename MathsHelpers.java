@@ -11,8 +11,7 @@ public class MathsHelpers
 		System.out.println("Out: " + result.x + ", " + result.y);
 		*/
 
-		
-		int result = getDistanceFromCentreLine(new ObstacleData(new Point(60, 60), 10), new Point(0, 0), new Point(3000, 0));
+		int result = getDistanceFromCentreLine(new ObstacleData(new Point(1000, 900), 10), new Point(0, 0), new Point(3000, 2500));
 		System.out.println(result);
 		
 	}
@@ -33,7 +32,7 @@ public class MathsHelpers
 			return new Point((int)Math.round(start.x + Math.cos(angle) * distance), (int)Math.round(start.y - Math.sin(angle) * distance));
 		} else if (angle <= 1.5 * Math.PI) {
 			angle -= Math.PI;
-			return new Point((int)Math.round(start.x - Math.cos(angle) * distance), (int)Math.round(start.y - Math.sin(angle) * distance));
+			return new Point((int)Math.round(start.x - Math.sin(angle) * distance), (int)Math.round(start.y - Math.cos(angle) * distance));
 		} else {
 			angle -= 1.5 * Math.PI;
 			return new Point((int)Math.round(start.x - Math.cos(angle) * distance), (int)Math.round(start.y + Math.sin(angle) * distance));

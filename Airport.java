@@ -164,9 +164,15 @@ public class Airport
 			throw new IllegalArgumentException("No runway specified to add obstacle to");
 		}
 
+		Point pos = MathsHelpers.calculatePosition(getRunwayFull(runName).getLeftBearing(), runwayPosition, distanceFromCentreLine, runwayPositions.get(runName));
+		Point runpos = runwayPositions.get(runName);
+
+		System.out.println("Runway pos: " + runpos.x + ", " + runpos.y);
+		System.out.println("Calced pos: " + pos.x + ", " + pos.y);
+
 		// System.out.println("Obstacle Position: " + toAdd.position.x + ", " + toAdd.position.y + "\nRunway Position: " + runwayPositions.get(runName).x + ", " + runwayPositions.get(runName).y);
 		if (left) {
-			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getLeftBearing(), runwayPosition, distanceFromCentreLine, runwayPositions.get(runName)), height));
+			addObstacle(new ObstacleData(pos, height));
 		} else {
 			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getRightBearing(), runwayPosition, distanceFromCentreLine, MathsHelpers.calculatePositionInner(getRunwayFull(runName).getLeftBearing(), getRunwayFull(runName).getRunR().getRunwaySpec().TORA, runwayPositions.get(runName))), height));
 		}
