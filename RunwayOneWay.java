@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.awt.Point;
 
 @XmlRootElement(name = "runwayoneway")
-@XmlType(propOrder = { "name", "runwaySpec", "updatedRunway", "obstacles"})
+@XmlType(propOrder = { "name", "runwaySpec", "updatedRunway", "impactfulObstacles","otherObstacles"})
 public class RunwayOneWay
 {
 	private String name;
@@ -101,13 +101,36 @@ public class RunwayOneWay
 		return dataReCalc;
 	}
 
-
-	@XmlElementWrapper(name = "obstacles")
-	@XmlElement(name = "obstacle")
-    public List<ObstacleData> getObstacles() 
+	@XmlElementWrapper(name = "impactfulObstacles")
+	@XmlElement(name = "impactfulObstacle")
+    public List<ObstacleData> getImpactfulObstacles()
     {
         return impactfulObstacles;
     }
+
+	@XmlElementWrapper(name = "otherObstacles")
+	@XmlElement(name = "otherObstacle")
+    public List<ObstacleData> getOtherObstacles() { return this.otherObstacles; }
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setRunwaySpec(RunwayData dataOriginal) {
+		this.dataOriginal = dataOriginal;
+	}
+
+	public void setUpdatedRunway(RunwayData dataReCalc) {
+		this.dataReCalc = dataReCalc;
+	}
+
+	public void setImpactfulObstacles(List<ObstacleData> impactfulObstacles) {
+		this.impactfulObstacles = impactfulObstacles;
+	}
+
+	public void setOtherObstacles(List<ObstacleData> otherObstacles) {
+		this.otherObstacles = otherObstacles;
+	}
 
     private void setNewData(RunwayData newData)
     {
@@ -135,15 +158,4 @@ public class RunwayOneWay
     			newData.ASDA < dataReCalc.ASDA || newData.LDA < dataReCalc.LDA;
     }
 
-    public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setRunwaySpec(RunwayData dataOriginal) {
-		this.dataOriginal = dataOriginal;
-	}
-
-	public void setUpdatedRunway(RunwayData dataReCalc) {
-		this.dataReCalc = dataReCalc;
-	}
 }

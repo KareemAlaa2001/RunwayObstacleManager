@@ -6,8 +6,14 @@ import java.awt.Point;
 @XmlRootElement(name = "obstacle")
 public class ObstacleData
 {
+	@XmlElement
 	public Point position; // Position refers to it's position relative to the threshold
+	@XmlElement
 	public int maxHeight;
+
+	private ObstacleData() {
+		this.position = new Point();
+	}
 
 	public ObstacleData(Point position, int maxHeight) throws IllegalArgumentException
 	{
@@ -20,7 +26,7 @@ public class ObstacleData
 	}
 
 	public String getName() {
-		return "P: " + this.position + ", MH: " + this.maxHeight;
+		return "Max Height: " + this.maxHeight;
 	}
 
 }

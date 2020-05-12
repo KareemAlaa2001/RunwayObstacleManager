@@ -49,7 +49,7 @@ public class RunwayCanvas extends Canvas {
         this.nDataR = runwayR.getUpdatedRunway();
 
         this.name = runway.getName();
-        this.obstacles = runway.getRunL().getObstacles();
+        this.obstacles = runway.getRunL().getImpactfulObstacles();
         totalScale = (w - (MARGIN * 2)) / (oDataR.clearway + oDataL.TORA + oDataL.clearway + 0.0);
         this.gradedArea = runway.getGradedArea();
         runwayVpos = this.getWidth() / 2 - 25;
@@ -70,7 +70,7 @@ public class RunwayCanvas extends Canvas {
             g.setFill(Color.LIGHTGRAY);
             g.fillRect(0, 0, this.getWidth(), g.getCanvas().getHeight() * VRATIO);
 
-            this.obstacles = runway.getRunL().getObstacles();
+            this.obstacles = runway.getRunL().getImpactfulObstacles();
             List<ObstacleData> obstacles;
             if (hideObs) {
                 obstacles = new ArrayList();

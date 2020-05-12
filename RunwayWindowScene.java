@@ -104,11 +104,7 @@ public class RunwayWindowScene extends WindowScene
                 alert.setContentText("Please select the runways with intersections and enter the respective locations");
                 alert.showAndWait();
             } else if (runwaySelectCombo.getValue().equals(runSelectCombo2.getValue())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("You are not able to add an intersection");
-                alert.setContentText("Can't have an intersection within the same runway!");
-                alert.showAndWait();
+                generateAlert("You are not able to add an intersection","Can't have an intersection within the same runway!");
             } else {
                 String run1Name = runwaySelectCombo.getValue();
                 String run2Name = runSelectCombo2.getValue();
@@ -125,11 +121,7 @@ public class RunwayWindowScene extends WindowScene
 
         addRunway.setOnAction(e -> {
             if (selectedRunwayTextField.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("You are not able to add a runway");
-                alert.setContentText("Please choose a file");
-                alert.showAndWait();
+                generateAlert("You are not able to add a runway","Please choose a file");
             } else {
                 //  TODO IMPLEMENT XML RUNWAY
             }
@@ -140,12 +132,7 @@ public class RunwayWindowScene extends WindowScene
         addRunwayManually.setOnAction(e -> {
             if (runLeftBearingField.getText().isEmpty() || threshold.getText().isEmpty() || threshold2.getText().isEmpty()
                     || tora.getText().isEmpty() || stopway.getText().isEmpty() || stopway2.getText().isEmpty() || clearway.getText().isEmpty() ||clearway2.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("You are not able to add a runway");
-                alert.setContentText("Please fill all the runway information text fields");
-                alert.showAndWait();
-
+                generateAlert("You are not able to add a runway","Please fill all the runway information text fields");
             } else {
 
                 int runwayLeftBearing = Integer.parseInt(runLeftBearingField.getText());
@@ -304,20 +291,6 @@ public class RunwayWindowScene extends WindowScene
 
         if (ap.getRunways() != null)
             this.setRunwayList(ap.getRunways());
-    }
-
-    public static TextField initNumTextField(String prompt) {
-        TextField field = new TextField();
-        field.setPromptText(prompt);
-        field.setTextFormatter(new TextFormatter<>(c -> {
-            if (!c.getControlNewText().matches("\\d*"))
-                return null;
-            else
-                return c;
-        }
-        ));
-
-        return field;
     }
 
     private void setRunwayList(List<Runway> runways) {
