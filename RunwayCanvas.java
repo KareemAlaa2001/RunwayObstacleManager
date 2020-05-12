@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 public class RunwayCanvas extends Canvas {
 
@@ -236,15 +237,15 @@ public class RunwayCanvas extends Canvas {
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
                 int counter = 0;
-                for (Map.Entry<String, Integer> entry : nDataL.getThresholdBreakdown().entrySet()) {
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter + entry.getValue(), bottomCL + 95, Color.BLACK,
+                for (Pair<String, Integer> entry : nDataL.getThresholdBreakdown()) {
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter + entry.getValue(), bottomCL + 95, Color.BLACK,
                             entry.getKey(), true, false, 2, 15);
                     counter += entry.getValue();
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 115, Color.BLACK);
                 }
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
                         leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
@@ -266,7 +267,7 @@ public class RunwayCanvas extends Canvas {
                 drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
                 int counter = 0;
-                for (Map.Entry<String, Integer> entry : nDataR.getThresholdBreakdown().entrySet()) {
+                for (Pair<String, Integer> entry : nDataR.getThresholdBreakdown()) {
                     drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 95,
                             rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 115, Color.BLACK);
                     drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 95,
