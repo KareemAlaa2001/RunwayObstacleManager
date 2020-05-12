@@ -86,6 +86,14 @@ public class RunwayCanvas extends Canvas {
                 nDataL = runway.getRunL().getUpdatedRunway();
                 nDataR = runway.getRunR().getUpdatedRunway();
             }
+            for (ObstacleData impactfulObstacle : impactfulObstacles) {
+                System.out.println(impactfulObstacle);
+            }
+            System.out.println("-----");
+            for (ObstacleData otherObstacle : otherObstacles) {
+                System.out.println(otherObstacle);
+            }
+            System.out.println("=====");
 
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
