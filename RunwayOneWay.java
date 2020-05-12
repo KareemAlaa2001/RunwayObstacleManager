@@ -134,6 +134,7 @@ public class RunwayOneWay {
     private void setNewData(RunwayData newData) {
         if (newData.threshold > dataReCalc.threshold) {
             dataReCalc.threshold = newData.threshold;
+            dataReCalc.thresholdBreakdown = newData.thresholdBreakdown;
         }
         if (newData.takeoffThreshold > dataReCalc.takeoffThreshold) {
             dataReCalc.takeoffThreshold = newData.takeoffThreshold;

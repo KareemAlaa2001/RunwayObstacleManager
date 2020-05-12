@@ -24,7 +24,7 @@ public class RunwayData
 	@XmlElement
 	public int LDA;			// Landing Distance Available
 
-	private ArrayList<Pair<String, Integer>> thresholdBreakdown;
+	public ArrayList<Pair<String, Integer>> thresholdBreakdown;
 
 	private RunwayData() {
 		thresholdBreakdown = new ArrayList();
