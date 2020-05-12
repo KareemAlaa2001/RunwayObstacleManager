@@ -1,7 +1,9 @@
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.util.Pair;
 
 public class RunwayData
 {
@@ -22,10 +24,10 @@ public class RunwayData
 	@XmlElement
 	public int LDA;			// Landing Distance Available
 
-	private Map<String, Integer> thresholdBreakdown;
+	private ArrayList<Pair<String, Integer>> thresholdBreakdown;
 
 	private RunwayData() {
-		thresholdBreakdown = new HashMap<>();
+		thresholdBreakdown = new ArrayList();
 	}
 
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
@@ -67,7 +69,7 @@ public class RunwayData
 		thresholdBreakdown = null;
 	}
 
-	public RunwayData(int threshold, int takeoffThreshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA, Map<String, Integer> thresholdBreakdown)
+	public RunwayData(int threshold, int takeoffThreshold, int stopway, int clearway, int TORA, int ASDA, int TODA, int LDA, ArrayList<Pair<String, Integer>> thresholdBreakdown)
 	{ // Any usage of this constructor should be marked as such, only called in recalculation
 		this.threshold = threshold;
 		this.takeoffThreshold = takeoffThreshold;
@@ -82,12 +84,12 @@ public class RunwayData
 
 	@XmlElementWrapper(name = "thresholdBreakdown")
 	@XmlElement(name = "thresholdBreakdownEntry")
-	public Map<String, Integer> getThresholdBreakdown()
+	public ArrayList<Pair<String, Integer>> getThresholdBreakdown()
 	{
 		return thresholdBreakdown;
 	}
 
-	public void setThresholdBreakdown(Map<String, Integer> thresholdBreakdown) {
+	public void setThresholdBreakdown(ArrayList<Pair<String, Integer>> thresholdBreakdown) {
 		this.thresholdBreakdown = thresholdBreakdown;
 	}
 
