@@ -71,6 +71,7 @@ public class Runway
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(od, leftStart, endpos);
 
 		if (distanceFromCentreLine <= 60) {
+			MainWindowController.addActivityText("Added obstacle " + od.maxHeight + "m high near runway " + name);
 			RunL.addObstacle(distanceFromCentreLine, od, leftBearing, leftStart);
 			RunR.addObstacle(-distanceFromCentreLine, od, rightBearing, MathsHelpers.calculateOtherStart(RunL.getRunwaySpec().TORA, leftBearing, leftStart));
 		}
@@ -81,14 +82,14 @@ public class Runway
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(OD, leftStart, rightStart);
 		RunL.removeObstacle(OD, distanceFromCentreLine, leftBearing, leftStart);
 		RunR.removeObstacle(OD, -distanceFromCentreLine, rightBearing, rightStart);
-		MainWindowController.addActivityText("Removed obstacle at " + OD.position + ", "  + OD.maxHeight + "m high from " + name);
+		MainWindowController.addActivityText("Removed obstacle " + OD.maxHeight + "m high from near runway " + name);
 	}
 
 	public List<ObstacleData> clear()
 	{
 		List<ObstacleData> obs = RunL.clear();
 		obs.addAll(RunR.clear());
-		MainWindowController.addActivityText("Removed all obstacles from runway " + name);
+		MainWindowController.addActivityText("Removed all obstacles near runway " + name);
 		return obs;
 	}
 
