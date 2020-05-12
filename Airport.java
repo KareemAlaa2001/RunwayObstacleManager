@@ -155,7 +155,7 @@ public class Airport
 	public Runway getRunwayFull(String name)
 	{
 		if (name == null) {
-			throw new IllegalArgumentException("No name give for runway");
+			throw new IllegalArgumentException("No name given for runway");
 		}
 		for (Runway run : runways) {
 			if (run.getName().equals(name)) {
@@ -247,7 +247,7 @@ public class Airport
             if (obstacleData.getName().equals(obsName)) return obstacleData;
         }
 
-        throw new IllegalArgumentException("Runway name doesn't match that of any runways in the passed list!");
+        throw new IllegalArgumentException("Obstacle name doesn't match that of any obstacles in the passed list!");
     }
 
 }

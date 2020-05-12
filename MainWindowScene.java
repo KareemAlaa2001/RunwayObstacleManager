@@ -131,23 +131,29 @@ public class MainWindowScene extends WindowScene {
         presetSetButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                switch (presetSelectionBox.getValue() + "") {
-                    case "Custom":
-                        break;
-                    case "Boeing 747 on right":
-                        ap.clearRunway(runwaySelectionBox.getValue());
-                        ap.addObstacle(19, 
-                                (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.9),
-                                0, runwaySelectionBox.getValue(), true);
-                        break;
-                    case "Luggage truck on left":
-                        ap.clearRunway(runwaySelectionBox.getValue());
-                        ap.addObstacle(2, 
-                                (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.2),
-                                0, runwaySelectionBox.getValue(), true);
-                        break;
+                if (runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
+                    generateAlert("Unable to add an obstacle", "You must first select a runway");
+                } else {
+                    switch (presetSelectionBox.getValue() + "") {
+                        case "Custom":
+                            break;
+                        case "Boeing 747 on right":
+                            ap.clearRunway(runwaySelectionBox.getValue());
+                            ap.addObstacle(19,
+                                    (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.9),
+                                    0, runwaySelectionBox.getValue(), true);
+                            obstacleSelectionBox.getItems().add("Max Height: " + 19);
+                            break;
+                        case "Luggage truck on left":
+                            ap.clearRunway(runwaySelectionBox.getValue());
+                            ap.addObstacle(2,
+                                    (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.2),
+                                    0, runwaySelectionBox.getValue(), true);
+                            obstacleSelectionBox.getItems().add("Max Height: " + 2);
+                            break;
+                    }
+                    updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
                 }
-                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
 
