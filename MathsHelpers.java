@@ -11,7 +11,7 @@ public class MathsHelpers
 		System.out.println("Out: " + result.x + ", " + result.y);
 		*/
 
-		int result = getDistanceFromCentreLine(new ObstacleData(new Point(1000, 900), 10), new Point(0, 0), new Point(3000, 2500));
+		int result = getDistanceFromCentreLine(new ObstacleData(new Point(1000, 900), 10, 0), new Point(0, 0), new Point(3000, 2500));
 		System.out.println(result);
 		
 	}
