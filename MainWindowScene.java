@@ -36,7 +36,7 @@ import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
 
 public class MainWindowScene extends WindowScene {
-    
+
     private Airport ap;
     private Map<String, RunwayCanvas> runways;
     private List<String> runwayNames;
@@ -62,10 +62,10 @@ public class MainWindowScene extends WindowScene {
 
         Pane emptyPane = new Pane();
         emptyPane.setPrefSize(1100, 900);
-        
+
         CheckBox rotateSelect = new CheckBox("Rotate Runway");
         CheckBox hideObsSelect = new CheckBox("Hide obstacles");
-        
+
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900);
         emptyPane.getChildren().add(defaultCanvas);
         defaultCanvas.render(1.0, 0, 0, false, false);
@@ -121,6 +121,36 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
+        ComboBox presetSelectionBox = new ComboBox();
+        presetSelectionBox.getItems().add("Custom");
+        presetSelectionBox.getItems().add("Boeing 747 on right");
+        presetSelectionBox.getItems().add("Luggage truck on left");
+        presetSelectionBox.setValue("Custom");
+
+        Button presetSetButton = new Button("Set");
+        presetSetButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switch (presetSelectionBox.getValue() + "") {
+                    case "Custom":
+                        break;
+                    case "Boeing 747 on right":
+                        ap.clearRunway(runwaySelectionBox.getValue());
+                        ap.addObstacle(19, 
+                                (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.9),
+                                0, runwaySelectionBox.getValue(), true);
+                        break;
+                    case "Luggage truck on left":
+                        ap.clearRunway(runwaySelectionBox.getValue());
+                        ap.addObstacle(2, 
+                                (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.2),
+                                0, runwaySelectionBox.getValue(), true);
+                        break;
+                }
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
+            }
+        });
+
         rotateSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
@@ -128,14 +158,12 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
-
         TextField obstacleHeightInput = initNumTextField("Enter obstacle height");
         TextField obstacleLocationInput = initNumTextField("Enter obstacle distance from start of runway");
         TextField obsCentrelineInput = initNumTextField("Enter obstacle distance from centreline");
 
         Text addObstacle = new Text("Add a new obstacle: ");
         addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-
 
         Label obsHeightLabel = new Label("Obstacle height: ");
         Label obsDistLabel = new Label("Distance along runway: ");
@@ -149,11 +177,11 @@ public class MainWindowScene extends WindowScene {
                 generateAlert("Unable to add an obstacle", "You must first fill all 3 obstacle information fields");
             } else {
                 try {
-                    ap.addObstacle( Integer.parseInt(obstacleHeightInput.getText()),
+                    ap.addObstacle(Integer.parseInt(obstacleHeightInput.getText()),
                             Integer.parseInt(obstacleLocationInput.getText()),
                             Integer.parseInt(obsCentrelineInput.getText()),
-                            (String)(runwaySelectionBox.getValue()),
-                            true );
+                            (String) (runwaySelectionBox.getValue()),
+                            true);
 
                     obstacleSelectionBox.getItems().add("Max Height: " + obstacleHeightInput.getText());
 
@@ -185,7 +213,7 @@ public class MainWindowScene extends WindowScene {
 
         Button clearRunway = new Button("Clear runway");
         clearRunway.setOnAction(e -> {
-            if(runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
+            if (runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
                 generateAlert("Unable to clear runway", "You must first select a runway");
             } else {
                 String runName = runwaySelectionBox.getValue();
@@ -205,7 +233,7 @@ public class MainWindowScene extends WindowScene {
             File file = fileChooser.showSaveDialog(getAppStage());
             if (file != null) {
                 try {
-                    XMLLoader.exportAirport(this.ap,file.getPath());
+                    XMLLoader.exportAirport(this.ap, file.getPath());
                 } catch (JAXBException ex) {
                     generateAlert("Unable to export airport", "There was a problem with exporting the airport to XML");
                 }
@@ -248,7 +276,7 @@ public class MainWindowScene extends WindowScene {
         toRunwayScene.setOnAction(e -> MainWindowController.goToRunwayScreen(ap));
 
         Label rmObsLabel = new Label("Remove an obstacle: ");
-        
+
         hideObsSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
@@ -271,15 +299,17 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(toRunwayScene, 2, 12);
         gridPane.add(toAirportScene, 3, 12);
         gridPane.add(addObstacle, 1, 2, 2, 1);
-        gridPane.add(obsHeightLabel, 1, 3, 1,1);
-        gridPane.add(obsDistLabel, 2, 3, 1,1);
-        gridPane.add(obsCentrelineLabel,3,3);
+        gridPane.add(presetSelectionBox, 2, 2, 2, 1);
+        gridPane.add(presetSetButton, 3, 2, 2, 1);
+        gridPane.add(obsHeightLabel, 1, 3, 1, 1);
+        gridPane.add(obsDistLabel, 2, 3, 1, 1);
+        gridPane.add(obsCentrelineLabel, 3, 3);
         gridPane.add(rmObstacles, 4, 5, 1, 1);
-        gridPane.add(rmObsLabel, 2,5);
-        gridPane.add(obstacleSelectionBox, 3,5);
+        gridPane.add(rmObsLabel, 2, 5);
+        gridPane.add(obstacleSelectionBox, 3, 5);
         gridPane.add(hideObsSelect, 1, 6);
         gridPane.add(clearRunway, 1, 7);
-        gridPane.add(exportButton, 1,13);
+        gridPane.add(exportButton, 1, 13);
         scene = new Scene(gridPane);
 
         this.setAirport(airp);
@@ -315,10 +345,10 @@ public class MainWindowScene extends WindowScene {
     public void clearActivity() {
         activityTextArea.clear();
     }
-    
+
     public void setAirport(Airport ap) {
         this.ap = ap;
-        
+
         runways = new HashMap();
         runwayNames = new ArrayList();
         for (Runway runway : ap.getRunways()) {
@@ -326,7 +356,7 @@ public class MainWindowScene extends WindowScene {
             RunwayCanvas runwayCanvas = new RunwayCanvas(1100, 900, runway, ap.getRunwayPos(runway.getName()));
             runways.put(runway.getName(), runwayCanvas);
         }
-        
+
         runwaySelectionBox.getItems().clear();
         runwaySelectionBox.getItems().addAll(runwayNames);
     }
@@ -342,5 +372,5 @@ public class MainWindowScene extends WindowScene {
     private Stage getAppStage() {
         return MainWindowController.getAppStage();
     }
-    
+
 }

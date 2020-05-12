@@ -250,7 +250,7 @@ public class RunwayCanvas extends Canvas {
                         leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 50 - leftOb.maxHeight * vScale,
                         leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 50, Color.BLACK); //Left slope
-                drawRotatedText(g, "            ALS", (leftObPos + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
+                drawRotatedText(g, "     ALS", (leftObPos + oDataL.threshold + oDataR.clearway) * totalScale + MARGIN, bottomCL + 45 - leftOb.maxHeight * vScale,
                         90 - Math.toDegrees(angle), Color.BLACK); //Left slope label
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50 - leftOb.maxHeight * vScale,
                         leftObPos + oDataL.threshold + oDataR.clearway - 70, bottomCL + 50, Color.BLACK,
