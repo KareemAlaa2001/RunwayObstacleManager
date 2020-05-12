@@ -3,7 +3,7 @@ import javax.xml.bind.annotation.*;
 import java.awt.Point;
 
 @XmlRootElement
-@XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways"})
+@XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways","runwayPositions","obstacles"})
 public class Airport
 { // Default values below, can be set
 	public static int RESA = 240;
@@ -19,6 +19,8 @@ public class Airport
 
 	private Airport() {
 		runways = new ArrayList<>();
+		obstacles = new ArrayList<>();
+		runwayPositions = new HashMap<>();
 	}
 
 	public Airport(int RESA, int StripEnd, int BlastAllowance, int MinSlope)
@@ -61,11 +63,32 @@ public class Airport
 		return this.MinSlope;
 	}
 
+	@XmlElementWrapper(name = "runwayPositions")
+	@XmlElement(name = "runwayPosition")
+	public Map<String,Point> getRunwayPositions() {
+	    return this.runwayPositions;
+    }
+
+    @XmlElementWrapper(name = "obstacles")
+    @XmlElement(name = "obstacle")
+    public List<ObstacleData> getObstacles() {
+        return this.obstacles;
+    }
+
 	public void setRunways(List<Runway> runways) {
 		this.runways = runways;
 	}
 
-	public void addRunway(Runway run)
+	public void setRunwayPositions(Map<String,Point> positions) {
+	    this.runwayPositions = positions;
+    }
+
+    public void setObstacles(List<ObstacleData> obstacles) {
+        this.obstacles = obstacles;
+    }
+
+
+    public void addRunway(Runway run)
 	{
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
@@ -204,17 +227,12 @@ public class Airport
 		if (!this.getRunways().contains(run)) throw new IllegalArgumentException("Passed a runway which is not part of this airport!");
 		else {
 			List<ObstacleData> runObs = new ArrayList<>();
+			this.getObstacles().forEach(obs -> {
+				if (run.getRunL().getImpactfulObstacles().contains(obs)) runObs.add(obs);
+			});
 
 			return runObs;
 		}
-	}
-
-	public List<ObstacleData> getObstacles() {
-		return obstacles;
-	}
-
-	public void setObstacles(List<ObstacleData> obstacles) {
-		this.obstacles = obstacles;
 	}
 
 	public static Runway findRunwayByName(String runName, List<Runway> runways) {

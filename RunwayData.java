@@ -1,4 +1,6 @@
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RunwayData
@@ -22,7 +24,9 @@ public class RunwayData
 
 	private Map<String, Integer> thresholdBreakdown;
 
-	private RunwayData() {}
+	private RunwayData() {
+		thresholdBreakdown = new HashMap<>();
+	}
 
 	public RunwayData(int threshold, int TORA, int stopway, int clearway)
 	{ // clearway totally seperate to stopway, call this function when initialising a runway
@@ -76,12 +80,15 @@ public class RunwayData
 		this.thresholdBreakdown = thresholdBreakdown;
 	}
 
-	public Map<String, Integer> getThresholdBreakdown() throws Exception
-	{ // Throws exception if thresholdBreakdown is not initialised, this is not an error, more like a flag
-		if (thresholdBreakdown == null) {
-			throw new Exception("thresholdBreakdown is not initialised");
-		}
+	@XmlElementWrapper(name = "thresholdBreakdown")
+	@XmlElement(name = "thresholdBreakdownEntry")
+	public Map<String, Integer> getThresholdBreakdown()
+	{
 		return thresholdBreakdown;
+	}
+
+	public void setThresholdBreakdown(Map<String, Integer> thresholdBreakdown) {
+		this.thresholdBreakdown = thresholdBreakdown;
 	}
 
 	@Override

@@ -124,9 +124,9 @@ public class MainWindowScene extends WindowScene {
         });
 
 
-        TextField obstacleHeightInput = RunwayWindowScene.initNumTextField("Enter obstacle height");
-        TextField obstacleLocationInput = RunwayWindowScene.initNumTextField("Enter obstacle distance from start of runway");
-        TextField obsCentrelineInput = RunwayWindowScene.initNumTextField("Enter obstacle distance from centreline");
+        TextField obstacleHeightInput = initNumTextField("Enter obstacle height");
+        TextField obstacleLocationInput = initNumTextField("Enter obstacle distance from start of runway");
+        TextField obsCentrelineInput = initNumTextField("Enter obstacle distance from centreline");
 
         Text addObstacle = new Text("Add a new obstacle: ");
         addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -138,13 +138,19 @@ public class MainWindowScene extends WindowScene {
 
         Button addObstacleButton = new Button("Add Obstacle");
         addObstacleButton.setOnAction(e -> {
-            if (!runwaySelectionBox.getValue().isEmpty()) {
+            if (runwaySelectionBox.getValue().isEmpty()) {
+                generateAlert("Unable to add an obstacle", "You must first select a runway");
+            } else if (obstacleHeightInput.getText().isEmpty() || obstacleLocationInput.getText().isEmpty() || obsCentrelineInput.getText().isEmpty()) {
+                generateAlert("Unable to add an obstacle", "You must first fill all 3 obstacle information fields");
+            } else {
                 try {
                     ap.addObstacle( Integer.parseInt(obstacleHeightInput.getText()),
-                                    Integer.parseInt(obstacleLocationInput.getText()),
-                                    Integer.parseInt(obsCentrelineInput.getText()),
-                                    (String)(runwaySelectionBox.getValue()), 
-                                    true );
+                            Integer.parseInt(obstacleLocationInput.getText()),
+                            Integer.parseInt(obsCentrelineInput.getText()),
+                            (String)(runwaySelectionBox.getValue()),
+                            true );
+
+                    obstacleSelectionBox.getItems().add("Max Height: " + obstacleHeightInput.getText());
 
                     obstacleHeightInput.clear();
                     obstacleLocationInput.clear();
@@ -160,8 +166,13 @@ public class MainWindowScene extends WindowScene {
         // TODO reimplement this for sprint 3
         Button rmObstacles = new Button("Remove obstacle");
         rmObstacles.setOnAction(e -> {
-            if (runwaySelectionBox.getValue() != null) {
+            if (runwaySelectionBox.getValue().isEmpty()) {
+                generateAlert("Unable to remove obstacle", "You must first select a runway");
+            } else if (obstacleSelectionBox.getValue().isEmpty()) {
+                generateAlert("Unable to remove obstacle", "Yout must first select an obstacle to remove");
+            } else {
                 String runName = runwaySelectionBox.getValue();
+                String obsName = obstacleSelectionBox.getValue();
                 ap.clearRunway(runName);
                 updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
