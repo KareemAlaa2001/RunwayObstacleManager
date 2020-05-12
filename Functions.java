@@ -25,8 +25,8 @@ public class Functions
 			newTakeoffThreshold = 0;
 			newLDA = position - Airport.RESA - Airport.StripEnd;
 
-			thresholdBreakdown.put("RESA", Airport.RESA);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("R", Airport.RESA);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText("");
 			MainWindowController.addOutputText("obstacle distance from threshold - RESA - strip end = New LDA");
 			MainWindowController.addOutputText(position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newLDA);
@@ -34,8 +34,8 @@ public class Functions
 			newThreshold = runway.threshold + position + Airport.RESA + Airport.StripEnd;
 			newLDA = runway.LDA - position - Airport.RESA - Airport.StripEnd;
 
-			thresholdBreakdown.put("RESA", Airport.RESA);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("R", Airport.RESA);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText(""); // TODO see if this println is necessary
 			MainWindowController.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
 			MainWindowController.addOutputText(runway.threshold + " + " + position + " + " + Airport.RESA + " + " + Airport.StripEnd + " = " + newThreshold);
@@ -46,8 +46,8 @@ public class Functions
 			newThreshold = runway.threshold + position + slopeAllowance + Airport.StripEnd;
 			newLDA = runway.LDA - position - slopeAllowance - Airport.StripEnd;
 
-			thresholdBreakdown.put("Slope Allowance", slopeAllowance);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("SA", slopeAllowance);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText(""); // TODO see if this println is necessary
 			MainWindowController.addOutputText("obstacle distance from threshold + old threshold + RESA + strip end = New Threshold");
 			MainWindowController.addOutputText(runway.threshold + " + " + position + " + " + slopeAllowance + " + " + Airport.StripEnd + " = " + newThreshold);
@@ -60,16 +60,16 @@ public class Functions
 		if (towards && slopeAllowance >= Airport.RESA) {
 			newTORA = newTODA = newASDA = runway.threshold + position - slopeAllowance - Airport.StripEnd;
 			System.out.println("");
-			thresholdBreakdown.put("Slope Allowance", slopeAllowance);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("SA", slopeAllowance);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText("");
 			MainWindowController.addOutputText("old threshold + obstacle distance from threshold - slope allowance - strip end = New TORA, TODA and ASDA");
 			MainWindowController.addOutputText(runway.threshold + " + " + position + " - " + slopeAllowance + " - " + Airport.StripEnd + " = " + newTORA);
 		} else if (towards && slopeAllowance < Airport.RESA) {
 			newTORA = newTODA = newASDA = runway.threshold + position - Airport.RESA - Airport.StripEnd;
 			System.out.println("");
-			thresholdBreakdown.put("RESA", Airport.RESA);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("R", Airport.RESA);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText("");
 			MainWindowController.addOutputText("old threshold + obstacle distance from threshold - RESA - strip end = New TORA, TODA and ASDA");
 			MainWindowController.addOutputText(runway.threshold + " + " + position + " - " + Airport.RESA + " - " + Airport.StripEnd + " = " + newTORA);
@@ -80,7 +80,7 @@ public class Functions
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
 
-			thresholdBreakdown.put("Blast Allowance", Airport.BlastAllowance);
+			thresholdBreakdown.put("BA", Airport.BlastAllowance);
 			MainWindowController.addOutputText("");
 			MainWindowController.addOutputText("old TORA - blast allowance  - old Threshold - obstacle distance from threshold = New TORA");
 			MainWindowController.addOutputText(runway.TORA + " - " + Airport.BlastAllowance + " - " + runway.threshold + " - " + position + " = " + newTORA);
@@ -97,8 +97,8 @@ public class Functions
 			newTODA = newTORA + runway.clearway;
 			newASDA = newTORA + runway.stopway;
 
-			thresholdBreakdown.put("RESA", Airport.RESA);
-			thresholdBreakdown.put("Strip End", Airport.StripEnd);
+			thresholdBreakdown.put("R", Airport.RESA);
+			thresholdBreakdown.put("S", Airport.StripEnd);
 			MainWindowController.addOutputText("");
 			MainWindowController.addOutputText("old TORA - RESA - strip end - obstacle distance from threshold = New TORA");
 			MainWindowController.addOutputText(runway.TORA + " - " + Airport.RESA + " - " + Airport.StripEnd + " - " + position + " = " + newTORA);

@@ -1,6 +1,7 @@
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -234,6 +235,17 @@ public class RunwayCanvas extends Canvas {
                         leftOb.maxHeight + "m x 50 = " + (leftOb.maxHeight * 50) + "m", true, false, 5, 15); //Left horizontal label
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
+                int counter = 0;
+                for (Map.Entry<String, Integer> entry : nDataL.getThresholdBreakdown().entrySet()) {
+                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
+                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
+                            leftObPos + oDataR.clearway + 5 + counter + entry.getValue(), bottomCL + 95, Color.BLACK,
+                            entry.getKey(), true, false, 2, 15);
+                    counter += entry.getValue();
+                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
+                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
+                }
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
                         leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 50 - leftOb.maxHeight * vScale,
@@ -253,6 +265,17 @@ public class RunwayCanvas extends Canvas {
                         - 5 - (int) (textWidth(g, rightOb.maxHeight + "m x 50 = " + (rightOb.maxHeight * 50) + "m")), 15); //Right horizontal marker
                 drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 60,
                         rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Right right horizontal marker
+                int counter = 0;
+                for (Map.Entry<String, Integer> entry : nDataR.getThresholdBreakdown().entrySet()) {
+                    drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 95,
+                            rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 95,
+                            rightObPos + oDataL.threshold + oDataR.clearway - counter - entry.getValue(), bottomCL + 95, Color.BLACK,
+                            entry.getKey(), false, false, -2, 15);
+                    counter += entry.getValue();
+                    drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 95,
+                            rightObPos + oDataL.threshold + oDataR.clearway - counter, bottomCL + 115, Color.BLACK);
+                }
                 drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 60,
                         rightObPos + oDataL.threshold + oDataR.clearway - rightOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Right left horizontal marker
                 drawLine(g, rightObPos + oDataL.threshold + oDataR.clearway, bottomCL + 50 - rightOb.maxHeight * vScale,
@@ -287,7 +310,7 @@ public class RunwayCanvas extends Canvas {
         g.strokeText(name, 10, 20);
 
     }
-    
+
     public void drawRect(GraphicsContext g, double x, double y, double w, double h, Color f, Color s) {
         g.setLineWidth(1);
         g.setFill(f);
