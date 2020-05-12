@@ -87,14 +87,6 @@ public class RunwayCanvas extends Canvas {
                 nDataL = runway.getRunL().getUpdatedRunway();
                 nDataR = runway.getRunR().getUpdatedRunway();
             }
-            for (ObstacleData impactfulObstacle : impactfulObstacles) {
-                System.out.println(impactfulObstacle);
-            }
-            System.out.println("-----");
-            for (ObstacleData otherObstacle : otherObstacles) {
-                System.out.println(otherObstacle);
-            }
-            System.out.println("=====");
 
             g.save();
             g.rect(0, 0, this.getWidth(), this.getHeight() * VRATIO);
@@ -246,14 +238,14 @@ public class RunwayCanvas extends Canvas {
                         leftObPos + oDataL.threshold + oDataR.clearway, bottomCL + 95, Color.BLACK); //Left left horizontal marker
                 int counter = 0;
                 for (Pair<String, Integer> entry : nDataL.getThresholdBreakdown()) {
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter + entry.getValue(), bottomCL + 95, Color.BLACK,
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter + entry.getValue(), bottomCL + 95, Color.BLACK,
                             entry.getKey(), true, false, 2, 15);
                     counter += entry.getValue();
-                    drawLine(g, leftObPos + oDataR.clearway + 5 + counter, bottomCL + 95,
-                            leftObPos + oDataR.clearway + 5 + counter, bottomCL + 115, Color.BLACK);
+                    drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 95,
+                            leftObPos + oDataL.threshold + oDataR.clearway + counter, bottomCL + 115, Color.BLACK);
                 }
                 drawLine(g, leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 60,
                         leftObPos + oDataL.threshold + oDataR.clearway + leftOb.maxHeight * Airport.MinSlope, bottomCL + 75, Color.BLACK); //Left right horizontal marker
