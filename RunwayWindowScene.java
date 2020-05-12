@@ -179,7 +179,7 @@ public class RunwayWindowScene extends WindowScene
             addRunway(r2);
             addRunway(r1);
             addIntersection(r3, r2, 3000,1500);
-            addIntersection(r3,r1,1000,2000);
+            addIntersection(r3, r1,1000,2000);
             goToMainScene(ap);
         });
 

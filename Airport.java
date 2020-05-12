@@ -86,7 +86,6 @@ public class Airport
         this.obstacles = obstacles;
     }
 
-
     public void addRunway(Runway run)
 	{
 		if (run == null) {
@@ -105,6 +104,19 @@ public class Airport
 
 		runwayPositions.put(toAdd.getName(), otherRunStart);
 		this.runways.add(toAdd);
+	}
+
+	public void addRunwaysWithIntersections(Runway oldRun, List<Integer> intersectionPoints, List<Runway> toAdd, List<Integer> newRunIntersections)
+	{ // intersectionPoint: 	distance from start of left threshold in oldRun that an intersection occurs
+	  // newRunIntersection:	distance from start of left runway in toAdd that an intersection occurs
+		Point runStart = runwayPositions.get(oldRun.getName());
+
+		for (int i = 0; i < intersectionPoints.size(); i++) {
+			Point otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoints.get(i), toAdd.get(i), newRunIntersections.get(i));
+
+			runwayPositions.put(toAdd.get(i).getName(), otherRunStart);
+			this.runways.add(toAdd.get(i));
+		}
 	}
 
 	public Map<Runway, Point> getIntersectingRunways(Runway run)
