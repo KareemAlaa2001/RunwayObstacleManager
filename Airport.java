@@ -92,7 +92,7 @@ public class Airport
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
-		runwayPositions.put(run.getName(), new Point(10000 * runways.size(), 10000 * runways.size()));
+		runwayPositions.put(run.getName(), new Point(1000000 * runways.size(), 1000000 * runways.size()));
 		
 		this.runways.add(run);
 	}
