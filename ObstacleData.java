@@ -1,7 +1,8 @@
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import java.awt.Point;
 
 @XmlRootElement(name = "obstacle")
 public class ObstacleData

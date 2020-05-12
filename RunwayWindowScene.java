@@ -98,11 +98,7 @@ public class RunwayWindowScene extends WindowScene
         addIntButton.setOnAction(e -> {
             if (run1IntPoint.getText().isEmpty() || run2IntPoint.getText().isEmpty()
                     || runwaySelectCombo.getValue().isEmpty() || runSelectCombo2.getValue().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("You are not able to add an intersection");
-                alert.setContentText("Please select the runways with intersections and enter the respective locations");
-                alert.showAndWait();
+                generateAlert("You are not able to add an intersection","Please select the runways with intersections and enter the respective locations");
             } else if (runwaySelectCombo.getValue().equals(runSelectCombo2.getValue())) {
                 generateAlert("You are not able to add an intersection","Can't have an intersection within the same runway!");
             } else {
@@ -123,7 +119,18 @@ public class RunwayWindowScene extends WindowScene
             if (selectedRunwayTextField.getText().isEmpty()) {
                 generateAlert("You are not able to add a runway","Please choose a file");
             } else {
-                //  TODO IMPLEMENT XML RUNWAY
+                String filePath = selectedRunwayTextField.getText();
+                try {
+                    Runway importedRun = XMLLoader.importRunway(filePath);
+                    selectedRunwayTextField.clear();
+                    selectedRunwayTextField.setStyle("-fx-background-color: white");
+
+                    addRunway(importedRun);
+                } catch (JAXBException jaxbException) {
+                    generateAlert("Unable to load airport", "There is a problem with the contents of the specified file");
+                } catch (FileNotFoundException fnfe) {
+                    generateAlert("Unable to load airport", "The specified file path is incorrect");
+                }
             }
         });
 

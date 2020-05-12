@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
+import javax.xml.bind.JAXBException;
 
 public class MainWindowScene extends WindowScene {
     
@@ -132,9 +137,9 @@ public class MainWindowScene extends WindowScene {
         addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
 
-        Label obsHeightLabel = new Label("Obstacle Height: ");
-        Label obsDistLabel = new Label("Obstacle Distance along runway: ");
-        Label obsCentrelineLabel = new Label("Obstacle Distance From Centreline:");
+        Label obsHeightLabel = new Label("Obstacle height: ");
+        Label obsDistLabel = new Label("Distance along runway: ");
+        Label obsCentrelineLabel = new Label("Distance from centreline:");
 
         Button addObstacleButton = new Button("Add Obstacle");
         addObstacleButton.setOnAction(e -> {
@@ -163,21 +168,49 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
-        // TODO reimplement this for sprint 3
         Button rmObstacles = new Button("Remove obstacle");
         rmObstacles.setOnAction(e -> {
             if (runwaySelectionBox.getValue().isEmpty()) {
                 generateAlert("Unable to remove obstacle", "You must first select a runway");
-            } else if (obstacleSelectionBox.getValue().isEmpty()) {
+            } else if (obstacleSelectionBox.getValue() == null || obstacleSelectionBox.getValue().isEmpty()) {
                 generateAlert("Unable to remove obstacle", "Yout must first select an obstacle to remove");
             } else {
                 String runName = runwaySelectionBox.getValue();
                 String obsName = obstacleSelectionBox.getValue();
-                ap.clearRunway(runName);
+                ap.removeObstacle(Airport.findObstacleByName(obsName, ap.getObstacles()));
+                obstacleSelectionBox.getItems().remove(obsName);
                 updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
             }
         });
 
+        Button clearRunway = new Button("Clear runway");
+        clearRunway.setOnAction(e -> {
+            if(runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
+                generateAlert("Unable to clear runway", "You must first select a runway");
+            } else {
+                String runName = runwaySelectionBox.getValue();
+                ap.clearRunway(runName);
+                obstacleSelectionBox.getItems().clear();
+                updateCanvas(emptyPane, currentCanvas, currentScroll, currentXOffset, currentYOffset, rotateSelect.isSelected(), hideObsSelect.isSelected());
+            }
+        });
+
+        Button exportButton = new Button("Export airport configuration");
+        exportButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Airport");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                    "XML files (*.xml)", "*.xml");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showSaveDialog(getAppStage());
+            if (file != null) {
+                try {
+                    XMLLoader.exportAirport(this.ap,file.getPath());
+                } catch (JAXBException ex) {
+                    generateAlert("Unable to export airport", "There was a problem with exporting the airport to XML");
+                }
+            }
+        });
 
         TabPane tabPane = new TabPane();
         Tab outputTab = new Tab("Output");
@@ -226,7 +259,7 @@ public class MainWindowScene extends WindowScene {
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
 
-        gridPane.add(emptyPane, 0, 0, 1, 9);
+        gridPane.add(emptyPane, 0, 0, 1, 15);
         gridPane.add(new Label("Select Runway:"), 1, 0);
         gridPane.add(runwaySelectionBox, 2, 0);
         gridPane.add(rotateSelect, 1, 1, 2, 1);
@@ -234,9 +267,9 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(obstacleLocationInput, 2, 4, 1, 1);
         gridPane.add(obsCentrelineInput, 3, 4);
         gridPane.add(addObstacleButton, 1, 5, 2, 1);
-        gridPane.add(tabPane, 1, 7, 5, 2);
-        gridPane.add(toRunwayScene, 2, 8);
-        gridPane.add(toAirportScene, 3, 8);
+        gridPane.add(tabPane, 1, 8, 5, 5);
+        gridPane.add(toRunwayScene, 2, 12);
+        gridPane.add(toAirportScene, 3, 12);
         gridPane.add(addObstacle, 1, 2, 2, 1);
         gridPane.add(obsHeightLabel, 1, 3, 1,1);
         gridPane.add(obsDistLabel, 2, 3, 1,1);
@@ -245,6 +278,8 @@ public class MainWindowScene extends WindowScene {
         gridPane.add(rmObsLabel, 2,5);
         gridPane.add(obstacleSelectionBox, 3,5);
         gridPane.add(hideObsSelect, 1, 6);
+        gridPane.add(clearRunway, 1, 7);
+        gridPane.add(exportButton, 1,13);
         scene = new Scene(gridPane);
 
         this.setAirport(airp);

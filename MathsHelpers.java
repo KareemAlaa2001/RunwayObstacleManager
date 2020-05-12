@@ -1,6 +1,5 @@
 import java.lang.Math;
 
-import java.awt.Point;
 
 public class MathsHelpers
 {

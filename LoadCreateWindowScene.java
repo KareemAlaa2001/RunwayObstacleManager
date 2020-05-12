@@ -1,5 +1,6 @@
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +13,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.xml.bind.JAXBException;
 
 
 public class LoadCreateWindowScene extends WindowScene {
@@ -107,13 +110,18 @@ public class LoadCreateWindowScene extends WindowScene {
 
         loadAirportButton.setOnAction(e -> {
             if (selectedAirportTextField.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("You are not able to load an airport");
-                alert.setContentText("Please choose a file");
-                alert.showAndWait();
+                generateAlert("Unable to load airport","Please choose a file");
             } else {
-                // TODO  fill in functionality
+                String filePath = selectedAirportTextField.getText();
+                try {
+                    Airport importedAp = XMLLoader.importAirport(filePath);
+                    selectedAirportTextField.clear();
+                    InputScreenController.goToRunwayScreen(importedAp);
+                } catch (JAXBException jaxbException) {
+                    generateAlert("Unable to load airport", "There is a problem with the contents of the specified file");
+                } catch (FileNotFoundException fnfe) {
+                    generateAlert("Unable to load airport", "The specified file path is incorrect");
+                }
             }
         });
 

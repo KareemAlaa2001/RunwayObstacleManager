@@ -1,5 +1,3 @@
-import java.awt.Point;
-
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -7,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "runway")
-@XmlType(propOrder = { "name", "gradedArea", "leftBearing", "runL", "runR"})
+@XmlType(propOrder = { "name", "gradedArea", "leftBearing", "rightBearing", "runL", "runR"})
 public class Runway
 {
 	private String name;

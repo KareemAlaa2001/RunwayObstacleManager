@@ -1,7 +1,5 @@
 
 import java.util.List;
-
-import java.awt.Point;
 import java.util.ArrayList;
 
 import javafx.scene.canvas.Canvas;

@@ -1,6 +1,6 @@
 import java.util.*;
 import javax.xml.bind.annotation.*;
-import java.awt.Point;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlRootElement
 @XmlType(propOrder = { "resa", "stripEnd", "blastAllowance", "minSlope", "runways","runwayPositions","obstacles"})
@@ -63,8 +63,7 @@ public class Airport
 		return this.MinSlope;
 	}
 
-	@XmlElementWrapper(name = "runwayPositions")
-	@XmlElement(name = "runwayPosition")
+	@XmlElement
 	public Map<String,Point> getRunwayPositions() {
 	    return this.runwayPositions;
     }
@@ -215,7 +214,7 @@ public class Airport
 		}
 	}
 
-	private void addObstacle(ObstacleData OD)
+	public void addObstacle(ObstacleData OD)
 	{
 		obstacles.add(OD);
 		for (Runway run : runways) {
@@ -242,4 +241,13 @@ public class Airport
 
 		throw new IllegalArgumentException("Runway name doesn't match that of any runways in the passed list!");
 	}
+
+	public static ObstacleData findObstacleByName(String obsName, List<ObstacleData> obstacles ) {
+        for (ObstacleData obstacleData: obstacles) {
+            if (obstacleData.getName().equals(obsName)) return obstacleData;
+        }
+
+        throw new IllegalArgumentException("Runway name doesn't match that of any runways in the passed list!");
+    }
+
 }

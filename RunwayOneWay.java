@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 import java.util.ArrayList;
 
-import java.awt.Point;
 
 @XmlRootElement(name = "runwayoneway")
 @XmlType(propOrder = { "name", "runwaySpec", "updatedRunway", "impactfulObstacles","otherObstacles"})
