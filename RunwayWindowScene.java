@@ -97,7 +97,7 @@ public class RunwayWindowScene extends WindowScene
 
         addIntButton.setOnAction(e -> {
             if (run1IntPoint.getText().isEmpty() || run2IntPoint.getText().isEmpty()
-                    || runwaySelectCombo.getValue().isEmpty() || runSelectCombo2.getValue().isEmpty()) {
+                    || runwaySelectCombo.getValue() == null || runwaySelectCombo.getValue().isEmpty() || runSelectCombo2.getValue() == null  || runSelectCombo2.getValue().isEmpty() ) {
                 generateAlert("You are not able to add an intersection","Please select the runways with intersections and enter the respective locations");
             } else if (runwaySelectCombo.getValue().equals(runSelectCombo2.getValue())) {
                 generateAlert("You are not able to add an intersection","Can't have an intersection within the same runway!");
@@ -116,7 +116,7 @@ public class RunwayWindowScene extends WindowScene
 
 
         addRunway.setOnAction(e -> {
-            if (selectedRunwayTextField.getText().isEmpty()) {
+            if (selectedRunwayTextField.getText() == null || selectedRunwayTextField.getText().isEmpty()) {
                 generateAlert("You are not able to add a runway","Please choose a file");
             } else {
                 String filePath = selectedRunwayTextField.getText();
@@ -466,27 +466,27 @@ public class RunwayWindowScene extends WindowScene
                     else {
                         ap.addRunway(run);
                         addedRunways.add(run);
-                        System.out.println("Reached here but not supposed to (this time) ");
                     }
                 }
             }
         }
 
+        rmDuplicateRunways(ap);
+
         InputScreenController.goToMainScene(ap);
     }
 
-    //  TODO complete implementation to throw alert window
-    private Runway importRunway(String filePath) {
-        Runway imported = null;
-        try {
-            imported = InputScreenController.importRunway(filePath);
-        } catch (FileNotFoundException fnfe) {
-            return null;
-        } catch (JAXBException je) {
-            return null;
+    private void rmDuplicateRunways(Airport ap) {
+        List<Runway> runwaysToRm = new ArrayList<>();
+        for (int i = 0; i < ap.getRunways().size()-1; i++) {
+            for (int j = 1; j < ap.getRunways().size(); j++) {
+                if (ap.getRunways().get(i).equals(ap.getRunways().get(j)) && !runwaysToRm.contains(ap.getRunways().get(j))) runwaysToRm.add(ap.getRunways().get(j));
+            }
         }
 
-        return imported;
+        for (Runway r: runwaysToRm) {
+            ap.getRunways().remove(r);
+        }
     }
 
 }
