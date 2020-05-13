@@ -100,13 +100,19 @@ public class RunwayWindowScene extends WindowScene
                     || runwaySelectCombo.getValue() == null || runwaySelectCombo.getValue().isEmpty() || runSelectCombo2.getValue() == null  || runSelectCombo2.getValue().isEmpty() ) {
                 generateAlert("You are not able to add an intersection","Please select the runways with intersections and enter the respective locations");
             } else if (runwaySelectCombo.getValue().equals(runSelectCombo2.getValue())) {
-                generateAlert("You are not able to add an intersection","Can't have an intersection within the same runway!");
+                generateAlert("You are not able to add an intersection", "Can't have an intersection within the same runway!");
+            } else if (((getRunByName(runwaySelectCombo.getValue()).getLeftBearing() + 18) % 36) == getRunByName(runSelectCombo2.getValue()).getLeftBearing()) {
+                generateAlert("You are not able to add an intersection", "Can't have an intersection between parallel runways!");
             } else {
                 String run1Name = runwaySelectCombo.getValue();
                 String run2Name = runSelectCombo2.getValue();
                 int run1Dist = Integer.parseInt(run1IntPoint.getText());
                 int run2Dist = Integer.parseInt(run2IntPoint.getText());
 
+                if (run1Dist > getRunByName(run1Name).getRunL().getRunwaySpec().TORA || run2Dist > getRunByName(run2Name).getRunL().getRunwaySpec().TORA) {
+                    generateAlert("You are not able to add an intersection", "Can't have an intersection distance larger than the runway length!");
+                    return;
+                }
                 addIntersection(getRunByName(run1Name),getRunByName(run2Name),run1Dist,run2Dist);
 
                 run1IntPoint.clear();
@@ -393,36 +399,12 @@ public class RunwayWindowScene extends WindowScene
         InputScreenController.goToLoadCreateWindowScene();
     }
 
-    private Intersection findIntersection(Runway run) {
-        for (Intersection intersection : this.intersections) {
-            if (intersection.isInvolved(run)) return intersection;
-        }
-
-        throw new IllegalArgumentException("Runway has no intersections!");
-    }
-
-    private void addIntersectingRunways(Airport ap, Runway oldRun) {
-        List<Integer> intersectionPoints = new ArrayList<>();
-        List<Runway> runwaysToAdd = new ArrayList<>();
-        List<Integer> newRunIntersections = new ArrayList<>();
-
-        //TODO
-    }
-
     private List<Intersection> findAllIntersections(Runway run, List<Runway> runways, List<Intersection> intersections) {
         List<Intersection> runIntersections = new ArrayList<>();
         for (Intersection intersection : intersections) {
             if (intersection.isInvolved(run) && runways.contains(intersection.getOtherRunway(run))) runIntersections.add(intersection);
         }
         return runIntersections;
-    }
-
-    private List<Intersection> findInCommon(List<Intersection> list1, List<Intersection> list2 ) {
-        List<Intersection> inCommon = new ArrayList<>();
-        for(Intersection i1: list1) {
-            if (list2.contains(i1)) inCommon.add(i1);
-        }
-        return inCommon;
     }
 
     private List<Intersection> findNotInCommon(List<Intersection> list1, List<Intersection> list2 ) {
@@ -471,22 +453,8 @@ public class RunwayWindowScene extends WindowScene
             }
         }
 
-        rmDuplicateRunways(ap);
 
         InputScreenController.goToMainScene(ap);
-    }
-
-    private void rmDuplicateRunways(Airport ap) {
-        List<Runway> runwaysToRm = new ArrayList<>();
-        for (int i = 0; i < ap.getRunways().size()-1; i++) {
-            for (int j = 1; j < ap.getRunways().size(); j++) {
-                if (ap.getRunways().get(i).equals(ap.getRunways().get(j)) && !runwaysToRm.contains(ap.getRunways().get(j))) runwaysToRm.add(ap.getRunways().get(j));
-            }
-        }
-
-        for (Runway r: runwaysToRm) {
-            ap.getRunways().remove(r);
-        }
     }
 
 }
