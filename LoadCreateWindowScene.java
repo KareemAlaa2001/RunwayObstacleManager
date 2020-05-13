@@ -30,7 +30,7 @@ public class LoadCreateWindowScene extends WindowScene {
         gridCreateScene.setPadding(new Insets(25, 25, 25, 25));
         
         //all buttons
-        Button chooseAirportFile = new Button("Choose XML file");
+        Button chooseAirportFile = new Button("Choose XML File");
         Button loadAirportButton = new Button("Load Airport");
         Button createAirportButton = new Button("Create Airport");
         Button quickCreate = new Button("Quick Create Airport");
@@ -149,7 +149,7 @@ public class LoadCreateWindowScene extends WindowScene {
         }));
 
         //just text
-        Text welcomeText = new Text("Welcome to the runway redeclaration tool");
+        Text welcomeText = new Text("Welcome to the Runway Redeclaration Tool");
         welcomeText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 22));
         gridCreateScene.add(welcomeText, 0, 0, 3, 1);
 

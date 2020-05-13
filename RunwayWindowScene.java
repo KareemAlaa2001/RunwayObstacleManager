@@ -47,13 +47,14 @@ public class RunwayWindowScene extends WindowScene
         gridAddRunways.setPadding(new Insets(25, 25, 25, 25));
 
         //all buttons
-        Button chooseRunwayFile = new Button("Choose XML file(s)");
-        Button addRunwayManually = new Button("Add runway to the airport");
-        Button addRunway = new Button("Add runway to the airport");
+        Button chooseRunwayFile = new Button("Choose XML File(s)");
+        Button addRunwayManually = new Button("Add Runway to the Airport");
+        Button addRunway = new Button("Add Runway to the Airport");
         Button finish = new Button("Finish");
         Button back = new Button("<-- Back");
-        Button quickAdd = new Button("Quick add runways");
+        Button quickAdd = new Button("Quick Add Runways");
         Button removeSelected = new Button("Remove Selected Runway");
+        removeSelected.setTooltip(new Tooltip("Runway selected in drop down to the left"));
         Button addIntButton = new Button("Add Intersection");
 
         HBox hbChooseRunway = new HBox(10);
@@ -92,8 +93,10 @@ public class RunwayWindowScene extends WindowScene
         TextField clearway2 = initNumTextField("No value given");
 
         TextField run1IntPoint = initNumTextField("No value given");
+        run1IntPoint.setTooltip(new Tooltip("Distance of the intersection from the left threshold of selected runway (drop down above)"));
 
         TextField run2IntPoint = initNumTextField("No value given");
+        run2IntPoint.setTooltip(new Tooltip("Distance of the intersection from the left threshold of selected runway (drop down above)"));
 
         addIntButton.setOnAction(e -> {
             if (run1IntPoint.getText().isEmpty() || run2IntPoint.getText().isEmpty()
@@ -187,11 +190,11 @@ public class RunwayWindowScene extends WindowScene
 
 
         //just text
-        Text loadRunways = new Text("Add existing runways to the airport");
+        Text loadRunways = new Text("Add Existing Runways to the Airport");
         loadRunways.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         gridAddRunways.add(loadRunways, 0, 0, 3, 1);
 
-        Text createRunways = new Text("Create new runways");
+        Text createRunways = new Text("Create New Runways");
         createRunways.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         gridAddRunways.add(createRunways, 0, 3, 2, 1);
 
@@ -218,10 +221,10 @@ public class RunwayWindowScene extends WindowScene
         Label selectIntRunLabel = new Label("Select Intersecting Runways:");
         gridAddRunways.add(selectIntRunLabel,0,11);
 
-        Label newRunIntLabel = new Label("Intersection locations:");
+        Label newRunIntLabel = new Label("Intersection Locations:");
         gridAddRunways.add(newRunIntLabel, 0,12);
 
-        Label currRuns = new Label ("Runways Currently in airport: ");
+        Label currRuns = new Label ("Runways Currently in Airport: ");
         gridAddRunways.add(currRuns, 0, 14);
 
 
