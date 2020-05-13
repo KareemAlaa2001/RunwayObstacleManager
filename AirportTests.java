@@ -1,29 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import java.util.*;
 
 public class AirportTests
-{ /*
-    @Test
-    public void createAirportFromRunways()
-    {
-        boolean nulll = false;
-        boolean none = false;
-        try {
-            Airport a = new Airport(null);
-        } catch (Exception e) {
-            nulll = true;
-        }
-        try {
-            Airport a = new Airport(new ArrayList<Runway>());
-        } catch (Exception e) {
-            none = true;
-        }
-        assertTrue(nulll);
-        assertTrue(none);
-    }
-
+{
     @Test
     public void createAirportBoundary()
     {
@@ -69,12 +49,8 @@ public class AirportTests
     @Test
     public void addRetreiveRunways()
     {
-        Airport ap1 = null;
-        ArrayList<Runway> runwayList = new ArrayList<Runway>();
-        try {
-            runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
-            ap1 = new Airport(runwayList);
-        } catch (Exception e) {}
+    	Airport ap1 = new Airport(240, 60, 300, 50);
+    	ap1.addRunway(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
 
         RunwayOneWay rw = null;
         try {
@@ -89,12 +65,8 @@ public class AirportTests
     @Test
     public void addRetreiveRunwaysFull()
     {
-        Airport ap1 = null;
-        ArrayList<Runway> runwayList = new ArrayList<Runway>();
-        try {
-            runwayList.add(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
-            ap1 = new Airport(runwayList);
-        } catch (Exception e) {}
+        Airport ap1 = new Airport(240, 60, 300, 50);
+        ap1.addRunway(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
 
         try {
             RunwayOneWay rw1 = null;
@@ -109,5 +81,5 @@ public class AirportTests
             assertTrue(rw1 == rwO.getRunL());
             assertTrue(rw2 == rwO.getRunR());
         } catch (Exception e) {}
-    } */
+    }
 }
