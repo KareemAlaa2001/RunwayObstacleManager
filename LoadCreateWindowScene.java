@@ -186,18 +186,16 @@ public class LoadCreateWindowScene extends WindowScene {
         Label defSlope = new Label("" + Airport.MinSlope);
 
         //file choosers with filters
-        FileChooser xmlFileChooser = new FileChooser();
         FileChooser airportFileChooser = new FileChooser();
         FileChooser.ExtensionFilter xmlExtensionFilter = new FileChooser.ExtensionFilter(
                 "XML Files (*.xml)", "*.xml");
-        xmlFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
         
         chooseAirportFile.setOnAction(e -> {
             File selectedAirportFile = airportFileChooser.showOpenDialog(getAppStage());
-            selectedAirportTextField.setText(selectedAirportFile.getName());
+            selectedAirportTextField.setText(selectedAirportFile.getPath());
             selectedAirportTextField.setStyle("-fx-background-color: yellowgreen");
-            selectedAirportTextField.setStyle("-fx-opacity: 1;");
+            selectedAirportTextField.setDisable(true);
         });
         
         scene = new Scene(gridCreateScene, 300, 250);

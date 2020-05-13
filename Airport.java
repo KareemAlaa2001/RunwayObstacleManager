@@ -86,13 +86,12 @@ public class Airport
         this.obstacles = obstacles;
     }
 
-
     public void addRunway(Runway run)
 	{
 		if (run == null) {
 			throw new IllegalArgumentException("Error adding runways to airport");
 		}
-		runwayPositions.put(run.getName(), new Point(10000 * runways.size(), 10000 * runways.size()));
+		runwayPositions.put(run.getName(), new Point(1000000 * runways.size(), 1000000 * runways.size()));
 		
 		this.runways.add(run);
 	}
@@ -105,6 +104,19 @@ public class Airport
 
 		runwayPositions.put(toAdd.getName(), otherRunStart);
 		this.runways.add(toAdd);
+	}
+
+	public void addRunwaysWithIntersections(Runway oldRun, List<Integer> intersectionPoints, List<Runway> toAdd, List<Integer> newRunIntersections)
+	{ // intersectionPoint: 	distance from start of left threshold in oldRun that an intersection occurs
+	  // newRunIntersection:	distance from start of left runway in toAdd that an intersection occurs
+		Point runStart = runwayPositions.get(oldRun.getName());
+
+		for (int i = 0; i < intersectionPoints.size(); i++) {
+			Point otherRunStart = MathsHelpers.calculatePositionFromIntersection(runStart, oldRun, intersectionPoints.get(i), toAdd.get(i), newRunIntersections.get(i));
+
+			runwayPositions.put(toAdd.get(i).getName(), otherRunStart);
+			this.runways.add(toAdd.get(i));
+		}
 	}
 
 	public Map<Runway, Point> getIntersectingRunways(Runway run)
@@ -155,7 +167,7 @@ public class Airport
 	public Runway getRunwayFull(String name)
 	{
 		if (name == null) {
-			throw new IllegalArgumentException("No name give for runway");
+			throw new IllegalArgumentException("No name given for runway");
 		}
 		for (Runway run : runways) {
 			if (run.getName().equals(name)) {
@@ -247,7 +259,7 @@ public class Airport
             if (obstacleData.getName().equals(obsName)) return obstacleData;
         }
 
-        throw new IllegalArgumentException("Runway name doesn't match that of any runways in the passed list!");
+        throw new IllegalArgumentException("Obstacle name doesn't match that of any obstacles in the passed list!");
     }
 
 }

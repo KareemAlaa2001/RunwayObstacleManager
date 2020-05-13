@@ -172,10 +172,14 @@ public class RunwayWindowScene extends WindowScene
 
 
         quickAdd.setOnAction(e -> {
-            addRunway(new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884)));
-            addRunway(new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353)));
-            addRunway(new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660)));
-            
+            Runway r3 = new Runway(16, new RunwayData(0, 3660, 4060, 3860, 3660), new RunwayData(307, 3660, 3660, 3660, 3660));
+            Runway r1 = new Runway(9, new RunwayData(306, 3902, 3902, 3902, 3595), new RunwayData(0, 3884, 3962, 3884, 3884));
+            addRunway(r3);
+            Runway r2 = new Runway(27, new RunwayData(0, 3660, 3660, 3660, 3660), new RunwayData(307, 3660, 3660, 3660, 3353));
+            addRunway(r2);
+            addRunway(r1);
+            addIntersection(r3, r2, 3000,1500);
+            addIntersection(r3, r1,1000,2000);
             goToMainScene(ap);
         });
 
@@ -268,15 +272,13 @@ public class RunwayWindowScene extends WindowScene
 
         //file choosers with filters
         FileChooser xmlFileChooser = new FileChooser();
-        FileChooser airportFileChooser = new FileChooser();
         FileChooser.ExtensionFilter xmlExtensionFilter = new FileChooser.ExtensionFilter(
                 "XML Files (*.xml)", "*.xml");
         xmlFileChooser.getExtensionFilters().add(xmlExtensionFilter);
-        airportFileChooser.getExtensionFilters().add(xmlExtensionFilter);
-        
+
         chooseRunwayFile.setOnAction(e -> {
             File selectedRunwayFile = xmlFileChooser.showOpenDialog(getAppStage());
-            selectedRunwayTextField.setText(selectedRunwayFile.getName());
+            selectedRunwayTextField.setText(selectedRunwayFile.getPath());
             selectedRunwayTextField.setStyle("-fx-background-color: yellowgreen");
         });
         
@@ -399,22 +401,73 @@ public class RunwayWindowScene extends WindowScene
         throw new IllegalArgumentException("Runway has no intersections!");
     }
 
-    //TODO
+    private void addIntersectingRunways(Airport ap, Runway oldRun) {
+        List<Integer> intersectionPoints = new ArrayList<>();
+        List<Runway> runwaysToAdd = new ArrayList<>();
+        List<Integer> newRunIntersections = new ArrayList<>();
+
+        //TODO
+    }
+
+    private List<Intersection> findAllIntersections(Runway run, List<Runway> runways, List<Intersection> intersections) {
+        List<Intersection> runIntersections = new ArrayList<>();
+        for (Intersection intersection : intersections) {
+            if (intersection.isInvolved(run) && runways.contains(intersection.getOtherRunway(run))) runIntersections.add(intersection);
+        }
+        return runIntersections;
+    }
+
+    private List<Intersection> findInCommon(List<Intersection> list1, List<Intersection> list2 ) {
+        List<Intersection> inCommon = new ArrayList<>();
+        for(Intersection i1: list1) {
+            if (list2.contains(i1)) inCommon.add(i1);
+        }
+        return inCommon;
+    }
+
+    private List<Intersection> findNotInCommon(List<Intersection> list1, List<Intersection> list2 ) {
+        List<Intersection> notInCommon = new ArrayList<>();
+        for(Intersection i1: list1) {
+            if (!list2.contains(i1)) notInCommon.add(i1);
+        }
+        return notInCommon;
+    }
+
+
     private void goToMainScene(Airport ap) {
         ap.setRunways(new ArrayList<>());
         if (runwayList.size() == 0) {
             return;
         } else {
             ap.addRunway(runwayList.get(0));
+            List<Intersection> addedIntersections = new ArrayList<>();
+            List<Runway> addedRunways = new ArrayList<>();
+            /* IDEA:    For each runway we add, we find the intersections it has with other runways in the list,
+            where we keep track of added runways and added intersections accordingly */
+            for (Runway run: runwayList) {
+                if (hasIntersection(run,runwayList)) {
+                    List<Integer> intersectionPoints = new ArrayList<>();
+                    List<Runway> runwaysToAdd = new ArrayList<>();
+                    List<Integer> newRunIntersections = new ArrayList<>();
 
-            for (int i = 1; i < runwayList.size(); i++) {
-                Runway currun = runwayList.get(i);
+                    List<Intersection> runIntersections = findAllIntersections(run, runwayList, intersections);
+                    List<Intersection> notInAdded = findNotInCommon(runIntersections, addedIntersections);
+                    for (Intersection i: notInAdded) {
+                        intersectionPoints.add(i.getRunwayDistance(run));
+                        newRunIntersections.add(i.getRunwayDistance(i.getOtherRunway(run)));
+                        runwaysToAdd.add(i.getOtherRunway(run));
+                        addedIntersections.add(i);
+                        addedRunways.add(i.getOtherRunway(run));
+                    }
+                    ap.addRunwaysWithIntersections(run, intersectionPoints,runwaysToAdd,newRunIntersections);
 
-                if (hasIntersection(currun,runwayList.subList(0,i))) {
-                    Intersection intersection = findIntersection(currun);
-                    ap.addRunway(intersection.getOtherRunway(currun), intersection.getRunwayDistance(intersection.getOtherRunway(currun)), currun, intersection.getRunwayDistance(currun));
                 } else {
-                    ap.addRunway(currun);
+                    if (addedRunways.contains(run)) {}
+                    else {
+                        ap.addRunway(run);
+                        addedRunways.add(run);
+                        System.out.println("Reached here but not supposed to (this time) ");
+                    }
                 }
             }
         }
