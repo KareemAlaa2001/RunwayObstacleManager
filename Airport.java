@@ -198,7 +198,6 @@ public class Airport
 			throw new IllegalArgumentException("No runway specified to add obstacle to");
 		}
 		
-		// System.out.println("Obstacle Position: " + toAdd.position.x + ", " + toAdd.position.y + "\nRunway Position: " + runwayPositions.get(runName).x + ", " + runwayPositions.get(runName).y);
 		if (left) {
 			addObstacle(new ObstacleData(MathsHelpers.calculatePosition(getRunwayFull(runName).getLeftBearing(), runwayPosition, distanceFromCentreLine, runwayPositions.get(runName)), height, distanceFromCentreLine));
 		} else {
@@ -215,6 +214,8 @@ public class Airport
 			}
 		}
 		obstacles.removeAll(obstaclesToRemove);
+
+		MainWindowController.addActivityText("Removed all obstacles near runway " + runName);
 	}
 
 	public void removeObstacle(ObstacleData OD)
