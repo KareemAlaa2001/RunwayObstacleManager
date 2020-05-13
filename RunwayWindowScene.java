@@ -427,6 +427,7 @@ public class RunwayWindowScene extends WindowScene
             ap.addRunway(runwayList.get(0));
             List<Intersection> addedIntersections = new ArrayList<>();
             List<Runway> addedRunways = new ArrayList<>();
+            addedRunways.add(runwayList.get(0));
             /* IDEA:    For each runway we add, we find the intersections it has with other runways in the list,
             where we keep track of added runways and added intersections accordingly */
             for (Runway run: runwayList) {
