@@ -66,7 +66,7 @@ public class MainWindowScene extends WindowScene {
         emptyPane.setPrefSize(1100, 900);
 
         CheckBox rotateSelect = new CheckBox("Rotate Runway");
-        CheckBox hideObsSelect = new CheckBox("Hide obstacles");
+        CheckBox hideObsSelect = new CheckBox("Hide Obstacles");
 
         RunwayCanvas defaultCanvas = new RunwayCanvas(1100, 900);
         emptyPane.getChildren().add(defaultCanvas);
@@ -170,13 +170,13 @@ public class MainWindowScene extends WindowScene {
         TextField obstacleLocationInput = initNumTextField("Enter obstacle distance from start of runway");
         TextField obsCentrelineInput = initNumTextField("Enter obstacle distance from centreline");
 
-        Text addObstacle = new Text("Add a new obstacle: ");
+        Text addObstacle = new Text("Add a new Obstacle: ");
         addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         
-        Text removeObstacle = new Text("Remove obstacles: ");
+        Text removeObstacle = new Text("Remove Obstacles: ");
         removeObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         
-        Text selectRunwayLabel = new Text("Select runway: ");
+        Text selectRunwayLabel = new Text("Select Runway: ");
         selectRunwayLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         
         Text viewOptions = new Text("View Options: ");
@@ -185,9 +185,9 @@ public class MainWindowScene extends WindowScene {
         Text obstaclePresets = new Text("Obstacle Presets:");
         obstaclePresets.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
-        Label obsHeightLabel = new Label("Obstacle height: ");
-        Label obsDistLabel = new Label("Distance along runway: ");
-        Label obsCentrelineLabel = new Label("Distance from centreline:");
+        Label obsHeightLabel = new Label("Obstacle Height: ");
+        Label obsDistLabel = new Label("Distance Along Runway: ");
+        Label obsCentrelineLabel = new Label("Distance From Centreline:");
 
         Button addObstacleButton = new Button("Add Obstacle");
         addObstacleButton.setOnAction(e -> {
@@ -216,7 +216,7 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
-        Button rmObstacles = new Button("Remove obstacle");
+        Button rmObstacles = new Button("Remove Obstacle");
         rmObstacles.setOnAction(e -> {
             if (runwaySelectionBox.getValue().isEmpty()) {
                 generateAlert("Unable to remove obstacle", "You must first select a runway");
@@ -231,7 +231,7 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
-        Button clearRunway = new Button("Clear runway");
+        Button clearRunway = new Button("Clear Runway");
         clearRunway.setOnAction(e -> {
             if (runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
                 generateAlert("Unable to clear runway", "You must first select a runway");
@@ -289,10 +289,10 @@ public class MainWindowScene extends WindowScene {
         activityScrollPane.setPrefHeight(700);
         activityTab.setContent(activityScrollPane);
 
-        Button toAirportScene = new Button("To airport scene");
+        Button toAirportScene = new Button("To Airport Scene");
         toAirportScene.setOnAction(e -> MainWindowController.goToCreateScreen());
 
-        Button toRunwayScene = new Button("To runway scene");
+        Button toRunwayScene = new Button("To Runway Scene");
         toRunwayScene.setOnAction(e -> MainWindowController.goToRunwayScreen(ap));
 
         hideObsSelect.setOnAction(new EventHandler<ActionEvent>() {
@@ -317,10 +317,10 @@ public class MainWindowScene extends WindowScene {
         buttonPane.add(obsCentrelineInput, 2, 3);
         buttonPane.add(addObstacleButton, 0, 4);
         buttonPane.add(removeObstacle, 0, 5);
-        buttonPane.add(new Label("Remove single obstacle:"), 0, 6);
+        buttonPane.add(new Label("Remove Single Obstacle:"), 0, 6);
         buttonPane.add(obstacleSelectionBox, 1, 6);
         buttonPane.add(rmObstacles, 2, 6);
-        buttonPane.add(new Label("Remove all obstacles:"), 0, 7);
+        buttonPane.add(new Label("Remove all Obstacles:"), 0, 7);
         buttonPane.add(clearRunway, 1, 7);
         buttonPane.add(obstaclePresets, 0, 8);
         buttonPane.add(presetSelectionBox, 1, 8);
