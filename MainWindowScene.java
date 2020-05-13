@@ -24,15 +24,17 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
 
 public class MainWindowScene extends WindowScene {
@@ -136,13 +138,13 @@ public class MainWindowScene extends WindowScene {
                         break;
                     case "Boeing 747 on right":
                         ap.clearRunway(runwaySelectionBox.getValue());
-                        ap.addObstacle(19, 
+                        ap.addObstacle(19,
                                 (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.9),
                                 0, runwaySelectionBox.getValue(), true);
                         break;
                     case "Luggage truck on left":
                         ap.clearRunway(runwaySelectionBox.getValue());
-                        ap.addObstacle(2, 
+                        ap.addObstacle(2,
                                 (int) ((ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().TORA - ap.getRunwayFull(runwaySelectionBox.getValue()).getRunL().getRunwaySpec().takeoffThreshold) * 0.2),
                                 0, runwaySelectionBox.getValue(), true);
                         break;
@@ -164,6 +166,18 @@ public class MainWindowScene extends WindowScene {
 
         Text addObstacle = new Text("Add a new obstacle: ");
         addObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        
+        Text removeObstacle = new Text("Remove obstacles: ");
+        removeObstacle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        
+        Text selectRunwayLabel = new Text("Select runway: ");
+        selectRunwayLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        
+        Text viewOptions = new Text("View Options: ");
+        viewOptions.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        
+        Text obstaclePresets = new Text("Obstacle Presets:");
+        obstaclePresets.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         Label obsHeightLabel = new Label("Obstacle height: ");
         Label obsDistLabel = new Label("Distance along runway: ");
@@ -244,28 +258,28 @@ public class MainWindowScene extends WindowScene {
         Tab outputTab = new Tab("Output");
         outputTab.setClosable(false);
         outputTextArea = new TextArea();
-        outputTextArea.setPrefWidth(800);
+        outputTextArea.setPrefWidth(500);
         outputTextArea.setWrapText(true);
         outputTextArea.setEditable(false);
 
         ScrollPane outputScrollPane = new ScrollPane();
         outputScrollPane.setContent(outputTextArea);
         outputScrollPane.setFitToWidth(true);
-        outputScrollPane.setPrefWidth(800);
+        outputScrollPane.setPrefWidth(500);
         outputScrollPane.setPrefHeight(700);
         outputTab.setContent(outputScrollPane);
 
         Tab activityTab = new Tab("Activity");
         activityTab.setClosable(false);
         activityTextArea = new TextArea();
-        activityTextArea.setPrefWidth(800);
+        activityTextArea.setPrefWidth(500);
         activityTextArea.setWrapText(true);
         activityTextArea.setEditable(false);
 
         ScrollPane activityScrollPane = new ScrollPane();
         activityScrollPane.setContent(activityTextArea);
         activityScrollPane.setFitToWidth(true);
-        activityScrollPane.setPrefWidth(800);
+        activityScrollPane.setPrefWidth(500);
         activityScrollPane.setPrefHeight(700);
         activityTab.setContent(activityScrollPane);
 
@@ -274,8 +288,6 @@ public class MainWindowScene extends WindowScene {
 
         Button toRunwayScene = new Button("To runway scene");
         toRunwayScene.setOnAction(e -> MainWindowController.goToRunwayScreen(ap));
-
-        Label rmObsLabel = new Label("Remove an obstacle: ");
 
         hideObsSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -287,29 +299,44 @@ public class MainWindowScene extends WindowScene {
         tabPane.getTabs().add(outputTab);
         tabPane.getTabs().add(activityTab);
 
-        gridPane.add(emptyPane, 0, 0, 1, 15);
-        gridPane.add(new Label("Select Runway:"), 1, 0);
-        gridPane.add(runwaySelectionBox, 2, 0);
-        gridPane.add(rotateSelect, 1, 1, 2, 1);
-        gridPane.add(obstacleHeightInput, 1, 4, 1, 1);
-        gridPane.add(obstacleLocationInput, 2, 4, 1, 1);
-        gridPane.add(obsCentrelineInput, 3, 4);
-        gridPane.add(addObstacleButton, 1, 5, 2, 1);
-        gridPane.add(tabPane, 1, 8, 5, 5);
-        gridPane.add(toRunwayScene, 2, 12);
-        gridPane.add(toAirportScene, 3, 12);
-        gridPane.add(addObstacle, 1, 2, 2, 1);
-        gridPane.add(presetSelectionBox, 2, 2, 2, 1);
-        gridPane.add(presetSetButton, 3, 2, 2, 1);
-        gridPane.add(obsHeightLabel, 1, 3, 1, 1);
-        gridPane.add(obsDistLabel, 2, 3, 1, 1);
-        gridPane.add(obsCentrelineLabel, 3, 3);
-        gridPane.add(rmObstacles, 4, 5, 1, 1);
-        gridPane.add(rmObsLabel, 2, 5);
-        gridPane.add(obstacleSelectionBox, 3, 5);
-        gridPane.add(hideObsSelect, 1, 6);
-        gridPane.add(clearRunway, 1, 7);
-        gridPane.add(exportButton, 1, 13);
+        GridPane buttonPane = new GridPane();
+        buttonPane.add(selectRunwayLabel, 0, 0);
+        buttonPane.add(runwaySelectionBox, 1, 0);
+        buttonPane.add(addObstacle, 0, 1);
+        buttonPane.add(obsHeightLabel, 0, 2);
+        buttonPane.add(obsDistLabel, 1, 2);
+        buttonPane.add(obsCentrelineLabel, 2, 2);
+        buttonPane.add(obstacleHeightInput, 0, 3);
+        buttonPane.add(obstacleLocationInput, 1, 3);
+        buttonPane.add(obsCentrelineInput, 2, 3);
+        buttonPane.add(addObstacleButton, 0, 4);
+        buttonPane.add(removeObstacle, 0, 5);
+        buttonPane.add(new Label("Remove single obstacle:"), 0, 6);
+        buttonPane.add(obstacleSelectionBox, 1, 6);
+        buttonPane.add(rmObstacles, 2, 6);
+        buttonPane.add(new Label("Remove all obstacles:"), 0, 7);
+        buttonPane.add(clearRunway, 1, 7);
+        buttonPane.add(obstaclePresets, 0, 8);
+        buttonPane.add(presetSelectionBox, 1, 8);
+        buttonPane.add(presetSetButton, 2, 8);
+        buttonPane.add(viewOptions, 0, 9);
+        buttonPane.add(hideObsSelect, 0, 10);
+        buttonPane.add(rotateSelect, 0, 11);
+        buttonPane.add(exportButton, 0, 12, 2, 1);
+        buttonPane.add(toRunwayScene, 0, 14);
+        buttonPane.add(toAirportScene, 1, 14);
+        
+        buttonPane.setAlignment(Pos.CENTER);
+        buttonPane.setHgap(10);
+        buttonPane.setVgap(10);
+        buttonPane.setAlignment(Pos.TOP_LEFT);
+
+        gridPane.add(emptyPane, 0, 0, 1, 2);
+        gridPane.add(buttonPane, 1, 0);
+        gridPane.add(tabPane, 1, 1);
+        gridPane.getColumnConstraints().add(new ColumnConstraints(1920 - 820));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(820));
+        gridPane.getRowConstraints().add(new RowConstraints(550));
         scene = new Scene(gridPane);
 
         this.setAirport(airp);
