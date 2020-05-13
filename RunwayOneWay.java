@@ -31,8 +31,7 @@ public class RunwayOneWay {
     }
 
     public void addObstacle(int distanceFromCentreLine, ObstacleData OD, int bearing, Point start) {
-        MainWindowController.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold " + distanceFromCentreLine + "m from the centreline.");
-        MainWindowController.addOutputText("");
+        MainWindowController.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + MathsHelpers.calculateDistance(OD, bearing, dataOriginal.TORA, start) + "m from threshold " + distanceFromCentreLine + "m from the centreline.");
         RunwayData newData = Functions.reCalculate(dataOriginal, MathsHelpers.calculateDistance(OD, bearing, dataOriginal.TORA, start), OD.maxHeight);
         
         if (newData == null) {
@@ -56,6 +55,7 @@ public class RunwayOneWay {
             throw new IllegalArgumentException("Trying to remove a null obstacle!");
         }
         if (otherObstacles.contains(OD) || impactfulObstacles.contains(OD)) {
+			MainWindowController.addActivityText("Removed obstacle " + OD.maxHeight + "m high from near runway " + name);
             MainWindowController.addOutputText("Re-calculating runway " + name + " due to the removal of the obstacle " + OD.maxHeight + "m high near to it.");
             MainWindowController.addOutputText("");
         } else {

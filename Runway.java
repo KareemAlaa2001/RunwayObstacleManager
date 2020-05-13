@@ -80,14 +80,12 @@ public class Runway
 		int distanceFromCentreLine = MathsHelpers.getDistanceFromCentreLine(OD, leftStart, rightStart);
 		RunL.removeObstacle(OD, distanceFromCentreLine, leftBearing, leftStart);
 		RunR.removeObstacle(OD, -distanceFromCentreLine, rightBearing, rightStart);
-		MainWindowController.addActivityText("Removed obstacle " + OD.maxHeight + "m high from near runway " + name);
 	}
 
 	public List<ObstacleData> clear()
 	{
 		List<ObstacleData> obs = RunL.clear();
 		obs.addAll(RunR.clear());
-		MainWindowController.addActivityText("Removed all obstacles near runway " + name);
 		return obs;
 	}
 
