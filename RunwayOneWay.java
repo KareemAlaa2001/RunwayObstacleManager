@@ -34,7 +34,7 @@ public class RunwayOneWay {
         MainWindowController.addOutputText("Re-Calculating Runway " + name + " due to Obstacle " + OD.maxHeight + "m high, " + OD.position + "m from threshold " + distanceFromCentreLine + "m from the centreline.");
         MainWindowController.addOutputText("");
         RunwayData newData = Functions.reCalculate(dataOriginal, MathsHelpers.calculateDistance(OD, bearing, dataOriginal.TORA, start), OD.maxHeight);
-
+        
         if (newData == null) {
             MainWindowController.addOutputText("Re-Calculating Runway " + name + " causes definate closure, new values are too extreme");
             MainWindowController.addOutputText("");

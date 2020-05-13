@@ -1,18 +1,11 @@
 import java.lang.Math;
 
-
 public class MathsHelpers
 {
 	public static void main(String[] args)
 	{ // For debugging, will be turned into unit test
-		/*
-		Point result = calculatePosition(1, 1000, 60, new Point(10,10));
-		System.out.println("Out: " + result.x + ", " + result.y);
-		*/
-
-		int result = getDistanceFromCentreLine(new ObstacleData(new Point(1000, 900), 10, 0), new Point(0, 0), new Point(3000, 2500));
-		System.out.println(result);
-		
+		System.out.println(MathsHelpers.calculatePosition(28, 1000, 60, new Point(10,10)).x + ", " + MathsHelpers.calculatePosition(28, 1000, 60, new Point(10,10)).y);
+		System.out.println(MathsHelpers.calculatePosition(35, 1000, 60, new Point(10,10)).x + ", " + MathsHelpers.calculatePosition(35, 1000, 60, new Point(10,10)).y);
 	}
 
 	public static Point calculatePosition(int bearing, int distance, int distanceFromCentre, Point start)
@@ -67,7 +60,7 @@ public class MathsHelpers
 		return p.y == ((endA.y - startA.y) / (endA.x - startA.x)) * p.x;
 	}
 
-	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect
+	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect Adapted to java and our solution from this tutorial
 	private static Boolean intersect(Point startA, Point endA, Point startB, Point endB)
 	{
 	   int dir1 = direction(startA, endA, startB);
@@ -89,7 +82,7 @@ public class MathsHelpers
 	   return false;
 	}
 
-	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect
+	// https://www.tutorialspoint.com/Check-if-two-line-segments-intersect Adapted to java and our solution from this tutorial
 	// Magic number return:  0 -> colinear, 1-> anti-clockwise, 2 -> clockwise
 	private static int direction(Point a, Point b, Point c)
 	{

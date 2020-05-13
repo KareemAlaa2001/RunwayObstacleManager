@@ -3,7 +3,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 @XmlRootElement(name = "obstacle")
 public class ObstacleData
 {
@@ -27,7 +26,7 @@ public class ObstacleData
 		}
 		this.position = position;
 		this.maxHeight = maxHeight;
-                this.distanceFromCentreLine = distanceFromCentreLine;
+        this.distanceFromCentreLine = distanceFromCentreLine;
 	}
 
 	public String getName()
