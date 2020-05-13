@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.util.Pair;
@@ -24,6 +25,7 @@ public class RunwayData
 	@XmlElement
 	public int LDA;			// Landing Distance Available
 
+	@XmlTransient
 	public ArrayList<Pair<String, Integer>> thresholdBreakdown;
 
 	private RunwayData() {
