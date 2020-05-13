@@ -260,6 +260,27 @@ public class MainWindowScene extends WindowScene {
             }
         });
 
+        Button exportRunButton = new Button("Export runway configuration");
+        exportRunButton.setOnAction(e -> {
+            if (runwaySelectionBox.getValue() == null || runwaySelectionBox.getValue().isEmpty()) {
+                generateAlert("Could not export runway configuration", "You must first select a runway to export");
+            } else {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Runway");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                        "XML files (*.xml)", "*.xml");
+                fileChooser.getExtensionFilters().add(extFilter);
+                File file = fileChooser.showSaveDialog(getAppStage());
+                if (file != null) {
+                    try {
+                        XMLLoader.exportRunway(this.ap.getRunwayFull(runwaySelectionBox.getValue()), file.getPath());
+                    } catch (JAXBException ex) {
+                        generateAlert("Could not export runway configuration", "There was a problem with exporting the runway to XML");
+                    }
+                }
+            }
+        });
+
         TabPane tabPane = new TabPane();
         Tab outputTab = new Tab("Output");
         outputTab.setClosable(false);
@@ -329,6 +350,7 @@ public class MainWindowScene extends WindowScene {
         buttonPane.add(hideObsSelect, 0, 10);
         buttonPane.add(rotateSelect, 0, 11);
         buttonPane.add(exportButton, 0, 12, 2, 1);
+        buttonPane.add(exportRunButton, 1, 12);
         buttonPane.add(toRunwayScene, 0, 14);
         buttonPane.add(toAirportScene, 1, 14);
         
