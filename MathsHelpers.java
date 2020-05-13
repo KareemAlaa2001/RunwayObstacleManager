@@ -2,12 +2,6 @@ import java.lang.Math;
 
 public class MathsHelpers
 {
-	public static void main(String[] args)
-	{ // For debugging, will be turned into unit test
-		System.out.println(MathsHelpers.calculatePosition(28, 1000, 60, new Point(10,10)).x + ", " + MathsHelpers.calculatePosition(28, 1000, 60, new Point(10,10)).y);
-		System.out.println(MathsHelpers.calculatePosition(35, 1000, 60, new Point(10,10)).x + ", " + MathsHelpers.calculatePosition(35, 1000, 60, new Point(10,10)).y);
-	}
-
 	public static Point calculatePosition(int bearing, int distance, int distanceFromCentre, Point start)
 	{ // Nice wrapper for generating the position of an obstacle given the input that we previously got
 		double angle = Math.toRadians((double)bearing * 10) + Math.atan((double)distanceFromCentre/(double)distance);

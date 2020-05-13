@@ -430,8 +430,8 @@ public class RunwayWindowScene extends WindowScene
             addedRunways.add(runwayList.get(0));
             /* IDEA:    For each runway we add, we find the intersections it has with other runways in the list,
             where we keep track of added runways and added intersections accordingly */
-            for (Runway run: runwayList) {
-                if (hasIntersection(run,runwayList)) {
+            for (Runway run : runwayList) {
+                if (hasIntersection(run, runwayList)) {
                     List<Integer> intersectionPoints = new ArrayList<>();
                     List<Runway> runwaysToAdd = new ArrayList<>();
                     List<Integer> newRunIntersections = new ArrayList<>();
@@ -456,8 +456,6 @@ public class RunwayWindowScene extends WindowScene
                 }
             }
         }
-
-
         InputScreenController.goToMainScene(ap);
     }
 
