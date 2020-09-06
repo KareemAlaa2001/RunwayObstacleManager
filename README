@@ -1,2 +1,8 @@
-Runway Project has the Following Dependencies:
+The Runway Redeclaration Project has the Following Dependencies:
 JRE 	1.8.x	(JavaFX is included in this distribution, jar should run on any JRE)
+
+Running the jar launches the window for the application, where information about an airport and its runways can either be entered or imported via XML files.
+
+The airport configuration can then be displayed, where obstacles can be added and their effect viewed from mutliple angles.
+
+This application was developed for the purpose of assessment in the University of Southamtpon module COMP2211: Software Eng Group Project.
